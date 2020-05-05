@@ -1,0 +1,56 @@
+{
+    "name": "setono/tag-bag",
+    "type": "library",
+    "description": "Inject dynamic tags programmatically",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Joachim Løvgaard",
+            "email": "joachim@loevgaard.dk"
+        }
+    ],
+    "require": {
+        "php": "^7.2",
+        "thecodingmachine/safe":  "^1.0",
+        "webmozart/assert": "^1.8"
+    },
+    "require-dev": {
+        "ergebnis/composer-normalize": "^2.0",
+        "korbeil/phpstan-generic-rules": "^0.2",
+        "phpstan/extension-installer": "^1.0",
+        "phpstan/phpstan": "^0.12.22",
+        "phpstan/phpstan-strict-rules": "^0.12.2",
+        "phpstan/phpstan-webmozart-assert": "^0.12.3",
+        "phpunit/phpunit": "^8.5",
+        "sylius-labs/coding-standard": "^3.1",
+        "thecodingmachine/phpstan-safe-rule": "^1.0"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Setono\\TagBag\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Setono\\TagBag\\": "tests/"
+        }
+    },
+    "prefer-stable": true,
+    "scripts": {
+        "analyse": "vendor/bin/phpstan analyse -c phpstan.neon -l max src",
+        "check-style": "vendor/bin/ecs check --ansi src/ tests/",
+        "fix-style": "vendor/bin/ecs check --fix --ansi src/ tests/",
+        "phpunit": "vendor/bin/phpunit",
+        "test": [
+            "@phpunit"
+        ]
+    }
+}
