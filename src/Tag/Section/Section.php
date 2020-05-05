@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Setono\TagBag\Tag\Section;
 
+use ArrayIterator;
+use IteratorAggregate;
 use function Safe\usort;
 use Setono\TagBag\Tag\Rendered\MultiRenderedTag;
 use Setono\TagBag\Tag\Rendered\RenderedTag;
 use Setono\TagBag\Tag\Rendered\RenderedTagInterface;
 
-final class Section implements SectionInterface
+final class Section implements IteratorAggregate, SectionInterface
 {
     /** @var RenderedTag[]|MultiRenderedTag[] */
     private $tags = [];
@@ -32,6 +34,11 @@ final class Section implements SectionInterface
         });
     }
 
+    public function __toString(): string
+    {
+        return implode('', $this->tags);
+    }
+
     public function hasTag(string $key): bool
     {
         return isset($this->tags[$key]);
@@ -39,6 +46,13 @@ final class Section implements SectionInterface
 
     public function count(): int
     {
-        return count($this->tags);
+        return (int) array_sum(array_map(static function (RenderedTagInterface $tag): int {
+            return count($tag);
+        }, $this->tags));
+    }
+
+    public function getIterator(): ArrayIterator
+    {
+        return new ArrayIterator($this->tags);
     }
 }

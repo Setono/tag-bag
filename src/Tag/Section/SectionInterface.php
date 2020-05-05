@@ -6,9 +6,12 @@ namespace Setono\TagBag\Tag\Section;
 
 use Countable;
 use Setono\TagBag\Tag\Rendered\RenderedTag;
+use Traversable;
 
-interface SectionInterface extends Countable
+interface SectionInterface extends Countable, Traversable
 {
+    public function __toString(): string;
+
     public function addTag(RenderedTag $renderedTag): void;
 
     /**

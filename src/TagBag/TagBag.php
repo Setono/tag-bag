@@ -56,20 +56,22 @@ final class TagBag implements TagBagInterface
         ));
     }
 
-    public function getTags(string $section = null): array
+    public function getTags(): array
     {
-        if (null !== $section) {
-            if (!$this->hasSection($section)) {
-                return [];
-            }
+        $tags = $this->tags;
+        $this->tags = [];
 
-            $tags = [$this->tags[$section]];
+        return $tags;
+    }
 
-            unset($this->tags[$section]);
-        } else {
-            $tags = $this->tags;
-            $this->tags = [];
+    public function getSection(string $section): ?SectionInterface
+    {
+        if (!$this->hasSection($section)) {
+            return null;
         }
+
+        $tags = $this->tags[$section];
+        unset($this->tags[$section]);
 
         return $tags;
     }
@@ -94,13 +96,11 @@ final class TagBag implements TagBagInterface
      */
     public function count(): int
     {
-        $sections = count($this->tags);
-
-        if (0 === $sections) {
+        if (count($this->tags) === 0) {
             return 0;
         }
 
-        return (int) array_sum(array_map(static function (array $section): int {
+        return (int) array_sum(array_map(static function (SectionInterface $section): int {
             return count($section);
         }, $this->tags));
     }

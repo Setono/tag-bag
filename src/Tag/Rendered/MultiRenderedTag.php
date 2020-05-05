@@ -54,4 +54,9 @@ final class MultiRenderedTag implements RenderedTagInterface
     {
         return $this->priority;
     }
+
+    public function count(): int
+    {
+        return count($this->tags);
+    }
 }

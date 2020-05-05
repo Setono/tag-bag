@@ -1,5 +1,10 @@
 parameters:
+	reportUnmatchedIgnoredErrors: true
 	checkMissingIterableValueType: false
+	checkGenericClassInNonGenericObjectType: false
 
 	excludes_analyse:
 		- 'tests/**.php'
+
+	ignoreErrors:
+		- '/Unsafe usage of new static/'

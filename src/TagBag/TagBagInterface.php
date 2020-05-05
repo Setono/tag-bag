@@ -13,15 +13,18 @@ interface TagBagInterface extends Countable
     public function addTag(TagInterface $tag): void;
 
     /**
-     * Will always return an array of sections
-     *
-     * If the $section is set then the returning array will only hold one section
-     *
-     * When you call this method, the sections that are returned will be removed from the tag bag
+     * NOTICE: All tags are removed from the tag bag after you call this method
      *
      * @return SectionInterface[]
      */
-    public function getTags(string $section = null): array;
+    public function getTags(): array;
+
+    /**
+     * Returns null if the section doesn't exist
+     *
+     * NOTICE: The section is removed from the tag bag after you call this method
+     */
+    public function getSection(string $section): ?SectionInterface;
 
     /**
      * Stores the tag bag in the given data store

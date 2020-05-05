@@ -53,4 +53,9 @@ final class RenderedTag implements RenderedTagInterface
     {
         return $this->replace;
     }
+
+    public function count(): int
+    {
+        return 1;
+    }
 }
