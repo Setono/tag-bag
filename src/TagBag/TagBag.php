@@ -33,7 +33,7 @@ final class TagBag implements TagBagInterface
         $this->storage = $storage;
     }
 
-    public function addTag(TagInterface $tag): void
+    public function addTag(TagInterface $tag): TagBagInterface
     {
         Assert::true($this->renderer->supports($tag), sprintf('The tag %s is not supported by the given tag renderer', get_class($tag)));
 
@@ -54,9 +54,11 @@ final class TagBag implements TagBagInterface
         $this->tags[$section]->addTag(new RenderedTag(
             $tag->getKey(), $this->renderer->render($tag), $tag->getPriority(), $tag->willReplace()
         ));
+
+        return $this;
     }
 
-    public function getTags(): array
+    public function getAll(): array
     {
         $tags = $this->tags;
         $this->tags = [];
@@ -78,17 +80,21 @@ final class TagBag implements TagBagInterface
 
     public function store(): void
     {
+        if(count($this->tags) === 0) {
+            return;
+        }
+
         $this->storage->store(serialize($this->tags));
     }
 
     public function restore(): void
     {
         $data = $this->storage->restore();
-        if (null === $data) {
-            return;
-        }
 
-        $this->tags = unserialize($data, ['allowed_classes' => true]);
+        $this->tags = [];
+        if (null !== $data) {
+            $this->tags = unserialize($data, ['allowed_classes' => true]);
+        }
     }
 
     /**

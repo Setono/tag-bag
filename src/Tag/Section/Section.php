@@ -6,7 +6,7 @@ namespace Setono\TagBag\Tag\Section;
 
 use ArrayIterator;
 use IteratorAggregate;
-use function Safe\usort;
+use function Safe\uasort;
 use Setono\TagBag\Tag\Rendered\MultiRenderedTag;
 use Setono\TagBag\Tag\Rendered\RenderedTag;
 use Setono\TagBag\Tag\Rendered\RenderedTagInterface;
@@ -29,7 +29,7 @@ final class Section implements IteratorAggregate, SectionInterface
             $this->tags[$tag->getKey()] = $tag;
         }
 
-        usort($this->tags, static function (RenderedTagInterface $tag1, RenderedTagInterface $tag2): int {
+        uasort($this->tags, static function (RenderedTagInterface $tag1, RenderedTagInterface $tag2): int {
             return $tag2->getPriority() <=> $tag1->getPriority();
         });
     }
