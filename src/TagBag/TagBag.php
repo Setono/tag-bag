@@ -80,7 +80,7 @@ final class TagBag implements TagBagInterface
 
     public function store(): void
     {
-        if(count($this->tags) === 0) {
+        if (count($this->tags) === 0) {
             return;
         }
 

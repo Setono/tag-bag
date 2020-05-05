@@ -10,7 +10,6 @@ use Setono\TagBag\Renderer\RendererInterface;
 use Setono\TagBag\Storage\InMemoryStorage;
 use Setono\TagBag\Storage\StorageInterface;
 use Setono\TagBag\Tag\Rendered\RenderedTagInterface;
-use Setono\TagBag\Tag\Section\Section;
 use Setono\TagBag\Tag\Section\SectionInterface;
 use Setono\TagBag\Tag\Tag;
 use Setono\TagBag\Tag\TagInterface;
@@ -89,7 +88,7 @@ final class TagBagTest extends TestCase
         foreach ($section as $key => $tag) {
             $this->assertSame('key' . $i, $key);
 
-            $i++;
+            ++$i;
         }
     }
 
@@ -132,7 +131,6 @@ final class TagBagTest extends TestCase
         $tags = $tagBag->getAll();
 
         $this->default_tags_assertions($tags);
-
     }
 
     /**
