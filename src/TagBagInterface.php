@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Setono\TagBag\TagBag;
+namespace Setono\TagBag;
 
 use Countable;
 use Setono\TagBag\Tag\Section\SectionInterface;

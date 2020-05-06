@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Setono\TagBag\TagBag;
+namespace Setono\TagBag;
 
 use PHPUnit\Framework\TestCase;
 use Setono\TagBag\Exception\NonExistingTagsException;
@@ -14,6 +14,9 @@ use Setono\TagBag\Tag\Section\SectionInterface;
 use Setono\TagBag\Tag\Tag;
 use Setono\TagBag\Tag\TagInterface;
 
+/**
+ * @covers \Setono\TagBag\TagBag
+ */
 final class TagBagTest extends TestCase
 {
     /**

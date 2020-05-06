@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Setono\TagBag\TagBag;
+namespace Setono\TagBag;
 
 use function Safe\sprintf;
 use Setono\TagBag\Exception\NonExistingTagsException;
