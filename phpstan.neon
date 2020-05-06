@@ -7,5 +7,4 @@ parameters:
 		- 'tests/**.php'
 
 	ignoreErrors:
-		- '/Unsafe usage of new static/'
 		- '/Call to an undefined method Setono\\TagBag\\Tag\\TagInterface::getContent/'

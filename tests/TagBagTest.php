@@ -36,7 +36,7 @@ final class TagBagTest extends TestCase
     public function it_adds_tag(): void
     {
         $tagBag = $this->getTagBag();
-        $tagBag->addTag(Tag::create('key'));
+        $tagBag->addTag(new Tag('key'));
 
         $this->assertCount(1, $tagBag);
 
@@ -51,7 +51,7 @@ final class TagBagTest extends TestCase
     public function it_returns_a_section(): void
     {
         $tagBag = $this->getTagBag();
-        $tagBag->addTag(Tag::create('key')->setSection('section'));
+        $tagBag->addTag((new Tag('key'))->setSection('section'));
 
         $section = $tagBag->getSection('section');
 
@@ -66,7 +66,7 @@ final class TagBagTest extends TestCase
     public function it_returns_null_if_the_section_does_not_exist(): void
     {
         $tagBag = $this->getTagBag();
-        $tagBag->addTag(Tag::create('key')->setSection('section'));
+        $tagBag->addTag((new Tag('key'))->setSection('section'));
 
         $section = $tagBag->getSection('non_existing_section');
 
@@ -80,9 +80,9 @@ final class TagBagTest extends TestCase
     {
         $tagBag = $this->getTagBag();
         $tagBag
-            ->addTag(Tag::create('key3')->setPriority(-10))
-            ->addTag(Tag::create('key1')->setPriority(10))
-            ->addTag(Tag::create('key2'))
+            ->addTag((new Tag('key3'))->setPriority(-10))
+            ->addTag((new Tag('key1'))->setPriority(10))
+            ->addTag((new Tag('key2')))
         ;
 
         $section = $tagBag->getSection(TagBag::UNSET_SECTION_KEY);
@@ -102,8 +102,8 @@ final class TagBagTest extends TestCase
     {
         $tagBag = $this->getTagBag();
         $tagBag
-            ->addTag(Tag::create('dependent'))
-            ->addTag(Tag::create('key')->addDependent('dependent'))
+            ->addTag(new Tag('dependent'))
+            ->addTag((new Tag('key'))->addDependent('dependent'))
         ;
 
         $this->assertCount(2, $tagBag);
@@ -117,7 +117,7 @@ final class TagBagTest extends TestCase
         $this->expectException(NonExistingTagsException::class);
 
         $tagBag = $this->getTagBag();
-        $tagBag->addTag(Tag::create('key')->addDependent('dependent'));
+        $tagBag->addTag((new Tag('key'))->addDependent('dependent'));
     }
 
     /**
@@ -126,7 +126,7 @@ final class TagBagTest extends TestCase
     public function it_stores_and_restores(): void
     {
         $tagBag = $this->getTagBag();
-        $tagBag->addTag(Tag::create('key'));
+        $tagBag->addTag(new Tag('key'));
 
         $tagBag->store();
         $tagBag->restore();
@@ -156,7 +156,7 @@ final class TagBagTest extends TestCase
     public function it_does_not_restore_when_storage_is_null(): void
     {
         $tagBag = $this->getTagBag();
-        $tagBag->addTag(Tag::create('key'));
+        $tagBag->addTag(new Tag('key'));
 
         $tagBag->restore();
 

@@ -16,7 +16,7 @@ final class TagTest extends TestCase
      */
     public function it_creates(): void
     {
-        $this->assertInstanceOf(TagInterface::class, Tag::create('key'));
+        $this->assertInstanceOf(TagInterface::class, new Tag('key'));
     }
 
     /**
@@ -24,7 +24,7 @@ final class TagTest extends TestCase
      */
     public function it_has_default_values(): void
     {
-        $tag = Tag::create('key');
+        $tag = new Tag('key');
 
         $this->assertSame('key', $tag->getKey());
         $this->assertNull($tag->getSection());
@@ -39,7 +39,7 @@ final class TagTest extends TestCase
      */
     public function it_is_mutable(): void
     {
-        $tag = Tag::create('key');
+        $tag = new Tag('key');
         $tag
             ->setPriority(10)
             ->setSection('section')

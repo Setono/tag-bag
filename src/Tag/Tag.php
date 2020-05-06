@@ -26,14 +26,6 @@ class Tag implements TagInterface
         $this->key = $key;
     }
 
-    /**
-     * @return static
-     */
-    public static function create(string $key)
-    {
-        return new static($key);
-    }
-
     public function getKey(): string
     {
         return $this->key;
