@@ -89,9 +89,7 @@ final class TagBagTest extends TestCase
 
         $i = 1;
         foreach ($section as $key => $tag) {
-            $this->assertSame('key' . $i, $key);
-
-            ++$i;
+            $this->assertSame('key' . $i++, $key);
         }
     }
 
