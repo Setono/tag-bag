@@ -15,14 +15,14 @@
         "webmozart/assert": "^1.8"
     },
     "require-dev": {
-        "ergebnis/composer-normalize": "^2.0",
-        "korbeil/phpstan-generic-rules": "^0.2",
-        "phpstan/extension-installer": "^1.0",
-        "phpstan/phpstan": "^0.12.22",
+        "ergebnis/composer-normalize": "^2.5.1",
+        "korbeil/phpstan-generic-rules": "^0.2.4",
+        "phpstan/extension-installer": "^1.0.4",
+        "phpstan/phpstan": "^0.12.23",
         "phpstan/phpstan-strict-rules": "^0.12.2",
-        "phpstan/phpstan-webmozart-assert": "^0.12.3",
-        "phpunit/phpunit": "^8.5",
-        "sylius-labs/coding-standard": "^3.1",
+        "phpstan/phpstan-webmozart-assert": "^0.12.4",
+        "phpunit/phpunit": "^8.5.4",
+        "sylius-labs/coding-standard": "^3.1.2",
         "thecodingmachine/phpstan-safe-rule": "^1.0"
     },
     "config": {
