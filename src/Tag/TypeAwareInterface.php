@@ -9,8 +9,6 @@ interface TypeAwareInterface
     /**
      * These are just default types, you can use your own type
      */
-    public const TYPE_HTML = 'html';
-
     public const TYPE_SCRIPT = 'script';
 
     public const TYPE_STYLE = 'style';

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Setono\TagBag\Tag;
 
-final class StyleTag extends ContentTag
+final class StyleTag extends ContentTag implements TypeAwareInterface
 {
-    public function __construct(string $key, string $content)
+    public function getType(): string
     {
-        parent::__construct($key, $content, TypeAwareInterface::TYPE_STYLE);
+        return TypeAwareInterface::TYPE_STYLE;
     }
 }

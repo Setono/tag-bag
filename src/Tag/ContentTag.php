@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace Setono\TagBag\Tag;
 
-class ContentTag extends Tag implements ContentAwareInterface, TypeAwareInterface
+class ContentTag extends Tag implements ContentAwareInterface
 {
     use ContentAwareTrait;
-    use TypeAwareTrait;
 
-    public function __construct(string $key, string $content, string $type)
+    public function __construct(string $key, string $content)
     {
         parent::__construct($key);
 
         $this->content = $content;
-        $this->type = $type;
     }
 }

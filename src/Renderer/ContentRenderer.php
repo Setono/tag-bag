@@ -7,7 +7,7 @@ namespace Setono\TagBag\Renderer;
 use Setono\TagBag\Tag\ContentAwareInterface;
 use Setono\TagBag\Tag\TagInterface;
 
-final class ContentRenderer implements RendererInterface
+class ContentRenderer implements RendererInterface
 {
     public function supports(TagInterface $tag): bool
     {

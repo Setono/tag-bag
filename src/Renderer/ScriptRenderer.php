@@ -7,23 +7,15 @@ namespace Setono\TagBag\Renderer;
 use Setono\TagBag\Tag\TagInterface;
 use Setono\TagBag\Tag\TypeAwareInterface;
 
-final class ScriptRenderer implements RendererInterface
+final class ScriptRenderer extends ContentRenderer
 {
-    /** @var RendererInterface */
-    private $decoratedRenderer;
-
-    public function __construct(RendererInterface $decoratedRenderer)
-    {
-        $this->decoratedRenderer = $decoratedRenderer;
-    }
-
     public function supports(TagInterface $tag): bool
     {
-        return $this->decoratedRenderer->supports($tag) && $tag instanceof TypeAwareInterface && $tag->getType() === TypeAwareInterface::TYPE_SCRIPT;
+        return parent::supports($tag) && $tag instanceof TypeAwareInterface && $tag->getType() === TypeAwareInterface::TYPE_SCRIPT;
     }
 
     public function render(TagInterface $tag): string
     {
-        return '<script>' . $this->decoratedRenderer->render($tag) . '</script>';
+        return '<script>' . parent::render($tag) . '</script>';
     }
 }
