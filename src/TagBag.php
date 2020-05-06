@@ -111,7 +111,7 @@ final class TagBag implements TagBagInterface
 
     private function hasSection(string $section): bool
     {
-        return array_key_exists($section, $this->tags) && count($this->tags[$section]) > 0;
+        return array_key_exists($section, $this->tags);
     }
 
     /**
