@@ -6,15 +6,21 @@ namespace Setono\TagBag\Renderer;
 
 use Setono\TagBag\Exception\UnsupportedTagException;
 use Setono\TagBag\Tag\TagInterface;
+use SplPriorityQueue;
 
 final class CompositeRenderer implements RendererInterface
 {
-    /** @var RendererInterface[] */
+    /** @var SplPriorityQueue|RendererInterface[] */
     private $renderers;
 
-    public function __construct(RendererInterface ...$renderers)
+    public function __construct()
     {
-        $this->renderers = $renderers;
+        $this->renderers = new SplPriorityQueue();
+    }
+
+    public function addRenderer(RendererInterface $renderer, int $priority = 0): void
+    {
+        $this->renderers->insert($renderer, $priority);
     }
 
     public function supports(TagInterface $tag): bool
