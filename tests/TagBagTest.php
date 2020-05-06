@@ -85,7 +85,7 @@ final class TagBagTest extends TestCase
             ->addTag((new Tag('key2')))
         ;
 
-        $section = $tagBag->getSection(TagBag::UNSET_SECTION_KEY);
+        $section = $tagBag->getSection(TagBagInterface::DEFAULT_SECTION);
 
         $i = 1;
         foreach ($section as $key => $tag) {

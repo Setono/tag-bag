@@ -16,8 +16,6 @@ use Webmozart\Assert\Assert;
 
 final class TagBag implements TagBagInterface
 {
-    public const UNSET_SECTION_KEY = '__unset__';
-
     /** @var SectionInterface[] */
     private $tags = [];
 
@@ -45,7 +43,7 @@ final class TagBag implements TagBagInterface
             }
         }
 
-        $section = $tag->getSection() ?? self::UNSET_SECTION_KEY;
+        $section = $tag->getSection() ?? self::DEFAULT_SECTION;
 
         if (!$this->hasSection($section)) {
             $this->tags[$section] = new Section();
