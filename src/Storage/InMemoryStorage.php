@@ -18,4 +18,9 @@ final class InMemoryStorage implements StorageInterface
     {
         return $this->store;
     }
+
+    public function remove(): void
+    {
+        $this->store = null;
+    }
 }

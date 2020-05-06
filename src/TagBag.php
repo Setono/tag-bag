@@ -81,10 +81,10 @@ final class TagBag implements TagBagInterface
     public function store(): void
     {
         if (count($this->tags) === 0) {
-            return;
+            $this->storage->remove();
+        } else {
+            $this->storage->store(serialize($this->tags));
         }
-
-        $this->storage->store(serialize($this->tags));
     }
 
     public function restore(): void

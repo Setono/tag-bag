@@ -17,4 +17,9 @@ interface StorageInterface
      * Returns the stored data or null if not data is present
      */
     public function restore(): ?string;
+
+    /**
+     * Will remove any data stored in the storage
+     */
+    public function remove(): void;
 }

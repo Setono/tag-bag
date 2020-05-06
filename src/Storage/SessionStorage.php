@@ -28,6 +28,13 @@ final class SessionStorage implements StorageInterface
         return $_SESSION[self::DATA_KEY];
     }
 
+    public function remove(): void
+    {
+        self::assertSessionIsActive();
+
+        unset($_SESSION[self::DATA_KEY]);
+    }
+
     private static function assertSessionIsActive(): void
     {
         if (PHP_SAPI !== 'cli' && session_status() !== PHP_SESSION_ACTIVE) {
