@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Setono\TagBag\Storage;
 
-use const PHP_SAPI;
 use const PHP_SESSION_ACTIVE;
 use RuntimeException;
 
@@ -37,7 +36,7 @@ final class SessionStorage implements StorageInterface
 
     private static function assertSessionIsActive(): void
     {
-        if (PHP_SAPI !== 'cli' && session_status() !== PHP_SESSION_ACTIVE) {
+        if (php_sapi_name() !== 'cli' && session_status() !== PHP_SESSION_ACTIVE) {
             throw new RuntimeException('Sessions need to be started before calling store/restore');
         }
     }

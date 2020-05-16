@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Setono\TagBag\Tag\Rendered;
 
+use function Safe\usort;
+
 /**
  * @internal
  */
@@ -24,22 +26,29 @@ final class MultiRenderedTag implements RenderedTagInterface
 
     public function __toString(): string
     {
-        return implode('', $this->tags);
+        return $this->getValue();
     }
 
     public function addTag(RenderedTag $tag): void
     {
         $this->tags[] = $tag;
 
-        // We use the highest priority as the aggregate priority
-        $priority = $tag->getPriority();
-        foreach ($this->tags as $item) {
-            if ($item->getPriority() > $priority) {
-                $priority = $item->getPriority();
-            }
-        }
+        usort($this->tags, static function (RenderedTagInterface $tag1, RenderedTagInterface $tag2): int {
+            return $tag2->getPriority() <=> $tag1->getPriority();
+        });
 
-        $this->priority = $priority;
+        // we set the priority of this 'multi tag' to the highest priority of all tags
+        $this->priority = $this->tags[0]->getPriority();
+    }
+
+    public function getValue(): string
+    {
+        return implode('', $this->tags);
+    }
+
+    public function getPriority(): int
+    {
+        return $this->priority;
     }
 
     /**
@@ -48,11 +57,6 @@ final class MultiRenderedTag implements RenderedTagInterface
     public function getTags(): array
     {
         return $this->tags;
-    }
-
-    public function getPriority(): int
-    {
-        return $this->priority;
     }
 
     public function count(): int

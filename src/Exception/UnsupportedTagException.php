@@ -12,6 +12,6 @@ final class UnsupportedTagException extends InvalidArgumentException
 {
     public function __construct(TagInterface $tag)
     {
-        parent::__construct(sprintf('The tag %s is not supported', get_class($tag)));
+        parent::__construct(sprintf('The tag %s (%s) is not supported', get_class($tag), $tag->getKey()));
     }
 }

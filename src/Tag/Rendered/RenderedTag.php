@@ -31,7 +31,7 @@ final class RenderedTag implements RenderedTagInterface
 
     public function __toString(): string
     {
-        return $this->value;
+        return $this->getValue();
     }
 
     public function getKey(): string

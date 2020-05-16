@@ -1,2 +1,6 @@
 imports:
     - { resource: 'vendor/sylius-labs/coding-standard/easy-coding-standard.yml' }
+
+parameters:
+    skip:
+        PhpCsFixer\Fixer\LanguageConstruct\FunctionToConstantFixer: ~

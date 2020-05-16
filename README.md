@@ -10,14 +10,67 @@
 ## Installation
 
 ### Download
-Open a command console, enter your project directory and execute the following command to download the latest stable version of this library:
-
 ```bash
 $ composer require setono/tag-bag
 ```
 
-This command requires you to have Composer installed globally, as explained in the [installation chapter](https://getcomposer.org/doc/00-intro.md) of the Composer documentation.
+## Tags
+Included are four tags. If you need another tag, just implement the `TagInterface` and you're ready to go.
 
+**Base tag**
+
+```php
+<?php
+use Setono\TagBag\Tag\Tag;
+
+$tag = new Tag('key');
+```
+
+**Content tag**
+
+```php
+<?php
+use Setono\TagBag\Tag\ContentTag;
+
+$tag = new ContentTag('key', '<div class="class-name">tag</div>');
+```
+
+**Script tag**
+
+```php
+<?php
+use Setono\TagBag\Tag\ScriptTag;
+
+$tag = new ScriptTag('key', 'alert("Hey!")');
+```
+
+A `ScriptTag` is wrapped in `<script>` tags by the `ScriptRenderer`.
+
+**Style tag**
+
+```php
+<?php
+use Setono\TagBag\Tag\StyleTag;
+
+$tag = new StyleTag('key', 'body { background-color: red; }');
+```
+
+A `StyleTag` is wrapped in `<style>` tags by the `StyleRenderer`.
+
+## Renderers
+The bundle contains four renderers that corresponds to the tags. A renderer implements the `RendererInterface` and is tagged with `setono_tag_bag.renderer`.
+
+**Content renderer**
+
+The `ContentRenderer` basically just renders the content you've input in the tag.
+
+**Script renderer**
+
+The `ScriptRenderer` wraps the content in a `<script>` tag.
+
+**Style renderer**
+
+The `StyleRenderer` wraps the content in a `<style>` tag.
 
 [ico-version]: https://poser.pugx.org/setono/tag-bag/v/stable
 [ico-unstable-version]: https://poser.pugx.org/setono/tag-bag/v/unstable

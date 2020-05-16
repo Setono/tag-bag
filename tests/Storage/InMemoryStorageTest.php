@@ -6,6 +6,9 @@ namespace Setono\TagBag\Storage;
 
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @covers \Setono\TagBag\Storage\InMemoryStorage
+ */
 final class InMemoryStorageTest extends TestCase
 {
     /**
@@ -17,5 +20,17 @@ final class InMemoryStorageTest extends TestCase
         $storage->store('test');
 
         $this->assertSame('test', $storage->restore());
+    }
+
+    /**
+     * @test
+     */
+    public function it_removes(): void
+    {
+        $storage = new InMemoryStorage();
+        $storage->store('test');
+        $storage->remove();
+
+        $this->assertNull($storage->restore());
     }
 }

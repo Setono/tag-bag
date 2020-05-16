@@ -13,5 +13,7 @@ interface RenderedTagInterface extends Countable
 {
     public function __toString(): string;
 
+    public function getValue(): string;
+
     public function getPriority(): int;
 }
