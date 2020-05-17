@@ -9,8 +9,8 @@ abstract class Tag implements TagInterface
     /** @var string */
     protected $name = 'setono_tag_bag_tag';
 
-    /** @var string|null */
-    protected $section;
+    /** @var string */
+    protected $section = self::SECTION_BODY_END;
 
     /** @var array */
     protected $dependencies = [];
@@ -30,12 +30,12 @@ abstract class Tag implements TagInterface
         return $this;
     }
 
-    public function getSection(): ?string
+    public function getSection(): string
     {
         return $this->section;
     }
 
-    public function setSection(?string $section): self
+    public function setSection(string $section): self
     {
         $this->section = $section;
 

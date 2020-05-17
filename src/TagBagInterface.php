@@ -10,8 +10,6 @@ use Setono\TagBag\Tag\TagInterface;
 
 interface TagBagInterface extends Countable
 {
-    public const DEFAULT_SECTION = 'default';
-
     public function addTag(TagInterface $tag): self;
 
     public function getAll(): array;

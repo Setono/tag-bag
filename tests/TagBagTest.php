@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Setono\TagBag;
 
 use PHPUnit\Framework\TestCase;
+use Psr\EventDispatcher\EventDispatcherInterface;
 use Setono\TagBag\Exception\NonExistingTagsException;
 use Setono\TagBag\Exception\UnsupportedTagException;
 use Setono\TagBag\Renderer\RendererInterface;
@@ -116,7 +117,7 @@ final class TagBagTest extends TestCase
             ->addTag($this->getTag()->setName('key2'))
         ;
 
-        $section = $tagBag->getSection(TagBagInterface::DEFAULT_SECTION);
+        $section = $tagBag->getSection(TagInterface::SECTION_BODY_END);
 
         $i = 1;
         foreach ($section as $tag) {
@@ -252,6 +253,13 @@ final class TagBagTest extends TestCase
             };
         }
 
-        return new TagBag($renderer, $storage ?? new InMemoryStorage());
+        $eventDispatcher = new class() implements EventDispatcherInterface {
+            public function dispatch(object $event): void
+            {
+                // TODO: Implement dispatch() method.
+            }
+        };
+
+        return new TagBag($renderer, $storage ?? new InMemoryStorage(), $eventDispatcher);
     }
 }

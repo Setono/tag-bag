@@ -18,9 +18,9 @@ final class UnsupportedTagExceptionTest extends TestCase
     public function it_instantiates(): void
     {
         $exception = new UnsupportedTagException(new class() implements TagInterface {
-            public function getSection(): ?string
+            public function getSection(): string
             {
-                return null;
+                return TagInterface::SECTION_BODY_END;
             }
 
             public function getName(): string

@@ -29,7 +29,7 @@ final class ContentTagTest extends TestCase
 
         $this->assertSame('setono_tag_bag_content_tag', $tag->getName());
         $this->assertSame('content', $tag->getContent());
-        $this->assertNull($tag->getSection());
+        $this->assertSame(TagInterface::SECTION_BODY_END, $tag->getSection());
         $this->assertSame(0, $tag->getPriority());
         $this->assertIsArray($tag->getDependencies());
         $this->assertCount(0, $tag->getDependencies());

@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Setono\TagBag;
 
+use Psr\EventDispatcher\EventDispatcherInterface;
 use function Safe\usort;
+use Setono\TagBag\Event\PreRenderEvent;
+use Setono\TagBag\Event\TagAddedEvent;
 use Setono\TagBag\Exception\NonExistingTagsException;
 use Setono\TagBag\Exception\UnsupportedTagException;
 use Setono\TagBag\Renderer\RendererInterface;
@@ -23,10 +26,17 @@ final class TagBag implements TagBagInterface
     /** @var StorageInterface */
     private $storage;
 
-    public function __construct(RendererInterface $renderer, StorageInterface $storage)
-    {
+    /** @var EventDispatcherInterface */
+    private $eventDispatcher;
+
+    public function __construct(
+        RendererInterface $renderer,
+        StorageInterface $storage,
+        EventDispatcherInterface $eventDispatcher
+    ) {
         $this->renderer = $renderer;
         $this->storage = $storage;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     public function addTag(TagInterface $tag): TagBagInterface
@@ -43,15 +53,16 @@ final class TagBag implements TagBagInterface
             }
         }
 
-        $section = $tag->getSection() ?? self::DEFAULT_SECTION;
+        $this->eventDispatcher->dispatch(new PreRenderEvent($tag));
 
-        $this->tags[$section][] = new RenderedTag(
-            $tag->getName(), $this->renderer->render($tag), $tag->getPriority()
-        );
+        $renderedTag = RenderedTag::createFromTag($tag, $this->renderer->render($tag));
+        $this->tags[$tag->getSection()][] = $renderedTag;
 
-        usort($this->tags[$section], static function (RenderedTag $tag1, RenderedTag $tag2): int {
+        usort($this->tags[$tag->getSection()], static function (RenderedTag $tag1, RenderedTag $tag2): int {
             return $tag2->getPriority() <=> $tag1->getPriority();
         });
+
+        $this->eventDispatcher->dispatch(new TagAddedEvent($renderedTag, $this));
 
         return $this;
     }

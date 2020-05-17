@@ -6,6 +6,8 @@ namespace Setono\TagBag\Tag\Rendered;
 
 use Countable;
 use PHPUnit\Framework\TestCase;
+use Setono\TagBag\Tag\Tag;
+use Setono\TagBag\Tag\TagInterface;
 
 /**
  * @covers \Setono\TagBag\Tag\Rendered\RenderedTag
@@ -17,13 +19,18 @@ final class RenderedTagTest extends TestCase
      */
     public function it_instantiates(): void
     {
-        $tag = new RenderedTag('name', 'value', 10);
-        $this->assertInstanceOf(Countable::class, $tag);
+        $tag = new class() extends Tag {
+        };
+        $tag->setPriority(10)->setName('name');
 
-        $this->assertSame('name', $tag->getName());
-        $this->assertSame('value', $tag->getValue());
-        $this->assertSame('value', (string) $tag);
-        $this->assertSame(10, $tag->getPriority());
-        $this->assertCount(1, $tag);
+        $renderedTag = RenderedTag::createFromTag($tag, 'value');
+
+        $this->assertInstanceOf(Countable::class, $renderedTag);
+        $this->assertSame('name', $renderedTag->getName());
+        $this->assertSame('value', $renderedTag->getValue());
+        $this->assertSame('value', (string) $renderedTag);
+        $this->assertSame(10, $renderedTag->getPriority());
+        $this->assertSame(TagInterface::SECTION_BODY_END, $renderedTag->getSection());
+        $this->assertCount(1, $renderedTag);
     }
 }

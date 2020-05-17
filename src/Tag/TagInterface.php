@@ -17,10 +17,8 @@ interface TagInterface
 
     /**
      * The section where this tag belongs.
-     *
-     * If it returns null, it doesn't matter where the tag is output
      */
-    public function getSection(): ?string;
+    public function getSection(): string;
 
     /**
      * Returns the name for this tag. The name is used in dependency checking. It is good practice to use a namespace
