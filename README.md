@@ -26,7 +26,7 @@ The script you need to inject on the success page looks like this:
 ```javascript
 easyTrack({
     event: 'sale',
-    value: <the order value>
+    value: 123.45 // the order value as a float
 });
 ```
 
