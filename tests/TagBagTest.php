@@ -256,7 +256,6 @@ final class TagBagTest extends TestCase
         $eventDispatcher = new class() implements EventDispatcherInterface {
             public function dispatch(object $event): void
             {
-                // TODO: Implement dispatch() method.
             }
         };
 

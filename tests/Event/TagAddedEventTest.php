@@ -57,12 +57,10 @@ final class TagAddedEventTest extends TestCase
 
             public function store(): void
             {
-                // TODO: Implement store() method.
             }
 
             public function restore(): void
             {
-                // TODO: Implement restore() method.
             }
         };
 
