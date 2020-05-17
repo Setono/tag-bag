@@ -7,12 +7,58 @@
 [![Coverage Status][ico-code-coverage]][link-code-coverage]
 [![Quality Score][ico-code-quality]][link-code-quality]
 
+Inject all kinds of tags onto your web pages with this library. Tags in this context could be a `<script>` tag, a `<style>`,
+or anything else that goes onto a web page.
+
+This is especially useful when you want to render tags with dynamic content.
+
 ## Installation
 
-### Download
 ```bash
 $ composer require setono/tag-bag
 ```
+
+## Usage
+
+Let's start with an example: You have an ecommerce store, and you want to track a sale with a third party script.
+The script you need to inject on the success page looks like this:
+
+```javascript
+easyTrack({
+    event: 'sale',
+    value: <the order value>
+});
+```
+
+You have a controller that handles the order when it is completed and redirects to the sucess page:
+
+```php
+<?php
+use Setono\TagBag\Tag\ScriptTag;
+use Setono\TagBag\TagBagInterface;
+
+final class OrderCompletedController
+{
+    /** @var TagBagInterface */
+    private $tagBag;
+
+    public function __construct(TagBagInterface $tagBag) {
+        $this->tagBag = $tagBag;
+    }
+
+    public function __invoke($order)
+    {
+        $tag = new ScriptTag(
+            sprintf("easyTrack({event: 'sale', value: %s});", $order->getTotalAsFloat())
+        );
+        $this->tagBag->addTag($tag);
+
+        // redirect to the success page
+    }
+}
+```
+
+On your success page you would then output this tag and other tags using `$tagBag->renderAll()`.
 
 ## Tags
 Included are three tags. If you need another tag, just implement the `TagInterface` and you're ready to go.
