@@ -15,16 +15,7 @@ $ composer require setono/tag-bag
 ```
 
 ## Tags
-Included are four tags. If you need another tag, just implement the `TagInterface` and you're ready to go.
-
-**Base tag**
-
-```php
-<?php
-use Setono\TagBag\Tag\Tag;
-
-$tag = new Tag('key');
-```
+Included are three tags. If you need another tag, just implement the `TagInterface` and you're ready to go.
 
 **Content tag**
 
@@ -32,7 +23,7 @@ $tag = new Tag('key');
 <?php
 use Setono\TagBag\Tag\ContentTag;
 
-$tag = new ContentTag('key', '<div class="class-name">tag</div>');
+$tag = new ContentTag('<div class="class-name">tag</div>');
 ```
 
 **Script tag**
@@ -41,7 +32,7 @@ $tag = new ContentTag('key', '<div class="class-name">tag</div>');
 <?php
 use Setono\TagBag\Tag\ScriptTag;
 
-$tag = new ScriptTag('key', 'alert("Hey!")');
+$tag = new ScriptTag('alert("Hey!")');
 ```
 
 A `ScriptTag` is wrapped in `<script>` tags by the `ScriptRenderer`.
@@ -52,7 +43,7 @@ A `ScriptTag` is wrapped in `<script>` tags by the `ScriptRenderer`.
 <?php
 use Setono\TagBag\Tag\StyleTag;
 
-$tag = new StyleTag('key', 'body { background-color: red; }');
+$tag = new StyleTag('body { background-color: red; }');
 ```
 
 A `StyleTag` is wrapped in `<style>` tags by the `StyleRenderer`.
