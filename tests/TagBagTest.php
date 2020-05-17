@@ -6,11 +6,11 @@ namespace Setono\TagBag;
 
 use PHPUnit\Framework\TestCase;
 use Setono\TagBag\Exception\NonExistingTagsException;
+use Setono\TagBag\Exception\UnsupportedTagException;
 use Setono\TagBag\Renderer\RendererInterface;
 use Setono\TagBag\Storage\InMemoryStorage;
 use Setono\TagBag\Storage\StorageInterface;
-use Setono\TagBag\Tag\Rendered\RenderedTagInterface;
-use Setono\TagBag\Tag\Section\SectionInterface;
+use Setono\TagBag\Tag\Rendered\RenderedTag;
 use Setono\TagBag\Tag\Tag;
 use Setono\TagBag\Tag\TagInterface;
 
@@ -30,19 +30,17 @@ final class TagBagTest extends TestCase
 
     /**
      * @test
-     *
-     * This test performs a lot of assertions about the behavior of the tag bag
      */
     public function it_adds_tag(): void
     {
         $tagBag = $this->getTagBag();
-        $tagBag->addTag(new Tag('key'));
+        $tagBag->addTag($this->getTag());
 
         $this->assertCount(1, $tagBag);
 
         $tags = $tagBag->getAll();
 
-        $this->default_tags_assertions($tags);
+        $this->defaultTagsAssertions($tags);
     }
 
     /**
@@ -51,13 +49,46 @@ final class TagBagTest extends TestCase
     public function it_returns_a_section(): void
     {
         $tagBag = $this->getTagBag();
-        $tagBag->addTag((new Tag('key'))->setSection('section'));
+        $tagBag->addTag($this->getTag()->setSection('section'));
 
         $section = $tagBag->getSection('section');
 
-        $this->assertInstanceOf(SectionInterface::class, $section);
+        $this->assertIsArray($section);
+        $this->assertCount(1, $section);
+    }
 
-        $this->assertSame('content', (string) $section);
+    /**
+     * @test
+     */
+    public function it_renders_a_section_and_removes_rendered_section(): void
+    {
+        $tagBag = $this->getTagBag();
+        $tagBag->addTag($this->getTag()->setSection('section1'));
+        $tagBag->addTag($this->getTag()->setSection('section2'));
+
+        // before the section is rendered, the count should be 2
+        $this->assertCount(2, $tagBag);
+        $this->assertSame('content', $tagBag->renderSection('section1'));
+
+        // after the section is rendered, the count should be 1,
+        // because the renderSection call should remove the given section from the tag bag
+        $this->assertCount(1, $tagBag);
+    }
+
+    /**
+     * @test
+     */
+    public function it_renders_all_tags_and_resets_the_tag_bag(): void
+    {
+        $tagBag = $this->getTagBag();
+        $tagBag->addTag($this->getTag()->setSection('section1'));
+        $tagBag->addTag($this->getTag()->setSection('section2'));
+
+        $this->assertSame('contentcontent', $tagBag->renderAll());
+
+        // after the section is rendered, the count should be 1,
+        // because the renderSection call should remove the given section from the tag bag
+        $this->assertCount(0, $tagBag);
     }
 
     /**
@@ -66,7 +97,7 @@ final class TagBagTest extends TestCase
     public function it_returns_null_if_the_section_does_not_exist(): void
     {
         $tagBag = $this->getTagBag();
-        $tagBag->addTag((new Tag('key'))->setSection('section'));
+        $tagBag->addTag($this->getTag()->setSection('section'));
 
         $section = $tagBag->getSection('non_existing_section');
 
@@ -80,28 +111,28 @@ final class TagBagTest extends TestCase
     {
         $tagBag = $this->getTagBag();
         $tagBag
-            ->addTag((new Tag('key3'))->setPriority(-10))
-            ->addTag((new Tag('key1'))->setPriority(10))
-            ->addTag((new Tag('key2')))
+            ->addTag($this->getTag()->setPriority(-10)->setName('key3'))
+            ->addTag($this->getTag()->setPriority(10)->setName('key1'))
+            ->addTag($this->getTag()->setName('key2'))
         ;
 
         $section = $tagBag->getSection(TagBagInterface::DEFAULT_SECTION);
 
         $i = 1;
-        foreach ($section as $key => $tag) {
-            $this->assertSame('key' . $i++, $key);
+        foreach ($section as $tag) {
+            $this->assertSame('key' . $i++, $tag->getName());
         }
     }
 
     /**
      * @test
      */
-    public function it_adds_tag_with_dependent(): void
+    public function it_adds_tag_with_dependency(): void
     {
         $tagBag = $this->getTagBag();
         $tagBag
-            ->addTag(new Tag('dependent'))
-            ->addTag((new Tag('key'))->addDependent('dependent'))
+            ->addTag($this->getTag()->setName('dependency'))
+            ->addTag($this->getTag()->addDependency('dependency'))
         ;
 
         $this->assertCount(2, $tagBag);
@@ -115,7 +146,7 @@ final class TagBagTest extends TestCase
         $this->expectException(NonExistingTagsException::class);
 
         $tagBag = $this->getTagBag();
-        $tagBag->addTag((new Tag('key'))->addDependent('dependent'));
+        $tagBag->addTag($this->getTag()->addDependency('dependent'));
     }
 
     /**
@@ -124,14 +155,14 @@ final class TagBagTest extends TestCase
     public function it_stores_and_restores(): void
     {
         $tagBag = $this->getTagBag();
-        $tagBag->addTag(new Tag('key'));
+        $tagBag->addTag($this->getTag());
 
         $tagBag->store();
         $tagBag->restore();
 
         $tags = $tagBag->getAll();
 
-        $this->default_tags_assertions($tags);
+        $this->defaultTagsAssertions($tags);
     }
 
     /**
@@ -154,37 +185,23 @@ final class TagBagTest extends TestCase
     public function it_does_not_restore_when_storage_is_null(): void
     {
         $tagBag = $this->getTagBag();
-        $tagBag->addTag(new Tag('key'));
+        $tagBag->addTag(new class() extends Tag {
+        });
 
         $tagBag->restore();
 
         $this->assertCount(0, $tagBag);
     }
 
-    private function default_tags_assertions(array $tags): void
-    {
-        $this->assertIsArray($tags);
-
-        // asserting the number of sections
-        $this->assertCount(1, $tags);
-        $this->assertContainsOnlyInstancesOf(SectionInterface::class, $tags);
-
-        $section = current($tags);
-        $this->assertCount(1, $section);
-
-        foreach ($section as $tag) {
-            $this->assertInstanceOf(RenderedTagInterface::class, $tag);
-        }
-
-        $this->assertSame('content', (string) $section);
-    }
-
-    private function getTagBag(StorageInterface $storage = null): TagBagInterface
+    /**
+     * @test
+     */
+    public function it_throws_exception_if_tag_is_not_supported(): void
     {
         $renderer = new class() implements RendererInterface {
             public function supports(TagInterface $tag): bool
             {
-                return true;
+                return false;
             }
 
             public function render(TagInterface $tag): string
@@ -192,6 +209,48 @@ final class TagBagTest extends TestCase
                 return 'content';
             }
         };
+
+        $this->expectException(UnsupportedTagException::class);
+        $tagBag = $this->getTagBag(null, $renderer);
+        $tagBag->addTag($this->getTag());
+    }
+
+    private function defaultTagsAssertions(array $tags): void
+    {
+        $this->assertIsArray($tags);
+
+        // asserting the number of sections
+        $this->assertCount(1, $tags);
+
+        $section = current($tags);
+        $this->assertCount(1, $section);
+
+        foreach ($section as $tag) {
+            $this->assertInstanceOf(RenderedTag::class, $tag);
+        }
+    }
+
+    private function getTag(): Tag
+    {
+        return new class() extends Tag {
+        };
+    }
+
+    private function getTagBag(StorageInterface $storage = null, RendererInterface $renderer = null): TagBagInterface
+    {
+        if (null === $renderer) {
+            $renderer = new class() implements RendererInterface {
+                public function supports(TagInterface $tag): bool
+                {
+                    return true;
+                }
+
+                public function render(TagInterface $tag): string
+                {
+                    return 'content';
+                }
+            };
+        }
 
         return new TagBag($renderer, $storage ?? new InMemoryStorage());
     }

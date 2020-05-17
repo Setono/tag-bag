@@ -8,9 +8,9 @@ class ContentTag extends Tag implements ContentAwareInterface
 {
     use ContentAwareTrait;
 
-    public function __construct(string $key, string $content)
+    public function __construct(string $content)
     {
-        parent::__construct($key);
+        $this->setName('setono_tag_bag_content_tag');
 
         $this->content = $content;
     }

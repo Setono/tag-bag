@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Setono\TagBag;
 
 use Countable;
-use Setono\TagBag\Tag\Section\SectionInterface;
+use Setono\TagBag\Tag\Rendered\RenderedTag;
 use Setono\TagBag\Tag\TagInterface;
 
 interface TagBagInterface extends Countable
@@ -14,19 +14,28 @@ interface TagBagInterface extends Countable
 
     public function addTag(TagInterface $tag): self;
 
-    /**
-     * NOTICE: All tags are removed from the tag bag after you call this method
-     *
-     * @return SectionInterface[]
-     */
     public function getAll(): array;
 
     /**
      * Returns null if the section doesn't exist
      *
-     * NOTICE: The section is removed from the tag bag after you call this method
+     * @return RenderedTag[]
      */
-    public function getSection(string $section): ?SectionInterface;
+    public function getSection(string $section): ?array;
+
+    /**
+     * If the tag is empty, it renders an empty string, i.e. ''
+     *
+     * NOTICE: All tags are removed from the tag bag when this method is called
+     */
+    public function renderAll(): string;
+
+    /**
+     * If the section doesn't exist, this method will render an empty string, i.e. ''
+     *
+     * NOTICE: The section is removed from the tag bag when this method is called
+     */
+    public function renderSection(string $section): string;
 
     /**
      * Stores the tag bag in the given storage

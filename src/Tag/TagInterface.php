@@ -23,22 +23,20 @@ interface TagInterface
     public function getSection(): ?string;
 
     /**
-     * Returns the key for this tag.
-     *
-     * This is used as a key for each tag in a given section which in turn
-     * means that you can't add multiple tags with the same key in a given section.
+     * Returns the name for this tag. The name is used in dependency checking. It is good practice to use a namespace
+     * when naming your tag, i.e. 'setono_tag_bag_style_tag' could be a name for the StyleTag instead of just 'style_tag'
      */
-    public function getKey(): string;
+    public function getName(): string;
 
     /**
-     * An array of tag keys which this tag depends on
+     * An array of tag names which this tag depends on
      *
      * The tag will search through all sections looking for the dependents. It is therefore up to you to control
      * the order of outputted tags both having the section and priority in mind
      *
      * @return string[]
      */
-    public function getDependents(): array;
+    public function getDependencies(): array;
 
     /**
      * The priority of this tag. The lower the number, the later the tag will be output
@@ -54,13 +52,4 @@ interface TagInterface
      * These tags output in the following order: Tag 1, Tag 3, Tag 2
      */
     public function getPriority(): int;
-
-    /**
-     * Returns true if this tag replaces an existing tag with the same key
-     *
-     * If this is false, the tag bag will add both tags to the same key
-     *
-     * Defaults to true
-     */
-    public function willReplace(): bool;
 }

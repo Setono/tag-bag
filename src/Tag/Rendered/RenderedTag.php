@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Setono\TagBag\Tag\Rendered;
 
+use Countable;
+
 /**
  * @internal
  */
-final class RenderedTag implements RenderedTagInterface
+final class RenderedTag implements Countable
 {
     /** @var string */
-    private $key;
+    private $name;
 
     /** @var string */
     private $value;
@@ -18,15 +20,11 @@ final class RenderedTag implements RenderedTagInterface
     /** @var int */
     private $priority;
 
-    /** @var bool */
-    private $replace;
-
-    public function __construct(string $key, string $value, int $priority, bool $replace)
+    public function __construct(string $name, string $value, int $priority)
     {
-        $this->key = $key;
+        $this->name = $name;
         $this->value = $value;
         $this->priority = $priority;
-        $this->replace = $replace;
     }
 
     public function __toString(): string
@@ -34,9 +32,9 @@ final class RenderedTag implements RenderedTagInterface
         return $this->getValue();
     }
 
-    public function getKey(): string
+    public function getName(): string
     {
-        return $this->key;
+        return $this->name;
     }
 
     public function getValue(): string
@@ -47,11 +45,6 @@ final class RenderedTag implements RenderedTagInterface
     public function getPriority(): int
     {
         return $this->priority;
-    }
-
-    public function willReplace(): bool
-    {
-        return $this->replace;
     }
 
     public function count(): int

@@ -23,12 +23,12 @@ final class UnsupportedTagExceptionTest extends TestCase
                 return null;
             }
 
-            public function getKey(): string
+            public function getName(): string
             {
-                return 'key';
+                return 'name';
             }
 
-            public function getDependents(): array
+            public function getDependencies(): array
             {
                 return [];
             }
@@ -37,13 +37,8 @@ final class UnsupportedTagExceptionTest extends TestCase
             {
                 return 0;
             }
-
-            public function willReplace(): bool
-            {
-                return true;
-            }
         });
 
-        $this->assertRegExp('/The tag [^(]+ \(key\) is not supported/', $exception->getMessage());
+        $this->assertRegExp('/The tag [^(]+ \(name\) is not supported/', $exception->getMessage());
     }
 }

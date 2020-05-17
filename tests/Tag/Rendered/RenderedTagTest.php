@@ -17,14 +17,13 @@ final class RenderedTagTest extends TestCase
      */
     public function it_instantiates(): void
     {
-        $tag = new RenderedTag('key', 'value', 10, true);
+        $tag = new RenderedTag('name', 'value', 10);
         $this->assertInstanceOf(Countable::class, $tag);
 
-        $this->assertSame('key', $tag->getKey());
+        $this->assertSame('name', $tag->getName());
         $this->assertSame('value', $tag->getValue());
         $this->assertSame('value', (string) $tag);
         $this->assertSame(10, $tag->getPriority());
-        $this->assertTrue($tag->willReplace());
         $this->assertCount(1, $tag);
     }
 }
