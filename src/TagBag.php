@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 namespace Setono\TagBag;
 
-use function Safe\sprintf;
+use function Safe\usort;
 use Setono\TagBag\Exception\NonExistingTagsException;
+use Setono\TagBag\Exception\UnsupportedTagException;
 use Setono\TagBag\Renderer\RendererInterface;
 use Setono\TagBag\Storage\StorageInterface;
 use Setono\TagBag\Tag\Rendered\RenderedTag;
-use Setono\TagBag\Tag\Section\Section;
-use Setono\TagBag\Tag\Section\SectionInterface;
 use Setono\TagBag\Tag\TagInterface;
-use Webmozart\Assert\Assert;
 
 final class TagBag implements TagBagInterface
 {
-    /** @var SectionInterface[] */
+    /** @var RenderedTag[][] */
     private $tags = [];
 
     /** @var RendererInterface */
@@ -33,47 +31,57 @@ final class TagBag implements TagBagInterface
 
     public function addTag(TagInterface $tag): TagBagInterface
     {
-        Assert::true($this->renderer->supports($tag), sprintf('The tag %s is not supported by the given tag renderer', get_class($tag)));
+        if (!$this->renderer->supports($tag)) {
+            throw new UnsupportedTagException($tag);
+        }
 
-        if (count($tag->getDependents()) > 0) {
-            $nonExistingKeys = $this->nonExistingKeys($tag->getDependents());
+        if (count($tag->getDependencies()) > 0) {
+            $nonExistingTags = $this->nonExistingTags($tag->getDependencies());
 
-            if (count($nonExistingKeys) > 0) {
-                throw new NonExistingTagsException($nonExistingKeys);
+            if (count($nonExistingTags) > 0) {
+                throw new NonExistingTagsException($nonExistingTags);
             }
         }
 
         $section = $tag->getSection() ?? self::DEFAULT_SECTION;
 
-        if (!$this->hasSection($section)) {
-            $this->tags[$section] = new Section();
-        }
+        $this->tags[$section][] = new RenderedTag(
+            $tag->getName(), $this->renderer->render($tag), $tag->getPriority()
+        );
 
-        $this->tags[$section]->addTag(new RenderedTag(
-            $tag->getKey(), $this->renderer->render($tag), $tag->getPriority(), $tag->willReplace()
-        ));
+        usort($this->tags[$section], static function (RenderedTag $tag1, RenderedTag $tag2): int {
+            return $tag2->getPriority() <=> $tag1->getPriority();
+        });
 
         return $this;
     }
 
     public function getAll(): array
     {
+        return $this->tags;
+    }
+
+    public function getSection(string $section): ?array
+    {
+        return $this->tags[$section] ?? null;
+    }
+
+    public function renderAll(): string
+    {
         $tags = $this->tags;
         $this->tags = [];
 
-        return $tags;
+        return implode('', array_map(static function (array $section): string {
+            return implode('', $section);
+        }, $tags));
     }
 
-    public function getSection(string $section): ?SectionInterface
+    public function renderSection(string $section): string
     {
-        if (!$this->hasSection($section)) {
-            return null;
-        }
-
-        $tags = $this->tags[$section];
+        $tags = $this->tags[$section] ?? [];
         unset($this->tags[$section]);
 
-        return $tags;
+        return implode('', $tags);
     }
 
     public function store(): void
@@ -104,22 +112,17 @@ final class TagBag implements TagBagInterface
             return 0;
         }
 
-        return (int) array_sum(array_map(static function (SectionInterface $section): int {
+        return (int) array_sum(array_map(static function (array $section): int {
             return count($section);
         }, $this->tags));
     }
 
-    private function hasSection(string $section): bool
-    {
-        return array_key_exists($section, $this->tags);
-    }
-
     /**
-     * Returns an array of non existing keys in the tag bag (not minding the section)
+     * Returns an array of non existing tags in the tag bag (not minding the section)
      *
-     * Returns an empty array if all keys exist
+     * Returns an empty array if all tags exist
      */
-    private function nonExistingKeys(array $keys): array
+    private function nonExistingTags(array $keys): array
     {
         $nonExistingKeys = [];
 
@@ -127,8 +130,10 @@ final class TagBag implements TagBagInterface
             $keyExists = false;
 
             foreach ($this->tags as $section) {
-                if ($section->hasTag($key)) {
-                    $keyExists = true;
+                foreach ($section as $tag) {
+                    if ($tag->getName() === $key) {
+                        $keyExists = true;
+                    }
                 }
             }
 

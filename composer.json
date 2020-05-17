@@ -11,8 +11,7 @@
     ],
     "require": {
         "php": "^7.2",
-        "thecodingmachine/safe": "^1.0",
-        "webmozart/assert": "^1.8"
+        "thecodingmachine/safe": "^1.0"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.5.1",
@@ -20,7 +19,6 @@
         "phpstan/extension-installer": "^1.0.4",
         "phpstan/phpstan": "^0.12.23",
         "phpstan/phpstan-strict-rules": "^0.12.2",
-        "phpstan/phpstan-webmozart-assert": "^0.12.4",
         "phpunit/phpunit": "^8.5.4",
         "sylius-labs/coding-standard": "^3.1.2",
         "thecodingmachine/phpstan-safe-rule": "^1.0"
@@ -48,9 +46,6 @@
         "analyse": "vendor/bin/phpstan analyse -c phpstan.neon -l max src",
         "check-style": "vendor/bin/ecs check --ansi src/ tests/",
         "fix-style": "vendor/bin/ecs check --fix --ansi src/ tests/",
-        "phpunit": "vendor/bin/phpunit",
-        "test": [
-            "@phpunit"
-        ]
+        "phpunit": "vendor/bin/phpunit"
     }
 }

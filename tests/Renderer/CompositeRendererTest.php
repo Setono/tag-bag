@@ -22,8 +22,8 @@ final class CompositeRendererTest extends TestCase
     {
         $renderer = self::getCompositeRenderer();
 
-        $this->assertTrue($renderer->supports(new StyleTag('key', 'content')));
-        $this->assertTrue($renderer->supports(new StyleTag('key', 'content')));
+        $this->assertTrue($renderer->supports(new StyleTag('content')));
+        $this->assertTrue($renderer->supports(new StyleTag('content')));
     }
 
     /**
@@ -33,7 +33,8 @@ final class CompositeRendererTest extends TestCase
     {
         $renderer = self::getCompositeRenderer();
 
-        $this->assertFalse($renderer->supports(new Tag('key')));
+        $this->assertFalse($renderer->supports(new class() extends Tag {
+        }));
     }
 
     /**
@@ -43,8 +44,8 @@ final class CompositeRendererTest extends TestCase
     {
         $renderer = self::getCompositeRenderer();
 
-        $this->assertSame('<style>content</style>', $renderer->render(new StyleTag('key', 'content')));
-        $this->assertSame('<script>content</script>', $renderer->render(new ScriptTag('key', 'content')));
+        $this->assertSame('<style>content</style>', $renderer->render(new StyleTag('content')));
+        $this->assertSame('<script>content</script>', $renderer->render(new ScriptTag('content')));
     }
 
     /**
@@ -55,7 +56,8 @@ final class CompositeRendererTest extends TestCase
         $this->expectException(UnsupportedTagException::class);
 
         $renderer = self::getCompositeRenderer();
-        $renderer->render(new Tag('key'));
+        $renderer->render(new class() extends Tag {
+        });
     }
 
     private static function getCompositeRenderer(): CompositeRenderer

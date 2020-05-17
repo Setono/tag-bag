@@ -16,7 +16,7 @@ final class StyleTagTest extends TestCase
      */
     public function it_creates(): void
     {
-        $this->assertInstanceOf(TagInterface::class, new StyleTag('key', 'content'));
+        $this->assertInstanceOf(TagInterface::class, new StyleTag('content'));
     }
 
     /**
@@ -24,35 +24,9 @@ final class StyleTagTest extends TestCase
      */
     public function it_has_default_values(): void
     {
-        $tag = new StyleTag('key', 'content');
+        $tag = new StyleTag('content');
 
-        $this->assertSame('key', $tag->getKey());
-        $this->assertSame('content', $tag->getContent());
+        $this->assertSame('setono_tag_bag_style_tag', $tag->getName());
         $this->assertSame(TypeAwareInterface::TYPE_STYLE, $tag->getType());
-        $this->assertNull($tag->getSection());
-        $this->assertSame(0, $tag->getPriority());
-        $this->assertIsArray($tag->getDependents());
-        $this->assertCount(0, $tag->getDependents());
-        $this->assertTrue($tag->willReplace());
-    }
-
-    /**
-     * @test
-     */
-    public function it_is_mutable(): void
-    {
-        $tag = new StyleTag('key', 'content');
-        $tag
-            ->setPriority(10)
-            ->setSection('section')
-            ->setReplace(false)
-            ->addDependent('dependent')
-        ;
-
-        $this->assertSame('section', $tag->getSection());
-        $this->assertSame(10, $tag->getPriority());
-        $this->assertIsArray($tag->getDependents());
-        $this->assertCount(1, $tag->getDependents());
-        $this->assertSame('dependent', $tag->getDependents()[0]);
     }
 }

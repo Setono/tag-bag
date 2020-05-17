@@ -19,7 +19,7 @@ final class ContentRendererTest extends TestCase
     public function it_supports_content_tag(): void
     {
         $renderer = new ContentRenderer();
-        $this->assertTrue($renderer->supports(new ContentTag('key', 'content')));
+        $this->assertTrue($renderer->supports(new ContentTag('content')));
     }
 
     /**
@@ -28,7 +28,8 @@ final class ContentRendererTest extends TestCase
     public function it_does_not_support_other_tags(): void
     {
         $renderer = new ContentRenderer();
-        $this->assertFalse($renderer->supports(new Tag('key')));
+        $this->assertFalse($renderer->supports(new class() extends Tag {
+        }));
     }
 
     /**
@@ -37,6 +38,6 @@ final class ContentRendererTest extends TestCase
     public function it_renders(): void
     {
         $renderer = new ContentRenderer();
-        $this->assertSame('content', $renderer->render(new ContentTag('key', 'content')));
+        $this->assertSame('content', $renderer->render(new ContentTag('content')));
     }
 }

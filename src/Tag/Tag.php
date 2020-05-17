@@ -4,31 +4,30 @@ declare(strict_types=1);
 
 namespace Setono\TagBag\Tag;
 
-class Tag implements TagInterface
+abstract class Tag implements TagInterface
 {
     /** @var string */
-    protected $key;
+    protected $name = 'setono_tag_bag_tag';
 
     /** @var string|null */
     protected $section;
 
     /** @var array */
-    protected $dependents = [];
+    protected $dependencies = [];
 
     /** @var int */
     protected $priority = 0;
 
-    /** @var bool */
-    protected $replace = true;
-
-    public function __construct(string $key)
+    public function getName(): string
     {
-        $this->key = $key;
+        return $this->name;
     }
 
-    public function getKey(): string
+    public function setName(string $name): self
     {
-        return $this->key;
+        $this->name = $name;
+
+        return $this;
     }
 
     public function getSection(): ?string
@@ -43,15 +42,15 @@ class Tag implements TagInterface
         return $this;
     }
 
-    public function getDependents(): array
+    public function getDependencies(): array
     {
-        return $this->dependents;
+        return $this->dependencies;
     }
 
-    public function addDependent(string $dependent): self
+    public function addDependency(string $dependency): self
     {
-        if (!in_array($dependent, $this->dependents, true)) {
-            $this->dependents[] = $dependent;
+        if (!in_array($dependency, $this->dependencies, true)) {
+            $this->dependencies[] = $dependency;
         }
 
         return $this;
@@ -65,18 +64,6 @@ class Tag implements TagInterface
     public function setPriority(int $priority): self
     {
         $this->priority = $priority;
-
-        return $this;
-    }
-
-    public function willReplace(): bool
-    {
-        return $this->replace;
-    }
-
-    public function setReplace(bool $replace): self
-    {
-        $this->replace = $replace;
 
         return $this;
     }

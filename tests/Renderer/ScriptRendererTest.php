@@ -19,7 +19,7 @@ final class ScriptRendererTest extends TestCase
     public function it_supports_script_tag(): void
     {
         $renderer = new ScriptRenderer();
-        $this->assertTrue($renderer->supports(new ScriptTag('key', 'content')));
+        $this->assertTrue($renderer->supports(new ScriptTag('content')));
     }
 
     /**
@@ -28,7 +28,8 @@ final class ScriptRendererTest extends TestCase
     public function it_does_not_support_other_tags(): void
     {
         $renderer = new ScriptRenderer();
-        $this->assertFalse($renderer->supports(new Tag('key')));
+        $this->assertFalse($renderer->supports(new class() extends Tag {
+        }));
     }
 
     /**
@@ -37,6 +38,6 @@ final class ScriptRendererTest extends TestCase
     public function it_renders(): void
     {
         $renderer = new ScriptRenderer();
-        $this->assertSame('<script>content</script>', $renderer->render(new ScriptTag('key', 'content')));
+        $this->assertSame('<script>content</script>', $renderer->render(new ScriptTag('content')));
     }
 }
