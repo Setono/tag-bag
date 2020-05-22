@@ -142,12 +142,40 @@ final class TagBagTest extends TestCase
     /**
      * @test
      */
-    public function it_throws_exception_if_dependent_does_not_exist(): void
+    public function it_throws_exception_if_dependency_does_not_exist(): void
     {
         $this->expectException(NonExistingTagsException::class);
 
         $tagBag = $this->getTagBag();
-        $tagBag->addTag($this->getTag()->addDependency('dependent'));
+        $tagBag->addTag($this->getTag()->addDependency('dependency'));
+
+        $tagBag->renderAll();
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_throw_when_dependency_is_present_in_not_rendered_tags(): void
+    {
+        $tagBag = $this->getTagBag();
+        $tagBag->addTag($this->getTag()->addDependency('dependency'));
+        $tagBag->addTag($this->getTag()->setName('dependency'));
+
+        $this->assertSame('contentcontent', $tagBag->renderAll());
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_throw_when_dependency_is_present_in_already_rendered_tags(): void
+    {
+        $tagBag = $this->getTagBag();
+        $tagBag->addTag($this->getTag()->addDependency('dependency'));
+        $tagBag->addTag($this->getTag()->setName('dependency')->setSection(TagInterface::SECTION_HEAD));
+
+        $tagBag->renderSection(TagInterface::SECTION_HEAD);
+
+        $this->assertSame('content', $tagBag->renderAll());
     }
 
     /**

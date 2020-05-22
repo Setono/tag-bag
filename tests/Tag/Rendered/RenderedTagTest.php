@@ -21,7 +21,7 @@ final class RenderedTagTest extends TestCase
     {
         $tag = new class() extends Tag {
         };
-        $tag->setPriority(10)->setName('name');
+        $tag->setPriority(10)->setName('name')->addDependency('dependency');
 
         $renderedTag = RenderedTag::createFromTag($tag, 'value');
 
@@ -32,5 +32,6 @@ final class RenderedTagTest extends TestCase
         $this->assertSame(10, $renderedTag->getPriority());
         $this->assertSame(TagInterface::SECTION_BODY_END, $renderedTag->getSection());
         $this->assertCount(1, $renderedTag);
+        $this->assertSame(['dependency'], $renderedTag->getDependencies());
     }
 }
