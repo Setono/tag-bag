@@ -118,6 +118,10 @@ body { background-color: red; }
 
 Render using twig templates. See installation instructions and usage [here](https://github.com/Setono/tag-bag-twig).
 
+### PHP templates tag
+
+Render using [PHP templates](https://github.com/Setono/php-templates). See installation instructions and usage [here](https://github.com/Setono/tag-bag-php-templates).
+
 ### Gtag tag
 
 If you're using Google's services, some of them allow you to track events using the [gtag](https://developers.google.com/gtagjs).
