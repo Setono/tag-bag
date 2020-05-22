@@ -7,10 +7,9 @@
 [![Coverage Status][ico-code-coverage]][link-code-coverage]
 [![Quality Score][ico-code-quality]][link-code-quality]
 
-Inject all kinds of tags onto your web pages with this library. Tags in this context could be a `<script>` tag, a `<style>`,
-or anything else that goes onto a web page.
+Tag bag is an object oriented and very extendable way of adding content/tags to your pages.
 
-This is especially useful when you want to render tags with dynamic content.
+A very common use case for the tag bag is tracking events on your pages. 
 
 ## Installation
 
@@ -47,9 +46,9 @@ on your pages. The ones included are pretty basic, and you may find that you'd w
 advanced tags that you can read about in the [tags](#tags) section below.
 
 ## Tags
-Included are three tags. If you need another tag, just implement the `TagInterface` and you're ready to go.
+The base library has three tags and on top of that you can use other tags by installing small sub packages of the tag bag.
 
-**Content tag**
+### Content tag
 
 ```php
 <?php
@@ -58,18 +57,47 @@ use Setono\TagBag\Tag\ContentTag;
 $tag = new ContentTag('<div class="class-name">tag</div>');
 ```
 
-**Script tag**
+Renders as:
+
+```html
+<div class="class-name">tag</div>
+```
+
+### Script tag
 
 ```php
 <?php
 use Setono\TagBag\Tag\ScriptTag;
 
-$tag = new ScriptTag('alert("Hey!")');
+$tag = new ScriptTag('alert("Hey!");');
 ```
 
-A `ScriptTag` is wrapped in `<script>` tags by the `ScriptRenderer`.
+Renders as:
 
-**Style tag**
+```html
+<script type="application/ld+json">
+alert("Hey!");
+</script>
+```
+
+The script tag also has an optional property named `type`:
+
+```php
+<?php
+use Setono\TagBag\Tag\ScriptTag;
+
+$tag = new ScriptTag('{"@context": "https://schema.org/"}');
+$tag->setType('application/ld+json');
+```
+
+The above renders as:
+```html
+<script type="application/ld+json">
+{"@context": "https://schema.org/"}
+</script>
+```
+
+### Style tag
 
 ```php
 <?php
@@ -78,14 +106,33 @@ use Setono\TagBag\Tag\StyleTag;
 $tag = new StyleTag('body { background-color: red; }');
 ```
 
-A `StyleTag` is wrapped in `<style>` tags by the `StyleRenderer`.
+Renders as:
+
+```html
+<style>
+body { background-color: red; }
+</style>
+```
+
+### Twig tag
+
+Render using twig templates. See installation instructions and usage [here](https://github.com/Setono/tag-bag-twig).
+
+### Gtag tag
+
+If you're using Google's services, some of them allow you to track events using the [gtag](https://developers.google.com/gtagjs).
+
+To make it easier to create these tags, you can use the [gtag extension for the tag bag](https://github.com/Setono/tag-bag-gtag).
 
 ## Renderers
-The bundle contains four renderers that corresponds to the tags. A renderer implements the `RendererInterface` and is tagged with `setono_tag_bag.renderer`.
+The base library contains three renderers that corresponds to the base tags.
+A renderer implements the `RendererInterface`.
+
+Just as with the tags there are also renderers in the sub packages.
 
 **Content renderer**
 
-The `ContentRenderer` basically just renders the content you've input in the tag.
+The `ContentRenderer` renders the content you've input in the tag.
 
 **Script renderer**
 
