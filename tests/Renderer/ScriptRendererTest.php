@@ -40,4 +40,16 @@ final class ScriptRendererTest extends TestCase
         $renderer = new ScriptRenderer();
         $this->assertSame('<script>content</script>', $renderer->render(new ScriptTag('content')));
     }
+
+    /**
+     * @test
+     */
+    public function it_renders_with_type(): void
+    {
+        $tag = new ScriptTag('content');
+        $tag->setType('application/ld+json');
+
+        $renderer = new ScriptRenderer();
+        $this->assertSame('<script type="application/ld+json">content</script>', $renderer->render($tag));
+    }
 }

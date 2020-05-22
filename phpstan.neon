@@ -8,3 +8,4 @@ parameters:
 
 	ignoreErrors:
 		- '/Call to an undefined method Setono\\TagBag\\Tag\\TagInterface::getContent/'
+		- '/Call to an undefined method Setono\\TagBag\\Tag\\TagInterface::getType/'

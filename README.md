@@ -18,47 +18,33 @@ This is especially useful when you want to render tags with dynamic content.
 $ composer require setono/tag-bag
 ```
 
-## Usage
-
-Let's start with an example: You have an ecommerce store, and you want to track a sale with a third party script.
-The script you need to inject on the success page looks like this:
-
-```javascript
-easyTrack({
-    event: 'sale',
-    value: 123.45 // the order value as a float
-});
-```
-
-You have a controller that handles the order when it is completed and redirects to the sucess page:
+## Basic usage
 
 ```php
 <?php
 use Setono\TagBag\Tag\ScriptTag;
 use Setono\TagBag\TagBagInterface;
 
-final class OrderCompletedController
-{
-    /** @var TagBagInterface */
-    private $tagBag;
+/** @var TagBagInterface $tagBag */
 
-    public function __construct(TagBagInterface $tagBag) {
-        $this->tagBag = $tagBag;
-    }
+// in a controller or service
+$tagBag->addTag(new ScriptTag('trackSomething();'));
 
-    public function __invoke($order)
-    {
-        $tag = new ScriptTag(
-            sprintf("easyTrack({event: 'sale', value: %s});", $order->getTotalAsFloat())
-        );
-        $this->tagBag->addTag($tag);
-
-        // redirect to the success page
-    }
-}
+// in your template
+$tagBag->renderAll();
 ```
 
-On your success page you would then output this tag and other tags using `$tagBag->renderAll()`.
+The above call to `TagBagInterface::renderAll()` would output the following:
+
+```html
+<script>trackSomething();</script>
+```
+
+Here we introduced two important concepts of the tag bag: The [tags](#tags) and the [rendering of the tags](#renderers).
+
+Tags are PHP classes implementing the `TagInterface` and they are designed to make it easier for you to output content
+on your pages. The ones included are pretty basic, and you may find that you'd want to use some of the other more
+advanced tags that you can read about in the [tags](#tags) section below.
 
 ## Tags
 Included are three tags. If you need another tag, just implement the `TagInterface` and you're ready to go.
