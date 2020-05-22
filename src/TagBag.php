@@ -20,6 +20,13 @@ final class TagBag implements TagBagInterface
     /** @var RenderedTag[][] */
     private $tags = [];
 
+    /**
+     * This holds an array of tag names already rendered in the life of this tag bag
+     *
+     * @var string[]
+     */
+    private $renderedTags = [];
+
     /** @var RendererInterface */
     private $renderer;
 
@@ -43,14 +50,6 @@ final class TagBag implements TagBagInterface
     {
         if (!$this->renderer->supports($tag)) {
             throw new UnsupportedTagException($tag);
-        }
-
-        if (count($tag->getDependencies()) > 0) {
-            $nonExistingTags = $this->nonExistingTags($tag->getDependencies());
-
-            if (count($nonExistingTags) > 0) {
-                throw new NonExistingTagsException($nonExistingTags);
-            }
         }
 
         $this->eventDispatcher->dispatch(new PreRenderEvent($tag));
@@ -79,20 +78,35 @@ final class TagBag implements TagBagInterface
 
     public function renderAll(): string
     {
+        $this->assertDependencies($this->tags);
+
         $tags = $this->tags;
         $this->tags = [];
 
-        return implode('', array_map(static function (array $section): string {
-            return implode('', $section);
-        }, $tags));
+        $str = '';
+        foreach ($tags as $section) {
+            foreach ($section as $tag) {
+                $this->renderedTags[] = $tag->getName();
+                $str .= $tag->getValue();
+            }
+        }
+
+        return $str;
     }
 
     public function renderSection(string $section): string
     {
         $tags = $this->tags[$section] ?? [];
+        $this->assertDependencies([$tags]);
         unset($this->tags[$section]);
 
-        return implode('', $tags);
+        $str = '';
+        foreach ($tags as $tag) {
+            $this->renderedTags[] = $tag->getName();
+            $str .= $tag->getValue();
+        }
+
+        return $str;
     }
 
     public function store(): void
@@ -129,30 +143,38 @@ final class TagBag implements TagBagInterface
     }
 
     /**
-     * Returns an array of non existing tags in the tag bag (not minding the section)
-     *
-     * Returns an empty array if all tags exist
+     * @param RenderedTag[][] $tags
      */
-    private function nonExistingTags(array $keys): array
+    private function assertDependencies(array $tags): void
     {
-        $nonExistingKeys = [];
+        $nonExistingTags = [];
 
-        foreach ($keys as $key) {
-            $keyExists = false;
-
-            foreach ($this->tags as $section) {
-                foreach ($section as $tag) {
-                    if ($tag->getName() === $key) {
-                        $keyExists = true;
+        foreach ($tags as $section) {
+            foreach ($section as $tag) {
+                foreach ($tag->getDependencies() as $dependency) {
+                    // we first check the already rendered tags
+                    foreach ($this->renderedTags as $renderedTagName) {
+                        if ($renderedTagName === $dependency) {
+                            continue 2;
+                        }
                     }
-                }
-            }
 
-            if (!$keyExists) {
-                $nonExistingKeys[] = $key;
+                    // ... and then the to-be-rendered tags
+                    foreach ($this->tags as $section2) {
+                        foreach ($section2 as $renderedTag) {
+                            if ($renderedTag->getName() === $dependency) {
+                                continue 3;
+                            }
+                        }
+                    }
+
+                    $nonExistingTags[] = $dependency;
+                }
             }
         }
 
-        return $nonExistingKeys;
+        if (count($nonExistingTags) > 0) {
+            throw new NonExistingTagsException($nonExistingTags);
+        }
     }
 }

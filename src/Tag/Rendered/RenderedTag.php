@@ -28,17 +28,21 @@ final class RenderedTag implements Countable
     /** @var string */
     private $section;
 
-    private function __construct(string $name, string $value, int $priority, string $section)
+    /** @var string[] */
+    private $dependencies;
+
+    private function __construct(string $name, string $value, int $priority, string $section, array $dependencies)
     {
         $this->name = $name;
         $this->value = $value;
         $this->priority = $priority;
         $this->section = $section;
+        $this->dependencies = $dependencies;
     }
 
     public static function createFromTag(TagInterface $tag, string $value): self
     {
-        return new self($tag->getName(), $value, $tag->getPriority(), $tag->getSection());
+        return new self($tag->getName(), $value, $tag->getPriority(), $tag->getSection(), $tag->getDependencies());
     }
 
     public function __toString(): string
@@ -64,6 +68,11 @@ final class RenderedTag implements Countable
     public function getSection(): string
     {
         return $this->section;
+    }
+
+    public function getDependencies(): array
+    {
+        return $this->dependencies;
     }
 
     public function count(): int
