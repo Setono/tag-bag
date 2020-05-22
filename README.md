@@ -142,6 +142,32 @@ The `ScriptRenderer` wraps the content in a `<script>` tag.
 
 The `StyleRenderer` wraps the content in a `<style>` tag.
 
+## Storage
+
+The intended use of the tag bag is to save the tag bag upon end of request and restore it upon starting the request life cycle.
+The `TagBagInterface` has `store` and `restore` methods for these events respectively.
+
+```php
+<?php
+use Setono\TagBag\Tag\ScriptTag;
+use Setono\TagBag\TagBagInterface;
+
+/** @var TagBagInterface $tagBag */
+
+// in a controller or service
+$tagBag->addTag(new ScriptTag('trackSomething();'));
+
+// this stores the contents of the tag bag
+$tagBag->store();
+
+// this restores the contents of the tag bag
+$tagBag->restore();
+```
+
+## Framework integration
+
+- Symfony: [TagBagBundle](https://github.com/Setono/TagBagBundle)
+
 [ico-version]: https://poser.pugx.org/setono/tag-bag/v/stable
 [ico-unstable-version]: https://poser.pugx.org/setono/tag-bag/v/unstable
 [ico-license]: https://poser.pugx.org/setono/tag-bag/license
