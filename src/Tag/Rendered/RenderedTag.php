@@ -8,11 +8,10 @@ use Countable;
 use Setono\TagBag\Tag\TagInterface;
 
 /**
- * This class should is not intended to be used outside the TagBag class.
+ * This class is not intended to be used outside the TagBag class.
  *
  * The reason for having a RenderedTag is that tags implementing the TagInterface can in theory have all sorts of
- * dependencies injected into the constructor which in turn makes it harder to serialize which is done when saving
- * the tag bag
+ * dependencies which in turn makes it harder to serialize, and the tag bag is serialized upon storing it
  */
 final class RenderedTag implements Countable
 {
