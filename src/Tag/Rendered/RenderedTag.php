@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Setono\TagBag\Tag\Rendered;
 
-use Countable;
 use Setono\TagBag\Tag\TagInterface;
 
 /**
@@ -13,7 +12,7 @@ use Setono\TagBag\Tag\TagInterface;
  * The reason for having a RenderedTag is that tags implementing the TagInterface can in theory have all sorts of
  * dependencies which in turn makes it harder to serialize, and the tag bag is serialized upon storing it
  */
-final class RenderedTag implements Countable
+final class RenderedTag
 {
     /** @var string */
     private $name;
@@ -72,10 +71,5 @@ final class RenderedTag implements Countable
     public function getDependencies(): array
     {
         return $this->dependencies;
-    }
-
-    public function count(): int
-    {
-        return 1;
     }
 }
