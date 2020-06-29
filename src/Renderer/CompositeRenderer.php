@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Setono\TagBag\Renderer;
 
+use Laminas\Stdlib\FastPriorityQueue;
 use Setono\TagBag\Exception\UnsupportedTagException;
 use Setono\TagBag\Tag\TagInterface;
-use SplPriorityQueue;
 
 final class CompositeRenderer implements RendererInterface
 {
-    /** @var SplPriorityQueue|RendererInterface[] */
+    /** @var FastPriorityQueue|RendererInterface[] */
     private $renderers;
 
     public function __construct()
     {
-        $this->renderers = new SplPriorityQueue();
+        $this->renderers = new FastPriorityQueue();
     }
 
     public function addRenderer(RendererInterface $renderer, int $priority = 0): void

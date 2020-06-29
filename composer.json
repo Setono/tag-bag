@@ -11,6 +11,7 @@
     ],
     "require": {
         "php": "^7.2",
+        "laminas/laminas-stdlib": "^3.2",
         "psr/event-dispatcher": "^1.0",
         "thecodingmachine/safe": "^1.0"
     },
