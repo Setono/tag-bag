@@ -18,6 +18,9 @@ abstract class Tag implements TagInterface
     /** @var int */
     protected $priority = 0;
 
+    /** @var bool */
+    protected $unique = false;
+
     public function getName(): string
     {
         return $this->name;
@@ -64,6 +67,18 @@ abstract class Tag implements TagInterface
     public function setPriority(int $priority): self
     {
         $this->priority = $priority;
+
+        return $this;
+    }
+
+    public function isUnique(): bool
+    {
+        return $this->unique;
+    }
+
+    public function setUnique(bool $unique): self
+    {
+        $this->unique = $unique;
 
         return $this;
     }

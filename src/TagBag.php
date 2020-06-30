@@ -48,6 +48,11 @@ final class TagBag implements TagBagInterface
 
     public function addTag(TagInterface $tag): TagBagInterface
     {
+        $existingTag = $this->getTag($tag->getName());
+        if (null !== $existingTag && ($existingTag->isUnique() || $tag->isUnique())) {
+            return $this;
+        }
+
         if (!$this->renderer->supports($tag)) {
             throw new UnsupportedTagException($tag);
         }
@@ -74,6 +79,19 @@ final class TagBag implements TagBagInterface
     public function getSection(string $section): ?array
     {
         return $this->tags[$section] ?? null;
+    }
+
+    public function getTag(string $name): ?RenderedTag
+    {
+        foreach ($this->tags as $section) {
+            foreach ($section as $tag) {
+                if ($tag->getName() === $name) {
+                    return $tag;
+                }
+            }
+        }
+
+        return null;
     }
 
     public function renderAll(): string

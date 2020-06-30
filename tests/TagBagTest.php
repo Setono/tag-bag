@@ -47,6 +47,22 @@ final class TagBagTest extends TestCase
     /**
      * @test
      */
+    public function it_does_not_add_tag_if_tag_is_unique_and_already_exists(): void
+    {
+        $tagBag = $this->getTagBag();
+        $tagBag->addTag($this->getTag()->setUnique(true));
+        $tagBag->addTag($this->getTag());
+
+        $this->assertCount(1, $tagBag);
+
+        $tags = $tagBag->getAll();
+
+        $this->defaultTagsAssertions($tags);
+    }
+
+    /**
+     * @test
+     */
     public function it_returns_a_section(): void
     {
         $tagBag = $this->getTagBag();

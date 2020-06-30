@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Setono\TagBag\Exception;
 
 use PHPUnit\Framework\TestCase;
-use Setono\TagBag\Tag\TagInterface;
+use Setono\TagBag\Tag\Tag;
 
 /**
  * @covers \Setono\TagBag\Exception\UnsupportedTagException
@@ -17,25 +17,10 @@ final class UnsupportedTagExceptionTest extends TestCase
      */
     public function it_instantiates(): void
     {
-        $exception = new UnsupportedTagException(new class() implements TagInterface {
-            public function getSection(): string
-            {
-                return TagInterface::SECTION_BODY_END;
-            }
-
+        $exception = new UnsupportedTagException(new class() extends Tag {
             public function getName(): string
             {
                 return 'name';
-            }
-
-            public function getDependencies(): array
-            {
-                return [];
-            }
-
-            public function getPriority(): int
-            {
-                return 0;
             }
         });
 
