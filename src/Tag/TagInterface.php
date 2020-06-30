@@ -16,15 +16,19 @@ interface TagInterface
     public const SECTION_BODY_END = 'body_end';
 
     /**
-     * The section where this tag belongs.
-     */
-    public function getSection(): string;
-
-    /**
      * Returns the name for this tag. The name is used in dependency checking. It is good practice to use a namespace
      * when naming your tag, i.e. 'setono_tag_bag_style_tag' could be a name for the StyleTag instead of just 'style_tag'
      */
     public function getName(): string;
+
+    public function setName(string $name): self;
+
+    /**
+     * The section where this tag belongs.
+     */
+    public function getSection(): string;
+
+    public function setSection(string $section): self;
 
     /**
      * An array of tag names which this tag depends on
@@ -35,6 +39,13 @@ interface TagInterface
      * @return string[]
      */
     public function getDependencies(): array;
+
+    public function addDependency(string $dependency): self;
+
+    /**
+     * Removes a dependency if it exists
+     */
+    public function removeDependency(string $dependency): self;
 
     /**
      * The priority of this tag. The lower the number, the later the tag will be output
@@ -51,10 +62,14 @@ interface TagInterface
      */
     public function getPriority(): int;
 
+    public function setPriority(int $priority): self;
+
     /**
      * Returns true if this tag is unique. This is deduced by the tag name.
      *
      * Returns false by default
      */
     public function isUnique(): bool;
+
+    public function setUnique(bool $unique): self;
 }

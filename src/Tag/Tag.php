@@ -26,7 +26,7 @@ abstract class Tag implements TagInterface
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName(string $name): TagInterface
     {
         $this->name = $name;
 
@@ -38,7 +38,7 @@ abstract class Tag implements TagInterface
         return $this->section;
     }
 
-    public function setSection(string $section): self
+    public function setSection(string $section): TagInterface
     {
         $this->section = $section;
 
@@ -50,11 +50,23 @@ abstract class Tag implements TagInterface
         return $this->dependencies;
     }
 
-    public function addDependency(string $dependency): self
+    public function addDependency(string $dependency): TagInterface
     {
         if (!in_array($dependency, $this->dependencies, true)) {
             $this->dependencies[] = $dependency;
         }
+
+        return $this;
+    }
+
+    public function removeDependency(string $dependency): TagInterface
+    {
+        $pos = array_search($dependency, $this->dependencies, true);
+        if (false === $pos) {
+            return $this;
+        }
+
+        array_splice($this->dependencies, (int) $pos, 1);
 
         return $this;
     }
@@ -64,7 +76,7 @@ abstract class Tag implements TagInterface
         return $this->priority;
     }
 
-    public function setPriority(int $priority): self
+    public function setPriority(int $priority): TagInterface
     {
         $this->priority = $priority;
 
@@ -76,7 +88,7 @@ abstract class Tag implements TagInterface
         return $this->unique;
     }
 
-    public function setUnique(bool $unique): self
+    public function setUnique(bool $unique): TagInterface
     {
         $this->unique = $unique;
 

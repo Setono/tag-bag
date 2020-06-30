@@ -31,7 +31,6 @@ final class ContentTagTest extends TestCase
         $this->assertSame('content', $tag->getContent());
         $this->assertSame(TagInterface::SECTION_BODY_END, $tag->getSection());
         $this->assertSame(0, $tag->getPriority());
-        $this->assertIsArray($tag->getDependencies());
         $this->assertFalse($tag->isUnique());
         $this->assertCount(0, $tag->getDependencies());
     }
@@ -47,7 +46,7 @@ final class ContentTagTest extends TestCase
             ->setContent('new content')
             ->setPriority(10)
             ->setSection('section')
-            ->addDependency('dependent')
+            ->addDependency('dependency')
             ->setUnique(true)
         ;
 
@@ -55,9 +54,33 @@ final class ContentTagTest extends TestCase
         $this->assertSame('new content', $tag->getContent());
         $this->assertSame('section', $tag->getSection());
         $this->assertSame(10, $tag->getPriority());
-        $this->assertIsArray($tag->getDependencies());
         $this->assertCount(1, $tag->getDependencies());
-        $this->assertSame('dependent', $tag->getDependencies()[0]);
+        $this->assertSame('dependency', $tag->getDependencies()[0]);
         $this->assertTrue($tag->isUnique());
+    }
+
+    /**
+     * @test
+     */
+    public function it_removes_dependencies(): void
+    {
+        $tag = new ContentTag('content');
+        $tag->addDependency('dependency');
+        $tag->removeDependency('dependency');
+
+        $this->assertCount(0, $tag->getDependencies());
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_do_anything_if_the_dependency_cannot_be_removed(): void
+    {
+        $tag = new ContentTag('content');
+        $tag->addDependency('dependency');
+        $tag->removeDependency('non_existing_dependency');
+
+        $this->assertCount(1, $tag->getDependencies());
+        $this->assertSame('dependency', $tag->getDependencies()[0]);
     }
 }
