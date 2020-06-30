@@ -22,6 +22,11 @@ interface TagBagInterface extends Countable
     public function getSection(string $section): ?array;
 
     /**
+     * Returns null if the tag does not exist
+     */
+    public function getTag(string $name): ?RenderedTag;
+
+    /**
      * If the tag is empty, it renders an empty string, i.e. ''
      *
      * NOTICE: All tags are removed from the tag bag when this method is called

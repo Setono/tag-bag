@@ -50,4 +50,11 @@ interface TagInterface
      * These tags output in the following order: Tag 1, Tag 3, Tag 2
      */
     public function getPriority(): int;
+
+    /**
+     * Returns true if this tag is unique. This is deduced by the tag name.
+     *
+     * Returns false by default
+     */
+    public function isUnique(): bool;
 }

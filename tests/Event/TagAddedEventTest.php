@@ -62,6 +62,11 @@ final class TagAddedEventTest extends TestCase
             public function restore(): void
             {
             }
+
+            public function getTag(string $name): ?RenderedTag
+            {
+                return null;
+            }
         };
 
         $event = new TagAddedEvent($renderedTag, $tagBag);

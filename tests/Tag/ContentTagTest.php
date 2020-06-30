@@ -32,6 +32,7 @@ final class ContentTagTest extends TestCase
         $this->assertSame(TagInterface::SECTION_BODY_END, $tag->getSection());
         $this->assertSame(0, $tag->getPriority());
         $this->assertIsArray($tag->getDependencies());
+        $this->assertFalse($tag->isUnique());
         $this->assertCount(0, $tag->getDependencies());
     }
 
@@ -47,6 +48,7 @@ final class ContentTagTest extends TestCase
             ->setPriority(10)
             ->setSection('section')
             ->addDependency('dependent')
+            ->setUnique(true)
         ;
 
         $this->assertSame('new_name', $tag->getName());
@@ -56,5 +58,6 @@ final class ContentTagTest extends TestCase
         $this->assertIsArray($tag->getDependencies());
         $this->assertCount(1, $tag->getDependencies());
         $this->assertSame('dependent', $tag->getDependencies()[0]);
+        $this->assertTrue($tag->isUnique());
     }
 }

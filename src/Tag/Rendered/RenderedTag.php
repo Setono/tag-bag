@@ -29,18 +29,30 @@ final class RenderedTag
     /** @var string[] */
     private $dependencies;
 
-    private function __construct(string $name, string $value, int $priority, string $section, array $dependencies)
-    {
+    /** @var bool */
+    private $unique;
+
+    private function __construct(
+        string $name,
+        string $value,
+        int $priority,
+        string $section,
+        array $dependencies,
+        bool $unique
+    ) {
         $this->name = $name;
         $this->value = $value;
         $this->priority = $priority;
         $this->section = $section;
         $this->dependencies = $dependencies;
+        $this->unique = $unique;
     }
 
     public static function createFromTag(TagInterface $tag, string $value): self
     {
-        return new self($tag->getName(), $value, $tag->getPriority(), $tag->getSection(), $tag->getDependencies());
+        return new self(
+            $tag->getName(), $value, $tag->getPriority(), $tag->getSection(), $tag->getDependencies(), $tag->isUnique()
+        );
     }
 
     public function __toString(): string
@@ -71,5 +83,10 @@ final class RenderedTag
     public function getDependencies(): array
     {
         return $this->dependencies;
+    }
+
+    public function isUnique(): bool
+    {
+        return $this->unique;
     }
 }
