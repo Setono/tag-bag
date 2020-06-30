@@ -6,6 +6,7 @@ namespace Setono\TagBag;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use function Safe\usort;
+use Setono\TagBag\Event\PreAddEvent;
 use Setono\TagBag\Event\PreRenderEvent;
 use Setono\TagBag\Event\TagAddedEvent;
 use Setono\TagBag\Exception\NonExistingTagsException;
@@ -48,6 +49,8 @@ final class TagBag implements TagBagInterface
 
     public function addTag(TagInterface $tag): TagBagInterface
     {
+        $this->eventDispatcher->dispatch(new PreAddEvent($tag));
+
         $existingTag = $this->getTag($tag->getName());
         if (null !== $existingTag && ($existingTag->isUnique() || $tag->isUnique())) {
             return $this;
