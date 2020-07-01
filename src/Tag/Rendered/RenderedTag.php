@@ -32,13 +32,17 @@ final class RenderedTag
     /** @var bool */
     private $unique;
 
+    /** @var string */
+    private $fingerprint;
+
     private function __construct(
         string $name,
         string $value,
         int $priority,
         string $section,
         array $dependencies,
-        bool $unique
+        bool $unique,
+        string $fingerprint
     ) {
         $this->name = $name;
         $this->value = $value;
@@ -46,12 +50,19 @@ final class RenderedTag
         $this->section = $section;
         $this->dependencies = $dependencies;
         $this->unique = $unique;
+        $this->fingerprint = $fingerprint;
     }
 
-    public static function createFromTag(TagInterface $tag, string $value): self
+    public static function createFromTag(TagInterface $tag, string $value, string $fingerprint): self
     {
         return new self(
-            $tag->getName(), $value, $tag->getPriority(), $tag->getSection(), $tag->getDependencies(), $tag->isUnique()
+            $tag->getName(),
+            $value,
+            $tag->getPriority(),
+            $tag->getSection(),
+            $tag->getDependencies(),
+            $tag->isUnique(),
+            $fingerprint
         );
     }
 
@@ -88,5 +99,10 @@ final class RenderedTag
     public function isUnique(): bool
     {
         return $this->unique;
+    }
+
+    public function getFingerprint(): string
+    {
+        return $this->fingerprint;
     }
 }

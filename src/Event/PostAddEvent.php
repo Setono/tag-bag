@@ -7,7 +7,10 @@ namespace Setono\TagBag\Event;
 use Setono\TagBag\Tag\Rendered\RenderedTag;
 use Setono\TagBag\TagBagInterface;
 
-final class TagAddedEvent
+/**
+ * This event is fired when the tag has been added to the tag bag
+ */
+final class PostAddEvent
 {
     /** @var RenderedTag */
     private $tag;

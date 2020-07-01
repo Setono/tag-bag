@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace Setono\TagBag;
 
+use InvalidArgumentException;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use function Safe\sprintf;
 use function Safe\usort;
+use Setono\TagBag\Event\PostAddEvent;
 use Setono\TagBag\Event\PreAddEvent;
-use Setono\TagBag\Event\PreRenderEvent;
-use Setono\TagBag\Event\TagAddedEvent;
 use Setono\TagBag\Exception\NonExistingTagsException;
 use Setono\TagBag\Exception\UnsupportedTagException;
+use Setono\TagBag\Generator\FingerprintGeneratorInterface;
 use Setono\TagBag\Renderer\RendererInterface;
 use Setono\TagBag\Storage\StorageInterface;
 use Setono\TagBag\Tag\Rendered\RenderedTag;
@@ -37,39 +39,44 @@ final class TagBag implements TagBagInterface
     /** @var EventDispatcherInterface */
     private $eventDispatcher;
 
+    /** @var FingerprintGeneratorInterface */
+    private $fingerprintGenerator;
+
     public function __construct(
         RendererInterface $renderer,
         StorageInterface $storage,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
+        FingerprintGeneratorInterface $fingerprintGenerator
     ) {
         $this->renderer = $renderer;
         $this->storage = $storage;
         $this->eventDispatcher = $eventDispatcher;
+        $this->fingerprintGenerator = $fingerprintGenerator;
     }
 
     public function addTag(TagInterface $tag): TagBagInterface
     {
         $this->eventDispatcher->dispatch(new PreAddEvent($tag));
 
-        $existingTag = $this->getTag($tag->getName());
-        if (null !== $existingTag && ($existingTag->isUnique() || $tag->isUnique())) {
-            return $this;
-        }
-
         if (!$this->renderer->supports($tag)) {
             throw new UnsupportedTagException($tag);
         }
 
-        $this->eventDispatcher->dispatch(new PreRenderEvent($tag));
+        $renderedValue = $this->renderer->render($tag);
+        $fingerprint = $this->fingerprintGenerator->generate($tag, $renderedValue);
+        $existingTag = $this->findTagByFingerprint($fingerprint);
+        if (null !== $existingTag && ($existingTag->isUnique() || $tag->isUnique())) {
+            return $this;
+        }
 
-        $renderedTag = RenderedTag::createFromTag($tag, $this->renderer->render($tag));
+        $renderedTag = RenderedTag::createFromTag($tag, $renderedValue, $fingerprint);
         $this->tags[$tag->getSection()][] = $renderedTag;
 
         usort($this->tags[$tag->getSection()], static function (RenderedTag $tag1, RenderedTag $tag2): int {
             return $tag2->getPriority() <=> $tag1->getPriority();
         });
 
-        $this->eventDispatcher->dispatch(new TagAddedEvent($renderedTag, $this));
+        $this->eventDispatcher->dispatch(new PostAddEvent($renderedTag, $this));
 
         return $this;
     }
@@ -79,12 +86,21 @@ final class TagBag implements TagBagInterface
         return $this->tags;
     }
 
-    public function getSection(string $section): ?array
+    public function getSection(string $section): array
     {
-        return $this->tags[$section] ?? null;
+        if (!$this->hasSection($section)) {
+            throw new InvalidArgumentException(sprintf('The section, "%s", does not exist', $section));
+        }
+
+        return $this->tags[$section];
     }
 
-    public function getTag(string $name): ?RenderedTag
+    public function hasSection(string $section): bool
+    {
+        return isset($this->tags[$section]);
+    }
+
+    public function getTag(string $name): RenderedTag
     {
         foreach ($this->tags as $section) {
             foreach ($section as $tag) {
@@ -94,7 +110,20 @@ final class TagBag implements TagBagInterface
             }
         }
 
-        return null;
+        throw new InvalidArgumentException(sprintf('The tag, "%s", does not exist', $name));
+    }
+
+    public function hasTag(string $name): bool
+    {
+        foreach ($this->tags as $section) {
+            foreach ($section as $tag) {
+                if ($tag->getName() === $name) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public function renderAll(): string
@@ -117,7 +146,11 @@ final class TagBag implements TagBagInterface
 
     public function renderSection(string $section): string
     {
-        $tags = $this->tags[$section] ?? [];
+        if (!$this->hasSection($section)) {
+            return '';
+        }
+
+        $tags = $this->getSection($section);
         $this->assertDependencies([$tags]);
         unset($this->tags[$section]);
 
@@ -197,5 +230,18 @@ final class TagBag implements TagBagInterface
         if (count($nonExistingTags) > 0) {
             throw new NonExistingTagsException($nonExistingTags);
         }
+    }
+
+    private function findTagByFingerprint(string $fingerprint): ?RenderedTag
+    {
+        foreach ($this->tags as $section) {
+            foreach ($section as $tag) {
+                if ($tag->getFingerprint() === $fingerprint) {
+                    return $tag;
+                }
+            }
+        }
+
+        return null;
     }
 }

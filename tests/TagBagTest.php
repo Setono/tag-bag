@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Setono\TagBag;
 
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Setono\TagBag\Exception\NonExistingTagsException;
 use Setono\TagBag\Exception\UnsupportedTagException;
+use Setono\TagBag\Generator\ValueBasedFingerprintGenerator;
 use Setono\TagBag\Renderer\RendererInterface;
 use Setono\TagBag\Storage\InMemoryStorage;
 use Setono\TagBag\Storage\StorageInterface;
@@ -63,6 +65,54 @@ final class TagBagTest extends TestCase
     /**
      * @test
      */
+    public function it_returns_tag_when_trying_to_get_existing_tag(): void
+    {
+        $tag = $this->getTag();
+
+        $tagBag = $this->getTagBag();
+        $tagBag->addTag($tag->setName('tag_name'));
+
+        $this->assertSame($tag->getName(), $tagBag->getTag('tag_name')->getName());
+    }
+
+    /**
+     * @test
+     */
+    public function it_throws_when_trying_to_get_non_existing_tag(): void
+    {
+        $this->expectException(InvalidArgumentException::class);
+
+        $tagBag = $this->getTagBag();
+        $tagBag->addTag($this->getTag()->setName('tag_name'));
+
+        $tagBag->getTag('non_existing_tag_name');
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_true_if_asked_if_existing_tag_exists(): void
+    {
+        $tagBag = $this->getTagBag();
+        $tagBag->addTag($this->getTag()->setName('tag_name'));
+
+        $this->assertTrue($tagBag->hasTag('tag_name'));
+    }
+
+    /**
+     * @test
+     */
+    public function it_returns_false_if_asked_if_non_existing_tag_exists(): void
+    {
+        $tagBag = $this->getTagBag();
+        $tagBag->addTag($this->getTag()->setName('tag_name'));
+
+        $this->assertFalse($tagBag->hasTag('non_existing_tag_name'));
+    }
+
+    /**
+     * @test
+     */
     public function it_returns_a_section(): void
     {
         $tagBag = $this->getTagBag();
@@ -72,6 +122,15 @@ final class TagBagTest extends TestCase
 
         $this->assertIsArray($section);
         $this->assertCount(1, $section);
+    }
+
+    /**
+     * @test
+     */
+    public function it_renders_empty_string_if_section_does_not_exist(): void
+    {
+        $tagBag = $this->getTagBag();
+        $this->assertSame('', $tagBag->renderSection('non_existing_section'));
     }
 
     /**
@@ -111,14 +170,13 @@ final class TagBagTest extends TestCase
     /**
      * @test
      */
-    public function it_returns_null_if_the_section_does_not_exist(): void
+    public function it_throws_if_the_section_does_not_exist(): void
     {
+        $this->expectException(InvalidArgumentException::class);
         $tagBag = $this->getTagBag();
         $tagBag->addTag($this->getTag()->setSection('section'));
 
-        $section = $tagBag->getSection('non_existing_section');
-
-        $this->assertNull($section);
+        $tagBag->getSection('non_existing_section');
     }
 
     /**
@@ -303,6 +361,6 @@ final class TagBagTest extends TestCase
             }
         };
 
-        return new TagBag($renderer, $storage ?? new InMemoryStorage(), $eventDispatcher);
+        return new TagBag($renderer, $storage ?? new InMemoryStorage(), $eventDispatcher, new ValueBasedFingerprintGenerator());
     }
 }

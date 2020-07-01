@@ -26,7 +26,7 @@ final class RenderedTagTest extends TestCase
             ->setUnique(true)
         ;
 
-        $renderedTag = RenderedTag::createFromTag($tag, 'value');
+        $renderedTag = RenderedTag::createFromTag($tag, 'value', 'fingerprint');
 
         $this->assertSame('name', $renderedTag->getName());
         $this->assertSame('value', $renderedTag->getValue());
@@ -35,5 +35,6 @@ final class RenderedTagTest extends TestCase
         $this->assertSame(TagInterface::SECTION_BODY_END, $renderedTag->getSection());
         $this->assertSame(['dependency'], $renderedTag->getDependencies());
         $this->assertTrue($renderedTag->isUnique());
+        $this->assertSame('fingerprint', $renderedTag->getFingerprint());
     }
 }

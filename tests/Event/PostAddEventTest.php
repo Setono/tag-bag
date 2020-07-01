@@ -11,9 +11,9 @@ use Setono\TagBag\Tag\TagInterface;
 use Setono\TagBag\TagBagInterface;
 
 /**
- * @covers \Setono\TagBag\Event\TagAddedEvent
+ * @covers \Setono\TagBag\Event\PostAddEvent
  */
-final class TagAddedEventTest extends TestCase
+final class PostAddEventTest extends TestCase
 {
     /**
      * @test
@@ -22,37 +22,42 @@ final class TagAddedEventTest extends TestCase
     {
         $tag = new class() extends Tag {
         };
-        $renderedTag = RenderedTag::createFromTag($tag, 'value');
+        $renderedTag = RenderedTag::createFromTag($tag, 'value', 'fingerprint');
 
         $tagBag = new class() implements TagBagInterface {
             public function count(): int
             {
-                return 0;
+                throw new \RuntimeException('Not implemented');
             }
 
             public function addTag(TagInterface $tag): TagBagInterface
             {
-                return $this;
+                throw new \RuntimeException('Not implemented');
             }
 
             public function getAll(): array
             {
-                return [];
+                throw new \RuntimeException('Not implemented');
             }
 
-            public function getSection(string $section): ?array
+            public function getSection(string $section): array
             {
-                return null;
+                throw new \RuntimeException('Not implemented');
+            }
+
+            public function hasSection(string $section): bool
+            {
+                throw new \RuntimeException('Not implemented');
             }
 
             public function renderAll(): string
             {
-                return '';
+                throw new \RuntimeException('Not implemented');
             }
 
             public function renderSection(string $section): string
             {
-                return '';
+                throw new \RuntimeException('Not implemented');
             }
 
             public function store(): void
@@ -63,13 +68,18 @@ final class TagAddedEventTest extends TestCase
             {
             }
 
-            public function getTag(string $name): ?RenderedTag
+            public function getTag(string $name): RenderedTag
             {
-                return null;
+                throw new \RuntimeException('Not implemented');
+            }
+
+            public function hasTag(string $name): bool
+            {
+                throw new \RuntimeException('Not implemented');
             }
         };
 
-        $event = new TagAddedEvent($renderedTag, $tagBag);
+        $event = new PostAddEvent($renderedTag, $tagBag);
         $this->assertSame($renderedTag, $event->getTag());
         $this->assertSame($tagBag, $event->getTagBag());
     }
