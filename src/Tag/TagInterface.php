@@ -65,8 +65,6 @@ interface TagInterface
     public function setPriority(int $priority): self;
 
     /**
-     * Returns true if this tag is unique. This is deduced by the tag name.
-     *
      * Returns false by default
      */
     public function isUnique(): bool;
