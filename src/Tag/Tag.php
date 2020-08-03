@@ -19,7 +19,7 @@ abstract class Tag implements TagInterface
     protected $priority = 0;
 
     /** @var bool */
-    protected $unique = false;
+    protected $unique = true;
 
     public function getName(): string
     {
