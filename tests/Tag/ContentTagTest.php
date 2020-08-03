@@ -17,7 +17,7 @@ final class ContentTagTest extends TestCase
      */
     public function it_creates(): void
     {
-        $this->assertInstanceOf(TagInterface::class, new ContentTag('content'));
+        self::assertInstanceOf(TagInterface::class, new ContentTag('content'));
     }
 
     /**
@@ -27,12 +27,12 @@ final class ContentTagTest extends TestCase
     {
         $tag = new ContentTag('content');
 
-        $this->assertSame('setono_tag_bag_content_tag', $tag->getName());
-        $this->assertSame('content', $tag->getContent());
-        $this->assertSame(TagInterface::SECTION_BODY_END, $tag->getSection());
-        $this->assertSame(0, $tag->getPriority());
-        $this->assertFalse($tag->isUnique());
-        $this->assertCount(0, $tag->getDependencies());
+        self::assertSame('setono_tag_bag_content_tag', $tag->getName());
+        self::assertSame('content', $tag->getContent());
+        self::assertSame(TagInterface::SECTION_BODY_END, $tag->getSection());
+        self::assertSame(0, $tag->getPriority());
+        self::assertTrue($tag->isUnique());
+        self::assertCount(0, $tag->getDependencies());
     }
 
     /**
@@ -50,13 +50,13 @@ final class ContentTagTest extends TestCase
             ->setUnique(true)
         ;
 
-        $this->assertSame('new_name', $tag->getName());
-        $this->assertSame('new content', $tag->getContent());
-        $this->assertSame('section', $tag->getSection());
-        $this->assertSame(10, $tag->getPriority());
-        $this->assertCount(1, $tag->getDependencies());
-        $this->assertSame('dependency', $tag->getDependencies()[0]);
-        $this->assertTrue($tag->isUnique());
+        self::assertSame('new_name', $tag->getName());
+        self::assertSame('new content', $tag->getContent());
+        self::assertSame('section', $tag->getSection());
+        self::assertSame(10, $tag->getPriority());
+        self::assertCount(1, $tag->getDependencies());
+        self::assertSame('dependency', $tag->getDependencies()[0]);
+        self::assertTrue($tag->isUnique());
     }
 
     /**
@@ -68,7 +68,7 @@ final class ContentTagTest extends TestCase
         $tag->addDependency('dependency');
         $tag->removeDependency('dependency');
 
-        $this->assertCount(0, $tag->getDependencies());
+        self::assertCount(0, $tag->getDependencies());
     }
 
     /**
@@ -80,7 +80,7 @@ final class ContentTagTest extends TestCase
         $tag->addDependency('dependency');
         $tag->removeDependency('non_existing_dependency');
 
-        $this->assertCount(1, $tag->getDependencies());
-        $this->assertSame('dependency', $tag->getDependencies()[0]);
+        self::assertCount(1, $tag->getDependencies());
+        self::assertSame('dependency', $tag->getDependencies()[0]);
     }
 }

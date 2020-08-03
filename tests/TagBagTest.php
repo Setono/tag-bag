@@ -13,6 +13,7 @@ use Setono\TagBag\Generator\ValueBasedFingerprintGenerator;
 use Setono\TagBag\Renderer\RendererInterface;
 use Setono\TagBag\Storage\InMemoryStorage;
 use Setono\TagBag\Storage\StorageInterface;
+use Setono\TagBag\Tag\ContentAwareInterface;
 use Setono\TagBag\Tag\Rendered\RenderedTag;
 use Setono\TagBag\Tag\Tag;
 use Setono\TagBag\Tag\TagInterface;
@@ -28,7 +29,7 @@ final class TagBagTest extends TestCase
     public function the_tag_bag_is_empty(): void
     {
         $tagBag = $this->getTagBag();
-        $this->assertCount(0, $tagBag);
+        self::assertCount(0, $tagBag);
     }
 
     /**
@@ -39,7 +40,7 @@ final class TagBagTest extends TestCase
         $tagBag = $this->getTagBag();
         $tagBag->addTag($this->getTag());
 
-        $this->assertCount(1, $tagBag);
+        self::assertCount(1, $tagBag);
 
         $tags = $tagBag->getAll();
 
@@ -55,7 +56,7 @@ final class TagBagTest extends TestCase
         $tagBag->addTag($this->getTag()->setUnique(true));
         $tagBag->addTag($this->getTag());
 
-        $this->assertCount(1, $tagBag);
+        self::assertCount(1, $tagBag);
 
         $tags = $tagBag->getAll();
 
@@ -72,7 +73,7 @@ final class TagBagTest extends TestCase
         $tagBag = $this->getTagBag();
         $tagBag->addTag($tag->setName('tag_name'));
 
-        $this->assertSame($tag->getName(), $tagBag->getTag('tag_name')->getName());
+        self::assertSame($tag->getName(), $tagBag->getTag('tag_name')->getName());
     }
 
     /**
@@ -96,7 +97,7 @@ final class TagBagTest extends TestCase
         $tagBag = $this->getTagBag();
         $tagBag->addTag($this->getTag()->setName('tag_name'));
 
-        $this->assertTrue($tagBag->hasTag('tag_name'));
+        self::assertTrue($tagBag->hasTag('tag_name'));
     }
 
     /**
@@ -107,7 +108,7 @@ final class TagBagTest extends TestCase
         $tagBag = $this->getTagBag();
         $tagBag->addTag($this->getTag()->setName('tag_name'));
 
-        $this->assertFalse($tagBag->hasTag('non_existing_tag_name'));
+        self::assertFalse($tagBag->hasTag('non_existing_tag_name'));
     }
 
     /**
@@ -120,8 +121,8 @@ final class TagBagTest extends TestCase
 
         $section = $tagBag->getSection('section');
 
-        $this->assertIsArray($section);
-        $this->assertCount(1, $section);
+        self::assertIsArray($section);
+        self::assertCount(1, $section);
     }
 
     /**
@@ -130,7 +131,7 @@ final class TagBagTest extends TestCase
     public function it_renders_empty_string_if_section_does_not_exist(): void
     {
         $tagBag = $this->getTagBag();
-        $this->assertSame('', $tagBag->renderSection('non_existing_section'));
+        self::assertSame('', $tagBag->renderSection('non_existing_section'));
     }
 
     /**
@@ -139,16 +140,16 @@ final class TagBagTest extends TestCase
     public function it_renders_a_section_and_removes_rendered_section(): void
     {
         $tagBag = $this->getTagBag();
-        $tagBag->addTag($this->getTag()->setSection('section1'));
-        $tagBag->addTag($this->getTag()->setSection('section2'));
+        $tagBag->addTag($this->getTag('content1')->setSection('section1'));
+        $tagBag->addTag($this->getTag('content2')->setSection('section2'));
 
         // before the section is rendered, the count should be 2
-        $this->assertCount(2, $tagBag);
-        $this->assertSame('content', $tagBag->renderSection('section1'));
+        self::assertCount(2, $tagBag);
+        self::assertSame('content1', $tagBag->renderSection('section1'));
 
         // after the section is rendered, the count should be 1,
         // because the renderSection call should remove the given section from the tag bag
-        $this->assertCount(1, $tagBag);
+        self::assertCount(1, $tagBag);
     }
 
     /**
@@ -157,14 +158,14 @@ final class TagBagTest extends TestCase
     public function it_renders_all_tags_and_resets_the_tag_bag(): void
     {
         $tagBag = $this->getTagBag();
-        $tagBag->addTag($this->getTag()->setSection('section1'));
-        $tagBag->addTag($this->getTag()->setSection('section2'));
+        $tagBag->addTag($this->getTag('content1')->setSection('section1'));
+        $tagBag->addTag($this->getTag('content2')->setSection('section2'));
 
-        $this->assertSame('contentcontent', $tagBag->renderAll());
+        self::assertSame('content1content2', $tagBag->renderAll());
 
         // after the section is rendered, the count should be 1,
         // because the renderSection call should remove the given section from the tag bag
-        $this->assertCount(0, $tagBag);
+        self::assertCount(0, $tagBag);
     }
 
     /**
@@ -186,16 +187,16 @@ final class TagBagTest extends TestCase
     {
         $tagBag = $this->getTagBag();
         $tagBag
-            ->addTag($this->getTag()->setPriority(-10)->setName('key3'))
-            ->addTag($this->getTag()->setPriority(10)->setName('key1'))
-            ->addTag($this->getTag()->setName('key2'))
+            ->addTag($this->getTag('content1')->setPriority(-10)->setName('key3'))
+            ->addTag($this->getTag('content2')->setPriority(10)->setName('key1'))
+            ->addTag($this->getTag('content3')->setName('key2'))
         ;
 
         $section = $tagBag->getSection(TagInterface::SECTION_BODY_END);
 
         $i = 1;
         foreach ($section as $tag) {
-            $this->assertSame('key' . $i++, $tag->getName());
+            self::assertSame('key' . $i++, $tag->getName());
         }
     }
 
@@ -206,11 +207,11 @@ final class TagBagTest extends TestCase
     {
         $tagBag = $this->getTagBag();
         $tagBag
-            ->addTag($this->getTag()->setName('dependency'))
-            ->addTag($this->getTag()->addDependency('dependency'))
+            ->addTag($this->getTag('content1')->setName('dependency'))
+            ->addTag($this->getTag('content2')->addDependency('dependency'))
         ;
 
-        $this->assertCount(2, $tagBag);
+        self::assertCount(2, $tagBag);
     }
 
     /**
@@ -232,10 +233,10 @@ final class TagBagTest extends TestCase
     public function it_does_not_throw_when_dependency_is_present_in_not_rendered_tags(): void
     {
         $tagBag = $this->getTagBag();
-        $tagBag->addTag($this->getTag()->addDependency('dependency'));
-        $tagBag->addTag($this->getTag()->setName('dependency'));
+        $tagBag->addTag($this->getTag('content1')->addDependency('dependency'));
+        $tagBag->addTag($this->getTag('content2')->setName('dependency'));
 
-        $this->assertSame('contentcontent', $tagBag->renderAll());
+        self::assertSame('content1content2', $tagBag->renderAll());
     }
 
     /**
@@ -244,12 +245,12 @@ final class TagBagTest extends TestCase
     public function it_does_not_throw_when_dependency_is_present_in_already_rendered_tags(): void
     {
         $tagBag = $this->getTagBag();
-        $tagBag->addTag($this->getTag()->addDependency('dependency'));
-        $tagBag->addTag($this->getTag()->setName('dependency')->setSection(TagInterface::SECTION_HEAD));
+        $tagBag->addTag($this->getTag('content1')->addDependency('dependency'));
+        $tagBag->addTag($this->getTag('content2')->setName('dependency')->setSection(TagInterface::SECTION_HEAD));
 
         $tagBag->renderSection(TagInterface::SECTION_HEAD);
 
-        $this->assertSame('content', $tagBag->renderAll());
+        self::assertSame('content1', $tagBag->renderAll());
     }
 
     /**
@@ -279,7 +280,7 @@ final class TagBagTest extends TestCase
 
         $tagBag->store();
 
-        $this->assertNull($storage->restore());
+        self::assertNull($storage->restore());
     }
 
     /**
@@ -293,7 +294,7 @@ final class TagBagTest extends TestCase
 
         $tagBag->restore();
 
-        $this->assertCount(0, $tagBag);
+        self::assertCount(0, $tagBag);
     }
 
     /**
@@ -320,22 +321,33 @@ final class TagBagTest extends TestCase
 
     private function defaultTagsAssertions(array $tags): void
     {
-        $this->assertIsArray($tags);
+        self::assertIsArray($tags);
 
         // asserting the number of sections
-        $this->assertCount(1, $tags);
+        self::assertCount(1, $tags);
 
         $section = current($tags);
-        $this->assertCount(1, $section);
+        self::assertCount(1, $section);
 
         foreach ($section as $tag) {
-            $this->assertInstanceOf(RenderedTag::class, $tag);
+            self::assertInstanceOf(RenderedTag::class, $tag);
         }
     }
 
-    private function getTag(): Tag
+    private function getTag(string $content = 'content'): Tag
     {
-        return new class() extends Tag {
+        return new class($content) extends Tag implements ContentAwareInterface {
+            private $content;
+
+            public function __construct(string $content)
+            {
+                $this->content = $content;
+            }
+
+            public function getContent(): string
+            {
+                return $this->content;
+            }
         };
     }
 
@@ -350,6 +362,10 @@ final class TagBagTest extends TestCase
 
                 public function render(TagInterface $tag): string
                 {
+                    if ($tag instanceof ContentAwareInterface) {
+                        return $tag->getContent();
+                    }
+
                     return 'content';
                 }
             };
