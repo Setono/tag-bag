@@ -24,10 +24,11 @@ final class TemplateTagTest extends TestCase
      */
     public function it_has_default_values(): void
     {
-        $tag = new TemplateTag('template');
+        $tag = new TemplateTag('template.html.twig');
 
         self::assertSame('setono_tag_bag_template_tag', $tag->getName());
-        self::assertSame('template', $tag->getTemplate());
+        self::assertSame('template.html.twig', $tag->getTemplate());
+        self::assertSame('twig', $tag->getTemplateType());
         self::assertSame([], $tag->getContext());
     }
 

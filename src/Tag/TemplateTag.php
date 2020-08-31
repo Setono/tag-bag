@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Setono\TagBag\Tag;
 
+use const PATHINFO_EXTENSION;
+
 class TemplateTag extends Tag implements TemplateTagInterface
 {
     /** @var string */
@@ -36,5 +38,10 @@ class TemplateTag extends Tag implements TemplateTagInterface
         $this->context = $context;
 
         return $this;
+    }
+
+    public function getTemplateType(): string
+    {
+        return mb_strtolower(pathinfo($this->template, PATHINFO_EXTENSION));
     }
 }

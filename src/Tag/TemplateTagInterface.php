@@ -23,4 +23,11 @@ interface TemplateTagInterface extends TagInterface
      * Overrides the current context
      */
     public function setContext(array $context): self;
+
+    /**
+     * Returns the template type. For example a twig template would return 'twig'
+     * This is helpful when creating renderers that should support generic tags. At runtime these tags
+     * can return the correct template type and subsequently be rendered by the correct renderer
+     */
+    public function getTemplateType(): string;
 }
