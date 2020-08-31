@@ -70,4 +70,9 @@ interface TagInterface
     public function isUnique(): bool;
 
     public function setUnique(bool $unique): self;
+
+    /**
+     * If this method returns null, a fingerprint generator will be used
+     */
+    public function getFingerprint(): ?string;
 }

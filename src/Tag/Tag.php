@@ -94,4 +94,9 @@ abstract class Tag implements TagInterface
 
         return $this;
     }
+
+    public function getFingerprint(): ?string
+    {
+        return null;
+    }
 }

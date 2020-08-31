@@ -63,7 +63,7 @@ final class TagBag implements TagBagInterface
         }
 
         $renderedValue = $this->renderer->render($tag);
-        $fingerprint = $this->fingerprintGenerator->generate($tag, $renderedValue);
+        $fingerprint = $this->getFingerprint($tag, $renderedValue);
         $existingTag = $this->findTagByFingerprint($fingerprint);
         if (null !== $existingTag && ($existingTag->isUnique() || $tag->isUnique())) {
             return $this;
@@ -194,6 +194,16 @@ final class TagBag implements TagBagInterface
         return (int) array_sum(array_map(static function (array $section): int {
             return count($section);
         }, $this->tags));
+    }
+
+    private function getFingerprint(TagInterface $tag, string $renderedValue): string
+    {
+        $fingerprint = $tag->getFingerprint();
+        if (null !== $fingerprint) {
+            return $fingerprint;
+        }
+
+        return $this->fingerprintGenerator->generate($tag, $renderedValue);
     }
 
     /**

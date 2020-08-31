@@ -3,9 +3,6 @@ parameters:
 	checkMissingIterableValueType: false
 	checkGenericClassInNonGenericObjectType: false
 
-	excludes_analyse:
-		- 'tests/**.php'
-
 	ignoreErrors:
 		- '/Call to an undefined method Setono\\TagBag\\Tag\\TagInterface::getContent/'
 		- '/Call to an undefined method Setono\\TagBag\\Tag\\TagInterface::getType/'
