@@ -12,6 +12,7 @@
     "require": {
         "php": "^7.2",
         "ext-hash": "*",
+        "ext-mbstring": "*",
         "ext-session": "*",
         "laminas/laminas-stdlib": "^3.2",
         "psr/event-dispatcher": "^1.0",
