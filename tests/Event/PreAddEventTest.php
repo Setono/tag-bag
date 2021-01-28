@@ -20,6 +20,6 @@ final class PreAddEventTest extends TestCase
         $tag = new class() extends Tag {
         };
         $event = new PreAddEvent($tag);
-        $this->assertSame($tag, $event->getTag());
+        self::assertSame($tag, $event->getTag());
     }
 }

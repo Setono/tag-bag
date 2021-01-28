@@ -6,11 +6,12 @@ namespace Setono\TagBag;
 
 use InvalidArgumentException;
 use Psr\EventDispatcher\EventDispatcherInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 use function Safe\sprintf;
 use function Safe\usort;
 use Setono\TagBag\Event\PostAddEvent;
 use Setono\TagBag\Event\PreAddEvent;
-use Setono\TagBag\Exception\NonExistingTagsException;
 use Setono\TagBag\Exception\UnsupportedTagException;
 use Setono\TagBag\Generator\FingerprintGeneratorInterface;
 use Setono\TagBag\Renderer\RendererInterface;
@@ -42,16 +43,21 @@ final class TagBag implements TagBagInterface
     /** @var FingerprintGeneratorInterface */
     private $fingerprintGenerator;
 
+    /** @var LoggerInterface */
+    private $logger;
+
     public function __construct(
         RendererInterface $renderer,
         StorageInterface $storage,
         EventDispatcherInterface $eventDispatcher,
-        FingerprintGeneratorInterface $fingerprintGenerator
+        FingerprintGeneratorInterface $fingerprintGenerator,
+        LoggerInterface $logger = null
     ) {
         $this->renderer = $renderer;
         $this->storage = $storage;
         $this->eventDispatcher = $eventDispatcher;
         $this->fingerprintGenerator = $fingerprintGenerator;
+        $this->logger = $logger ?? new NullLogger();
     }
 
     public function addTag(TagInterface $tag): TagBagInterface
@@ -128,7 +134,9 @@ final class TagBag implements TagBagInterface
 
     public function renderAll(): string
     {
-        $this->assertDependencies($this->tags);
+        if (!$this->checkDependencies($this->tags)) {
+            return '';
+        }
 
         $tags = $this->tags;
         $this->tags = [];
@@ -151,7 +159,11 @@ final class TagBag implements TagBagInterface
         }
 
         $tags = $this->getSection($section);
-        $this->assertDependencies([$tags]);
+
+        if (!$this->checkDependencies([$tags])) {
+            return '';
+        }
+
         unset($this->tags[$section]);
 
         $str = '';
@@ -208,8 +220,10 @@ final class TagBag implements TagBagInterface
 
     /**
      * @param RenderedTag[][] $tags
+     *
+     * Returns true if the dependencies check out, else it returns false
      */
-    private function assertDependencies(array $tags): void
+    private function checkDependencies(array $tags): bool
     {
         $nonExistingTags = [];
 
@@ -238,8 +252,12 @@ final class TagBag implements TagBagInterface
         }
 
         if (count($nonExistingTags) > 0) {
-            throw new NonExistingTagsException($nonExistingTags);
+            $this->logger->error(sprintf('[Tag Bag] Non existing tags that some other tag depended on: [%s]', implode(', ', $nonExistingTags)));
+
+            return false;
         }
+
+        return true;
     }
 
     private function findTagByFingerprint(string $fingerprint): ?RenderedTag

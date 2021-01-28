@@ -19,7 +19,7 @@ final class StyleRendererTest extends TestCase
     public function it_supports_style_tag(): void
     {
         $renderer = new StyleRenderer();
-        $this->assertTrue($renderer->supports(new StyleTag('content')));
+        self::assertTrue($renderer->supports(new StyleTag('content')));
     }
 
     /**
@@ -28,7 +28,7 @@ final class StyleRendererTest extends TestCase
     public function it_does_not_support_other_tags(): void
     {
         $renderer = new StyleRenderer();
-        $this->assertFalse($renderer->supports(new class() extends Tag {
+        self::assertFalse($renderer->supports(new class() extends Tag {
         }));
     }
 
@@ -38,6 +38,6 @@ final class StyleRendererTest extends TestCase
     public function it_renders(): void
     {
         $renderer = new StyleRenderer();
-        $this->assertSame('<style>content</style>', $renderer->render(new StyleTag('content')));
+        self::assertSame('<style>content</style>', $renderer->render(new StyleTag('content')));
     }
 }

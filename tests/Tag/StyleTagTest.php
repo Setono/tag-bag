@@ -17,8 +17,8 @@ final class StyleTagTest extends TestCase
     public function it_creates(): void
     {
         $tag = new StyleTag('content');
-        $this->assertInstanceOf(TagInterface::class, $tag);
-        $this->assertInstanceOf(StyleTagInterface::class, $tag);
+        self::assertInstanceOf(TagInterface::class, $tag);
+        self::assertInstanceOf(StyleTagInterface::class, $tag);
     }
 
     /**
@@ -28,6 +28,6 @@ final class StyleTagTest extends TestCase
     {
         $tag = new StyleTag('content');
 
-        $this->assertSame('setono_tag_bag_style_tag', $tag->getName());
+        self::assertSame('setono_tag_bag_style_tag', $tag->getName());
     }
 }

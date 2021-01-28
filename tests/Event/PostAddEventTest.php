@@ -80,7 +80,7 @@ final class PostAddEventTest extends TestCase
         };
 
         $event = new PostAddEvent($renderedTag, $tagBag);
-        $this->assertSame($renderedTag, $event->getTag());
-        $this->assertSame($tagBag, $event->getTagBag());
+        self::assertSame($renderedTag, $event->getTag());
+        self::assertSame($tagBag, $event->getTagBag());
     }
 }

@@ -7,7 +7,8 @@ namespace Setono\TagBag;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Setono\TagBag\Exception\NonExistingTagsException;
+use Psr\Log\AbstractLogger;
+use Psr\Log\LoggerInterface;
 use Setono\TagBag\Exception\UnsupportedTagException;
 use Setono\TagBag\Generator\ValueBasedFingerprintGenerator;
 use Setono\TagBag\Renderer\RendererInterface;
@@ -23,6 +24,30 @@ use Setono\TagBag\Tag\TagInterface;
  */
 final class TagBagTest extends TestCase
 {
+    /** @var LoggerInterface */
+    private $logger;
+
+    protected function setUp(): void
+    {
+        $this->logger = new class() extends AbstractLogger {
+            private $messages = [];
+
+            public function log($level, $message, array $context = []): void
+            {
+                $this->messages[] = [
+                    'level' => $level,
+                    'message' => $message,
+                    'context' => $context,
+                ];
+            }
+
+            public function getMessages(): array
+            {
+                return $this->messages;
+            }
+        };
+    }
+
     /**
      * @test
      */
@@ -219,12 +244,17 @@ final class TagBagTest extends TestCase
      */
     public function it_throws_exception_if_dependency_does_not_exist(): void
     {
-        $this->expectException(NonExistingTagsException::class);
-
         $tagBag = $this->getTagBag();
         $tagBag->addTag($this->getTag()->addDependency('dependency'));
 
         $tagBag->renderAll();
+
+        $messages = $this->logger->getMessages();
+        self::assertCount(1, $messages);
+
+        $message = $messages[0];
+
+        self::assertSame('[Tag Bag] Non existing tags that some other tag depended on: [dependency]', $message['message']);
     }
 
     /**
@@ -377,6 +407,6 @@ final class TagBagTest extends TestCase
             }
         };
 
-        return new TagBag($renderer, $storage ?? new InMemoryStorage(), $eventDispatcher, new ValueBasedFingerprintGenerator());
+        return new TagBag($renderer, $storage ?? new InMemoryStorage(), $eventDispatcher, new ValueBasedFingerprintGenerator(), $this->logger);
     }
 }

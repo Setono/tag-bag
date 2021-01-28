@@ -19,7 +19,7 @@ final class InMemoryStorageTest extends TestCase
         $storage = new InMemoryStorage();
         $storage->store('test');
 
-        $this->assertSame('test', $storage->restore());
+        self::assertSame('test', $storage->restore());
     }
 
     /**
@@ -31,6 +31,6 @@ final class InMemoryStorageTest extends TestCase
         $storage->store('test');
         $storage->remove();
 
-        $this->assertNull($storage->restore());
+        self::assertNull($storage->restore());
     }
 }
