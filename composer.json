@@ -9,7 +9,6 @@
             "email": "joachim@loevgaard.dk"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
         "php": "^7.2",
         "ext-hash": "*",
