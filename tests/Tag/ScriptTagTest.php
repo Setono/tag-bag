@@ -17,8 +17,8 @@ final class ScriptTagTest extends TestCase
     public function it_creates(): void
     {
         $tag = new ScriptTag('content');
-        $this->assertInstanceOf(TagInterface::class, $tag);
-        $this->assertInstanceOf(ScriptTagInterface::class, $tag);
+        self::assertInstanceOf(TagInterface::class, $tag);
+        self::assertInstanceOf(ScriptTagInterface::class, $tag);
     }
 
     /**
@@ -28,8 +28,8 @@ final class ScriptTagTest extends TestCase
     {
         $tag = new ScriptTag('content');
 
-        $this->assertSame('setono_tag_bag_script_tag', $tag->getName());
-        $this->assertNull($tag->getType());
+        self::assertSame('setono_tag_bag_script_tag', $tag->getName());
+        self::assertNull($tag->getType());
     }
 
     /**
@@ -40,6 +40,6 @@ final class ScriptTagTest extends TestCase
         $tag = new ScriptTag('content');
         $tag->setType('type');
 
-        $this->assertSame('type', $tag->getType());
+        self::assertSame('type', $tag->getType());
     }
 }

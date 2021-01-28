@@ -20,6 +20,6 @@ final class ValueBasedFingerprintGeneratorTest extends TestCase
         $generator = new ValueBasedFingerprintGenerator();
         $fingerprint = $generator->generate(new class() extends Tag {
         }, 'rendered_value');
-        $this->assertSame('5041ecdd6ce733b93561c1c79613f8e1', $fingerprint);
+        self::assertSame('5041ecdd6ce733b93561c1c79613f8e1', $fingerprint);
     }
 }

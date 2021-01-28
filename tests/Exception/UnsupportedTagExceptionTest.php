@@ -24,6 +24,6 @@ final class UnsupportedTagExceptionTest extends TestCase
             }
         });
 
-        $this->assertRegExp('/The tag [^(]+ \(name\) is not supported/', $exception->getMessage());
+        self::assertMatchesRegularExpression('/The tag [^(]+ \(name\) is not supported/', $exception->getMessage());
     }
 }

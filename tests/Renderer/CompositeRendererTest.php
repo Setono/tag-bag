@@ -22,8 +22,8 @@ final class CompositeRendererTest extends TestCase
     {
         $renderer = self::getCompositeRenderer();
 
-        $this->assertTrue($renderer->supports(new StyleTag('content')));
-        $this->assertTrue($renderer->supports(new StyleTag('content')));
+        self::assertTrue($renderer->supports(new StyleTag('content')));
+        self::assertTrue($renderer->supports(new StyleTag('content')));
     }
 
     /**
@@ -33,7 +33,7 @@ final class CompositeRendererTest extends TestCase
     {
         $renderer = self::getCompositeRenderer();
 
-        $this->assertFalse($renderer->supports(new class() extends Tag {
+        self::assertFalse($renderer->supports(new class() extends Tag {
         }));
     }
 
@@ -44,8 +44,8 @@ final class CompositeRendererTest extends TestCase
     {
         $renderer = self::getCompositeRenderer();
 
-        $this->assertSame('<style>content</style>', $renderer->render(new StyleTag('content')));
-        $this->assertSame('<script>content</script>', $renderer->render(new ScriptTag('content')));
+        self::assertSame('<style>content</style>', $renderer->render(new StyleTag('content')));
+        self::assertSame('<script>content</script>', $renderer->render(new ScriptTag('content')));
     }
 
     /**

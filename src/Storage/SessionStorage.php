@@ -34,9 +34,12 @@ final class SessionStorage implements StorageInterface
         unset($_SESSION[self::DATA_KEY]);
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     private static function assertSessionIsActive(): void
     {
-        if (php_sapi_name() !== 'cli' && session_status() !== PHP_SESSION_ACTIVE) {
+        if (\PHP_SAPI !== 'cli' && session_status() !== PHP_SESSION_ACTIVE) {
             throw new RuntimeException('Sessions need to be started before calling store/restore');
         }
     }

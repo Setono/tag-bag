@@ -17,6 +17,6 @@ final class NonExistingTagsExceptionTest extends TestCase
     public function it_instantiates(): void
     {
         $exception = new NonExistingTagsException(['tag1', 'tag2']);
-        $this->assertSame('The following tags does not exist in the tag bag: tag1, tag2', $exception->getMessage());
+        self::assertSame('The following tags does not exist in the tag bag: tag1, tag2', $exception->getMessage());
     }
 }
