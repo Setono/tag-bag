@@ -6,8 +6,7 @@ namespace Setono\TagBag\Tag;
 
 final class ScriptTag extends ContentTag implements ScriptTagInterface
 {
-    /** @var string|null */
-    private $type;
+    private ?string $type = null;
 
     public function __construct(string $content)
     {

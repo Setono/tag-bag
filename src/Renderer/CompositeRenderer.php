@@ -10,8 +10,12 @@ use Setono\TagBag\Tag\TagInterface;
 
 final class CompositeRenderer implements RendererInterface
 {
-    /** @var FastPriorityQueue|RendererInterface[] */
-    private $renderers;
+    /**
+     * @var FastPriorityQueue|RendererInterface[]
+     *
+     * @psalm-var FastPriorityQueue
+     */
+    private FastPriorityQueue $renderers;
 
     public function __construct()
     {

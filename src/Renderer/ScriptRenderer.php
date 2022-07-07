@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Setono\TagBag\Renderer;
 
-use function Safe\sprintf;
 use Setono\TagBag\Tag\ScriptTagInterface;
 use Setono\TagBag\Tag\TagInterface;
+use Webmozart\Assert\Assert;
 
 final class ScriptRenderer extends ContentRenderer
 {
+    /**
+     * @psalm-assert-if-true ScriptTagInterface $tag
+     */
     public function supports(TagInterface $tag): bool
     {
         return parent::supports($tag) && $tag instanceof ScriptTagInterface;
@@ -20,7 +23,10 @@ final class ScriptRenderer extends ContentRenderer
      */
     public function render(TagInterface $tag): string
     {
-        $type = $tag->getType() === null ? '' : sprintf(' type="%s"', $tag->getType());
+        Assert::true($this->supports($tag));
+
+        $type = $tag->getType();
+        $type = null === $type ? '' : sprintf(' type="%s"', $type);
 
         return sprintf('<script%s>%s</script>', $type, parent::render($tag));
     }

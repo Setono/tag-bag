@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Setono\TagBag\Exception;
 
 use InvalidArgumentException;
-use function Safe\sprintf;
 use Setono\TagBag\Tag\TagInterface;
 
 final class UnsupportedTagException extends InvalidArgumentException

@@ -6,8 +6,7 @@ namespace Setono\TagBag\Storage;
 
 final class InMemoryStorage implements StorageInterface
 {
-    /** @var string|null */
-    private $store;
+    private ?string $store = null;
 
     public function store(string $data): void
     {

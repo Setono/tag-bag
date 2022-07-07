@@ -8,7 +8,6 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\AbstractLogger;
-use Psr\Log\LoggerInterface;
 use Setono\TagBag\Exception\UnsupportedTagException;
 use Setono\TagBag\Generator\ValueBasedFingerprintGenerator;
 use Setono\TagBag\Renderer\RendererInterface;
@@ -24,28 +23,11 @@ use Setono\TagBag\Tag\TagInterface;
  */
 final class TagBagTest extends TestCase
 {
-    /** @var LoggerInterface */
-    private $logger;
+    private Logger $logger;
 
     protected function setUp(): void
     {
-        $this->logger = new class() extends AbstractLogger {
-            private $messages = [];
-
-            public function log($level, $message, array $context = []): void
-            {
-                $this->messages[] = [
-                    'level' => $level,
-                    'message' => $message,
-                    'context' => $context,
-                ];
-            }
-
-            public function getMessages(): array
-            {
-                return $this->messages;
-            }
-        };
+        $this->logger = new Logger();
     }
 
     /**
@@ -146,7 +128,6 @@ final class TagBagTest extends TestCase
 
         $section = $tagBag->getSection('section');
 
-        self::assertIsArray($section);
         self::assertCount(1, $section);
     }
 
@@ -351,8 +332,6 @@ final class TagBagTest extends TestCase
 
     private function defaultTagsAssertions(array $tags): void
     {
-        self::assertIsArray($tags);
-
         // asserting the number of sections
         self::assertCount(1, $tags);
 
@@ -408,5 +387,24 @@ final class TagBagTest extends TestCase
         };
 
         return new TagBag($renderer, $storage ?? new InMemoryStorage(), $eventDispatcher, new ValueBasedFingerprintGenerator(), $this->logger);
+    }
+}
+
+final class Logger extends AbstractLogger
+{
+    private array $messages = [];
+
+    public function log($level, $message, array $context = []): void
+    {
+        $this->messages[] = [
+            'level' => $level,
+            'message' => $message,
+            'context' => $context,
+        ];
+    }
+
+    public function getMessages(): array
+    {
+        return $this->messages;
     }
 }

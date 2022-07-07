@@ -12,11 +12,9 @@ use Setono\TagBag\TagBagInterface;
  */
 final class PostAddEvent
 {
-    /** @var RenderedTag */
-    private $tag;
+    private RenderedTag $tag;
 
-    /** @var TagBagInterface */
-    private $tagBag;
+    private TagBagInterface $tagBag;
 
     public function __construct(RenderedTag $tag, TagBagInterface $tagBag)
     {

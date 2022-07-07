@@ -8,8 +8,6 @@ use InvalidArgumentException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use function Safe\sprintf;
-use function Safe\usort;
 use Setono\TagBag\Event\PostAddEvent;
 use Setono\TagBag\Event\PreAddEvent;
 use Setono\TagBag\Exception\UnsupportedTagException;
@@ -22,29 +20,24 @@ use Setono\TagBag\Tag\TagInterface;
 final class TagBag implements TagBagInterface
 {
     /** @var RenderedTag[][] */
-    private $tags = [];
+    private array $tags = [];
 
     /**
      * This holds an array of tag names already rendered in the life of this tag bag
      *
      * @var string[]
      */
-    private $renderedTags = [];
+    private array $renderedTags = [];
 
-    /** @var RendererInterface */
-    private $renderer;
+    private RendererInterface $renderer;
 
-    /** @var StorageInterface */
-    private $storage;
+    private StorageInterface $storage;
 
-    /** @var EventDispatcherInterface */
-    private $eventDispatcher;
+    private EventDispatcherInterface $eventDispatcher;
 
-    /** @var FingerprintGeneratorInterface */
-    private $fingerprintGenerator;
+    private FingerprintGeneratorInterface $fingerprintGenerator;
 
-    /** @var LoggerInterface */
-    private $logger;
+    private LoggerInterface $logger;
 
     public function __construct(
         RendererInterface $renderer,
@@ -203,7 +196,7 @@ final class TagBag implements TagBagInterface
             return 0;
         }
 
-        return (int) array_sum(array_map(static function (array $section): int {
+        return array_sum(array_map(static function (array $section): int {
             return count($section);
         }, $this->tags));
     }

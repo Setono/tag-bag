@@ -6,8 +6,7 @@ namespace Setono\TagBag\Tag;
 
 trait ContentAwareTrait
 {
-    /** @var string */
-    protected $content;
+    protected string $content;
 
     public function getContent(): string
     {

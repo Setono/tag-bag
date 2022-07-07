@@ -42,8 +42,8 @@ final class ContentTagTest extends TestCase
     {
         $tag = new ContentTag('content');
         $tag
-            ->setName('new_name')
             ->setContent('new content')
+            ->setName('new_name')
             ->setPriority(10)
             ->setSection('section')
             ->addDependency('dependency')

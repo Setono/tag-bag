@@ -6,9 +6,13 @@ namespace Setono\TagBag\Renderer;
 
 use Setono\TagBag\Tag\ContentAwareInterface;
 use Setono\TagBag\Tag\TagInterface;
+use Webmozart\Assert\Assert;
 
 class ContentRenderer implements RendererInterface
 {
+    /**
+     * @psalm-assert-if-true ContentAwareInterface $tag
+     */
     public function supports(TagInterface $tag): bool
     {
         return $tag instanceof ContentAwareInterface;
@@ -16,6 +20,8 @@ class ContentRenderer implements RendererInterface
 
     public function render(TagInterface $tag): string
     {
+        Assert::true($this->supports($tag));
+
         return $tag->getContent();
     }
 }

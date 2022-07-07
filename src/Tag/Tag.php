@@ -6,20 +6,15 @@ namespace Setono\TagBag\Tag;
 
 abstract class Tag implements TagInterface
 {
-    /** @var string */
-    protected $name = 'setono_tag_bag_tag';
+    protected string $name = 'setono_tag_bag_tag';
 
-    /** @var string */
-    protected $section = self::SECTION_BODY_END;
+    protected string $section = self::SECTION_BODY_END;
 
-    /** @var array */
-    protected $dependencies = [];
+    protected array $dependencies = [];
 
-    /** @var int */
-    protected $priority = 0;
+    protected int $priority = 0;
 
-    /** @var bool */
-    protected $unique = true;
+    protected bool $unique = true;
 
     public function getName(): string
     {

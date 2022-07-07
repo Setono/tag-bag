@@ -8,14 +8,11 @@ use const PATHINFO_EXTENSION;
 
 class TemplateTag extends Tag implements TemplateTagInterface
 {
-    /** @var string */
-    protected $name = 'setono_tag_bag_template_tag';
+    protected string $name = 'setono_tag_bag_template_tag';
 
-    /** @var string */
-    protected $template;
+    protected string $template;
 
-    /** @var array */
-    protected $context;
+    protected array $context;
 
     public function __construct(string $template, array $context = [])
     {

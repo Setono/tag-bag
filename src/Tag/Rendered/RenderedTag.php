@@ -14,26 +14,20 @@ use Setono\TagBag\Tag\TagInterface;
  */
 final class RenderedTag
 {
-    /** @var string */
-    private $name;
+    private string $name;
 
-    /** @var string */
-    private $value;
+    private string $value;
 
-    /** @var int */
-    private $priority;
+    private int $priority;
 
-    /** @var string */
-    private $section;
+    private string $section;
 
     /** @var string[] */
-    private $dependencies;
+    private array $dependencies;
 
-    /** @var bool */
-    private $unique;
+    private bool $unique;
 
-    /** @var string */
-    private $fingerprint;
+    private string $fingerprint;
 
     private function __construct(
         string $name,
