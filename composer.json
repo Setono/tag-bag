@@ -20,6 +20,7 @@
         "webmozart/assert": "^1.11"
     },
     "require-dev": {
+        "infection/infection": "^0.26.6",
         "phpunit/phpunit": "^9.5",
         "psalm/plugin-phpunit": "^0.17",
         "setono/code-quality-pack": "^2.2"
@@ -38,7 +39,8 @@
     "config": {
         "allow-plugins": {
             "ergebnis/composer-normalize": true,
-            "dealerdirect/phpcodesniffer-composer-installer": false
+            "dealerdirect/phpcodesniffer-composer-installer": false,
+            "infection/extension-installer": true
         },
         "sort-packages": true
     },
