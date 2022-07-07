@@ -1,8 +1,8 @@
 {
     "name": "setono/tag-bag",
-    "type": "library",
     "description": "Inject dynamic tags programmatically",
     "license": "MIT",
+    "type": "library",
     "authors": [
         {
             "name": "Joachim Løvgaard",
@@ -24,14 +24,7 @@
         "psalm/plugin-phpunit": "^0.17",
         "setono/code-quality-pack": "^2.2"
     },
-    "config": {
-        "sort-packages": true,
-        "allow-plugins": {
-            "phpstan/extension-installer": false,
-            "ergebnis/composer-normalize": true,
-            "dealerdirect/phpcodesniffer-composer-installer": false
-        }
-    },
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Setono\\TagBag\\": "src/"
@@ -42,7 +35,13 @@
             "Setono\\TagBag\\": "tests/"
         }
     },
-    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true,
+            "dealerdirect/phpcodesniffer-composer-installer": false
+        },
+        "sort-packages": true
+    },
     "scripts": {
         "analyse": "psalm",
         "check-style": "ecs check",
