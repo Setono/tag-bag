@@ -1,8 +1,0 @@
-parameters:
-	reportUnmatchedIgnoredErrors: true
-	checkMissingIterableValueType: false
-	checkGenericClassInNonGenericObjectType: false
-
-	ignoreErrors:
-		- '/Call to an undefined method Setono\\TagBag\\Tag\\TagInterface::getContent/'
-		- '/Call to an undefined method Setono\\TagBag\\Tag\\TagInterface::getType/'
