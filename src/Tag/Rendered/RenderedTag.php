@@ -11,6 +11,8 @@ use Setono\TagBag\Tag\TagInterface;
  *
  * The reason for having a RenderedTag is that tags implementing the TagInterface can in theory have all sorts of
  * dependencies which in turn makes it harder to serialize, and the tag bag is serialized upon storing it
+ *
+ * @internal
  */
 final class RenderedTag
 {
@@ -18,12 +20,9 @@ final class RenderedTag
 
     private string $value;
 
-    private int $priority;
-
     private string $section;
 
-    /** @var string[] */
-    private array $dependencies;
+    private int $priority;
 
     private bool $unique;
 
@@ -32,17 +31,15 @@ final class RenderedTag
     private function __construct(
         string $name,
         string $value,
-        int $priority,
         string $section,
-        array $dependencies,
+        int $priority,
         bool $unique,
         string $fingerprint
     ) {
         $this->name = $name;
         $this->value = $value;
-        $this->priority = $priority;
         $this->section = $section;
-        $this->dependencies = $dependencies;
+        $this->priority = $priority;
         $this->unique = $unique;
         $this->fingerprint = $fingerprint;
     }
@@ -52,9 +49,8 @@ final class RenderedTag
         return new self(
             $tag->getName(),
             $value,
-            $tag->getPriority(),
             $tag->getSection(),
-            $tag->getDependencies(),
+            $tag->getPriority(),
             $tag->isUnique(),
             $fingerprint
         );
@@ -75,19 +71,14 @@ final class RenderedTag
         return $this->value;
     }
 
-    public function getPriority(): int
-    {
-        return $this->priority;
-    }
-
     public function getSection(): string
     {
         return $this->section;
     }
 
-    public function getDependencies(): array
+    public function getPriority(): int
     {
-        return $this->dependencies;
+        return $this->priority;
     }
 
     public function isUnique(): bool

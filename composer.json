@@ -13,14 +13,12 @@
         "php": ">=7.4",
         "ext-hash": "*",
         "ext-mbstring": "*",
-        "ext-session": "*",
-        "laminas/laminas-stdlib": "^3.2",
         "psr/event-dispatcher": "^1.0",
-        "psr/log": "^1.1",
+        "psr/log": "^1.1 || ^2.0 || ^3.0",
         "webmozart/assert": "^1.11"
     },
     "require-dev": {
-        "infection/infection": "^0.26.6",
+        "infection/infection": "^0.26",
         "phpunit/phpunit": "^9.5",
         "psalm/plugin-phpunit": "^0.17",
         "setono/code-quality-pack": "^2.2"

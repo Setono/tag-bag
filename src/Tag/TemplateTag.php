@@ -8,16 +8,24 @@ use const PATHINFO_EXTENSION;
 
 class TemplateTag extends Tag implements TemplateTagInterface
 {
-    protected string $name = 'setono_tag_bag_template_tag';
-
     protected string $template;
 
-    protected array $context;
+    protected array $data;
 
-    public function __construct(string $template, array $context = [])
+    final private function __construct(string $template, array $data = [], string $name = null)
     {
+        parent::__construct($name ?? 'setono/template-tag');
+
         $this->template = $template;
-        $this->context = $context;
+        $this->data = $data;
+    }
+
+    /**
+     * @return static
+     */
+    public static function create(string $template, array $data = [], string $name = null): self
+    {
+        return new static($template, $data, $name);
     }
 
     public function getTemplate(): string
@@ -25,16 +33,20 @@ class TemplateTag extends Tag implements TemplateTagInterface
         return $this->template;
     }
 
-    public function getContext(): array
+    public function getData(): array
     {
-        return $this->context;
+        return $this->data;
     }
 
-    public function setContext(array $context): TemplateTagInterface
+    /**
+     * @return static
+     */
+    public function withData(array $data): self
     {
-        $this->context = $context;
+        $obj = clone $this;
+        $obj->data = $data;
 
-        return $this;
+        return $obj;
     }
 
     public function getTemplateType(): string

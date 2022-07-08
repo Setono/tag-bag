@@ -9,46 +9,35 @@ interface TagInterface
     /**
      * These are just default sections, you can use your own section
      */
+
+    /**
+     * Inside the <head> tag
+     */
     public const SECTION_HEAD = 'head';
 
+    /**
+     * Just after the <body> tag
+     */
     public const SECTION_BODY_BEGIN = 'body_begin';
 
+    /**
+     * Just before the </body> tag
+     */
     public const SECTION_BODY_END = 'body_end';
 
     /**
-     * Returns the name for this tag. The name is used in dependency checking. It is good practice to use a namespace
-     * when naming your tag, i.e. 'setono_tag_bag_style_tag' could be a name for the StyleTag instead of just 'style_tag'
+     * Returns the name for this tag. The name is used in dependency checking. It is good practice using a namespace
+     * when naming your tag, i.e. 'setono/style-tag' could be a name for the StyleTag instead of just 'style-tag'
      */
     public function getName(): string;
 
-    public function setName(string $name): self;
-
     /**
-     * The section where this tag belongs.
+     * The section where this tag belongs. See SECTION_ constants above
      */
     public function getSection(): string;
 
-    public function setSection(string $section): self;
-
     /**
-     * An array of tag names which this tag depends on
-     *
-     * The tag will search through all sections looking for the dependents. It is therefore up to you to control
-     * the order of outputted tags both having the section and priority in mind
-     *
-     * @return string[]
-     */
-    public function getDependencies(): array;
-
-    public function addDependency(string $dependency): self;
-
-    /**
-     * Removes a dependency if it exists
-     */
-    public function removeDependency(string $dependency): self;
-
-    /**
-     * The priority of this tag. The lower the number, the later the tag will be output
+     * The priority of this tag. The lower the number, the later the tag will be outputted
      *
      * The default priority is 0
      *
@@ -58,18 +47,19 @@ interface TagInterface
      * Tag 2 has priority -10
      * Tag 3 has priority 0
      *
-     * These tags output in the following order: Tag 1, Tag 3, Tag 2
+     * These tags will be outputted in the following order:
+     *
+     * 1. Tag 1
+     * 2. Tag 3
+     * 3. Tag 2
      */
     public function getPriority(): int;
 
-    public function setPriority(int $priority): self;
-
     /**
-     * Returns false by default
+     * If a tag is set to unique, it means that no other tags with the same name can be added.
+     * Returns true by default
      */
     public function isUnique(): bool;
-
-    public function setUnique(bool $unique): self;
 
     /**
      * If this method returns null, a fingerprint generator will be used

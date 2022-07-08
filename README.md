@@ -26,7 +26,7 @@ use Setono\TagBag\TagBagInterface;
 /** @var TagBagInterface $tagBag */
 
 // in a controller or service
-$tagBag->addTag(new ScriptTag('trackSomething();'));
+$tagBag->add(new ScriptTag('trackSomething();'));
 
 // in your template
 $tagBag->renderAll();
@@ -51,9 +51,9 @@ The base library has three tags and on top of that you can use other tags by ins
 
 ```php
 <?php
-use Setono\TagBag\Tag\ContentTag;
+use Setono\TagBag\Tag\ContentAwareTag;
 
-$tag = new ContentTag('<div class="class-name">tag</div>');
+$tag = ContentAwareTag::create('<div class="class-name">tag</div>');
 ```
 
 Renders as:
@@ -68,13 +68,13 @@ Renders as:
 <?php
 use Setono\TagBag\Tag\ScriptTag;
 
-$tag = new ScriptTag('alert("Hey!");');
+$tag = ScriptTag::create('alert("Hey!");');
 ```
 
 Renders as:
 
 ```html
-<script type="application/ld+json">
+<script>
 alert("Hey!");
 </script>
 ```
@@ -85,8 +85,7 @@ The script tag also has an optional property named `type`:
 <?php
 use Setono\TagBag\Tag\ScriptTag;
 
-$tag = new ScriptTag('{"@context": "https://schema.org/"}');
-$tag->setType('application/ld+json');
+$tag = ScriptTag::create('{"@context": "https://schema.org/"}')->withType('application/ld+json');
 ```
 
 The above renders as:
@@ -102,7 +101,7 @@ The above renders as:
 <?php
 use Setono\TagBag\Tag\StyleTag;
 
-$tag = new StyleTag('body { background-color: red; }');
+$tag = StyleTag::create('body { background-color: red; }');
 ```
 
 Renders as:
@@ -158,7 +157,7 @@ use Setono\TagBag\TagBagInterface;
 /** @var TagBagInterface $tagBag */
 
 // in a controller or service
-$tagBag->addTag(new ScriptTag('trackSomething();'));
+$tagBag->add(new ScriptTag('trackSomething();'));
 
 // this stores the contents of the tag bag
 $tagBag->store();

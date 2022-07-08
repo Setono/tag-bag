@@ -5,23 +5,22 @@ declare(strict_types=1);
 namespace Setono\TagBag\Event;
 
 use PHPUnit\Framework\TestCase;
+use Setono\TagBag\Tag\ContentAwareTag;
 use Setono\TagBag\Tag\Rendered\RenderedTag;
-use Setono\TagBag\Tag\Tag;
 use Setono\TagBag\Tag\TagInterface;
 use Setono\TagBag\TagBagInterface;
 
 /**
- * @covers \Setono\TagBag\Event\PostAddEvent
+ * @covers \Setono\TagBag\Event\TagAddedEvent
  */
-final class PostAddEventTest extends TestCase
+final class TagAddedEventTest extends TestCase
 {
     /**
      * @test
      */
     public function it_instantiates(): void
     {
-        $tag = new class() extends Tag {
-        };
+        $tag = ContentAwareTag::create('value');
         $renderedTag = RenderedTag::createFromTag($tag, 'value', 'fingerprint');
 
         $tagBag = new class() implements TagBagInterface {
@@ -30,7 +29,7 @@ final class PostAddEventTest extends TestCase
                 throw new \RuntimeException('Not implemented');
             }
 
-            public function addTag(TagInterface $tag): TagBagInterface
+            public function add(TagInterface $tag): void
             {
                 throw new \RuntimeException('Not implemented');
             }
@@ -68,19 +67,19 @@ final class PostAddEventTest extends TestCase
             {
             }
 
-            public function getTag(string $name): RenderedTag
+            public function get(string $name): RenderedTag
             {
                 throw new \RuntimeException('Not implemented');
             }
 
-            public function hasTag(string $name): bool
+            public function has(string $name): bool
             {
                 throw new \RuntimeException('Not implemented');
             }
         };
 
-        $event = new PostAddEvent($renderedTag, $tagBag);
-        self::assertSame($renderedTag, $event->getTag());
-        self::assertSame($tagBag, $event->getTagBag());
+        $event = new TagAddedEvent($renderedTag, $tagBag);
+        self::assertSame($renderedTag, $event->tag);
+        self::assertSame($tagBag, $event->tagBag);
     }
 }

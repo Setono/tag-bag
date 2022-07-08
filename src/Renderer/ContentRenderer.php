@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace Setono\TagBag\Renderer;
 
-use Setono\TagBag\Tag\ContentAwareInterface;
+use Setono\TagBag\Tag\ContentAwareTagInterface;
 use Setono\TagBag\Tag\TagInterface;
 use Webmozart\Assert\Assert;
 
 class ContentRenderer implements RendererInterface
 {
     /**
-     * @psalm-assert-if-true ContentAwareInterface $tag
+     * @psalm-assert-if-true ContentAwareTagInterface $tag
      */
     public function supports(TagInterface $tag): bool
     {
-        return $tag instanceof ContentAwareInterface;
+        return $tag instanceof ContentAwareTagInterface;
     }
 
     public function render(TagInterface $tag): string
