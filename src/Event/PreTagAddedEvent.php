@@ -9,17 +9,12 @@ use Setono\TagBag\Tag\TagInterface;
 /**
  * Fired before anything else when trying to add a tag to the tag bag
  */
-final class PreAddEvent
+final class PreTagAddedEvent
 {
-    private TagInterface $tag;
+    public TagInterface $tag;
 
     public function __construct(TagInterface $tag)
     {
         $this->tag = $tag;
-    }
-
-    public function getTag(): TagInterface
-    {
-        return $this->tag;
     }
 }

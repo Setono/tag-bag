@@ -4,44 +4,11 @@ declare(strict_types=1);
 
 namespace Setono\TagBag;
 
-use Countable;
-use InvalidArgumentException;
-use Setono\TagBag\Tag\Rendered\RenderedTag;
 use Setono\TagBag\Tag\TagInterface;
 
-interface TagBagInterface extends Countable
+interface TagBagInterface
 {
-    public function addTag(TagInterface $tag): self;
-
-    public function getAll(): array;
-
-    /**
-     * Returns an empty array if the section does not exist
-     *
-     * @return RenderedTag[]
-     *
-     * @throws InvalidArgumentException if the section does not exist
-     */
-    public function getSection(string $section): array;
-
-    /**
-     * Returns true if the section exists
-     */
-    public function hasSection(string $section): bool;
-
-    /**
-     * Returns null if the tag does not exist
-     *
-     * @throws InvalidArgumentException if the tag does not exist
-     */
-    public function getTag(string $name): RenderedTag;
-
-    /**
-     * Returns true if the tag exists
-     *
-     * @param string $name The name of the tag
-     */
-    public function hasTag(string $name): bool;
+    public function add(TagInterface $tag): void;
 
     /**
      * If the tag is empty, it renders an empty string, i.e. ''

@@ -16,7 +16,7 @@ final class TemplateTagTest extends TestCase
      */
     public function it_creates(): void
     {
-        self::assertInstanceOf(TagInterface::class, new TemplateTag('template'));
+        self::assertInstanceOf(TagInterface::class, TemplateTag::create('template'));
     }
 
     /**
@@ -24,22 +24,11 @@ final class TemplateTagTest extends TestCase
      */
     public function it_has_default_values(): void
     {
-        $tag = new TemplateTag('template.html.twig');
+        $tag = TemplateTag::create('template.html.twig');
 
-        self::assertSame('setono_tag_bag_template_tag', $tag->getName());
+        self::assertSame('setono/template-tag', $tag->getName());
         self::assertSame('template.html.twig', $tag->getTemplate());
         self::assertSame('twig', $tag->getTemplateType());
-        self::assertSame([], $tag->getContext());
-    }
-
-    /**
-     * @test
-     */
-    public function it_is_mutable(): void
-    {
-        $tag = new TemplateTag('template');
-        $tag->setContext(['key' => 'val']);
-
-        self::assertSame(['key' => 'val'], $tag->getContext());
+        self::assertSame([], $tag->getData());
     }
 }

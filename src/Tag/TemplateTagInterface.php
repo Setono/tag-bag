@@ -15,14 +15,9 @@ interface TemplateTagInterface extends TagInterface
     public function getTemplate(): string;
 
     /**
-     * Returns the context to inject into the template
+     * Returns the data to inject into the template
      */
-    public function getContext(): array;
-
-    /**
-     * Overrides the current context
-     */
-    public function setContext(array $context): self;
+    public function getData(): array;
 
     /**
      * Returns the template type. For example a twig template would return 'twig'

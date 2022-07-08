@@ -16,7 +16,7 @@ final class StyleTagTest extends TestCase
      */
     public function it_creates(): void
     {
-        $tag = new StyleTag('content');
+        $tag = StyleTag::create('content');
         self::assertInstanceOf(TagInterface::class, $tag);
         self::assertInstanceOf(StyleTagInterface::class, $tag);
     }
@@ -26,8 +26,6 @@ final class StyleTagTest extends TestCase
      */
     public function it_has_default_values(): void
     {
-        $tag = new StyleTag('content');
-
-        self::assertSame('setono_tag_bag_style_tag', $tag->getName());
+        self::assertSame('setono/style-tag', $tag = StyleTag::create('content')->getName());
     }
 }

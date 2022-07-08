@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Setono\TagBag\Storage;
 
+/**
+ * Most likely you will use this storage for test purposes
+ */
 final class InMemoryStorage implements StorageInterface
 {
     private ?string $store = null;

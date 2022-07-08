@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Setono\TagBag\Tag;
 
-final class StyleTag extends ContentTag implements StyleTagInterface
+final class StyleTag extends ContentAwareTag implements StyleTagInterface
 {
-    public function __construct(string $content)
+    /**
+     * @return static
+     */
+    public static function create(string $content, string $name = null): self
     {
-        parent::__construct($content);
-
-        $this->setName('setono_tag_bag_style_tag');
+        return parent::create($content, $name ?? 'setono/style-tag');
     }
 }

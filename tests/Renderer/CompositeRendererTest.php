@@ -6,6 +6,7 @@ namespace Setono\TagBag\Renderer;
 
 use PHPUnit\Framework\TestCase;
 use Setono\TagBag\Exception\UnsupportedTagException;
+use Setono\TagBag\Tag\ContentAwareTag;
 use Setono\TagBag\Tag\ScriptTag;
 use Setono\TagBag\Tag\StyleTag;
 use Setono\TagBag\Tag\Tag;
@@ -22,8 +23,8 @@ final class CompositeRendererTest extends TestCase
     {
         $renderer = self::getCompositeRenderer();
 
-        self::assertTrue($renderer->supports(new StyleTag('content')));
-        self::assertTrue($renderer->supports(new StyleTag('content')));
+        self::assertTrue($renderer->supports(StyleTag::create('content')));
+        self::assertTrue($renderer->supports(StyleTag::create('content')));
     }
 
     /**
@@ -33,8 +34,7 @@ final class CompositeRendererTest extends TestCase
     {
         $renderer = self::getCompositeRenderer();
 
-        self::assertFalse($renderer->supports(new class() extends Tag {
-        }));
+        self::assertFalse($renderer->supports(new BaseTag()));
     }
 
     /**
@@ -44,8 +44,8 @@ final class CompositeRendererTest extends TestCase
     {
         $renderer = self::getCompositeRenderer();
 
-        self::assertSame('<style>content</style>', $renderer->render(new StyleTag('content')));
-        self::assertSame('<script>content</script>', $renderer->render(new ScriptTag('content')));
+        self::assertSame('<style>content</style>', $renderer->render(StyleTag::create('content')));
+        self::assertSame('<script>content</script>', $renderer->render(ScriptTag::create('content')));
     }
 
     /**
@@ -56,8 +56,7 @@ final class CompositeRendererTest extends TestCase
         $this->expectException(UnsupportedTagException::class);
 
         $renderer = self::getCompositeRenderer();
-        $renderer->render(new class() extends Tag {
-        });
+        $renderer->render(ContentAwareTag::create('content'));
     }
 
     private static function getCompositeRenderer(): CompositeRenderer
@@ -67,5 +66,13 @@ final class CompositeRendererTest extends TestCase
         $renderer->addRenderer(new ScriptRenderer());
 
         return $renderer;
+    }
+}
+
+final class BaseTag extends Tag
+{
+    public function __construct()
+    {
+        parent::__construct('setono/base-tag');
     }
 }

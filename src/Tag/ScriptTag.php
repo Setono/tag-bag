@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Setono\TagBag\Tag;
 
-final class ScriptTag extends ContentTag implements ScriptTagInterface
+final class ScriptTag extends ContentAwareTag implements ScriptTagInterface
 {
     private ?string $type = null;
 
-    public function __construct(string $content)
+    /**
+     * @return static
+     */
+    public static function create(string $content, string $name = null): self
     {
-        parent::__construct($content);
-
-        $this->setName('setono_tag_bag_script_tag');
+        return parent::create($content, $name ?? 'setono/script-tag');
     }
 
     public function getType(): ?string
@@ -20,10 +21,14 @@ final class ScriptTag extends ContentTag implements ScriptTagInterface
         return $this->type;
     }
 
-    public function setType(string $type): self
+    /**
+     * @return static
+     */
+    public function withType(string $type): self
     {
-        $this->type = $type;
+        $obj = clone $this;
+        $obj->type = $type;
 
-        return $this;
+        return $obj;
     }
 }

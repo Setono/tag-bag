@@ -16,7 +16,7 @@ final class ScriptTagTest extends TestCase
      */
     public function it_creates(): void
     {
-        $tag = new ScriptTag('content');
+        $tag = ScriptTag::create('content');
         self::assertInstanceOf(TagInterface::class, $tag);
         self::assertInstanceOf(ScriptTagInterface::class, $tag);
     }
@@ -26,9 +26,9 @@ final class ScriptTagTest extends TestCase
      */
     public function it_has_default_values(): void
     {
-        $tag = new ScriptTag('content');
+        $tag = ScriptTag::create('content');
 
-        self::assertSame('setono_tag_bag_script_tag', $tag->getName());
+        self::assertSame('setono/script-tag', $tag->getName());
         self::assertNull($tag->getType());
     }
 
@@ -37,8 +37,7 @@ final class ScriptTagTest extends TestCase
      */
     public function it_mutates(): void
     {
-        $tag = new ScriptTag('content');
-        $tag->setType('type');
+        $tag = ScriptTag::create('content')->withType('type');
 
         self::assertSame('type', $tag->getType());
     }

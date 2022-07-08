@@ -10,25 +10,17 @@ use Setono\TagBag\TagBagInterface;
 /**
  * This event is fired when the tag has been added to the tag bag
  */
-final class PostAddEvent
+final class TagAddedEvent
 {
-    private RenderedTag $tag;
+    /** @readonly */
+    public RenderedTag $tag;
 
-    private TagBagInterface $tagBag;
+    /** @readonly */
+    public TagBagInterface $tagBag;
 
     public function __construct(RenderedTag $tag, TagBagInterface $tagBag)
     {
         $this->tag = $tag;
         $this->tagBag = $tagBag;
-    }
-
-    public function getTag(): RenderedTag
-    {
-        return $this->tag;
-    }
-
-    public function getTagBag(): TagBagInterface
-    {
-        return $this->tagBag;
     }
 }

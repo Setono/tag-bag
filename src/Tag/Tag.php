@@ -6,26 +6,35 @@ namespace Setono\TagBag\Tag;
 
 abstract class Tag implements TagInterface
 {
-    protected string $name = 'setono_tag_bag_tag';
+    private string $name;
 
     protected string $section = self::SECTION_BODY_END;
-
-    protected array $dependencies = [];
 
     protected int $priority = 0;
 
     protected bool $unique = true;
+
+    protected ?string $fingerprint = null;
+
+    public function __construct(string $name)
+    {
+        $this->name = $name;
+    }
 
     public function getName(): string
     {
         return $this->name;
     }
 
-    public function setName(string $name): TagInterface
+    /**
+     * @return static
+     */
+    public function withName(string $name): self
     {
-        $this->name = $name;
+        $obj = clone $this;
+        $obj->name = $name;
 
-        return $this;
+        return $obj;
     }
 
     public function getSection(): string
@@ -33,37 +42,15 @@ abstract class Tag implements TagInterface
         return $this->section;
     }
 
-    public function setSection(string $section): TagInterface
+    /**
+     * @return static
+     */
+    public function withSection(string $section): self
     {
-        $this->section = $section;
+        $obj = clone $this;
+        $obj->section = $section;
 
-        return $this;
-    }
-
-    public function getDependencies(): array
-    {
-        return $this->dependencies;
-    }
-
-    public function addDependency(string $dependency): TagInterface
-    {
-        if (!in_array($dependency, $this->dependencies, true)) {
-            $this->dependencies[] = $dependency;
-        }
-
-        return $this;
-    }
-
-    public function removeDependency(string $dependency): TagInterface
-    {
-        $pos = array_search($dependency, $this->dependencies, true);
-        if (false === $pos) {
-            return $this;
-        }
-
-        array_splice($this->dependencies, (int) $pos, 1);
-
-        return $this;
+        return $obj;
     }
 
     public function getPriority(): int
@@ -71,11 +58,15 @@ abstract class Tag implements TagInterface
         return $this->priority;
     }
 
-    public function setPriority(int $priority): TagInterface
+    /**
+     * @return static
+     */
+    public function withPriority(int $priority): self
     {
-        $this->priority = $priority;
+        $obj = clone $this;
+        $obj->priority = $priority;
 
-        return $this;
+        return $obj;
     }
 
     public function isUnique(): bool
@@ -83,15 +74,52 @@ abstract class Tag implements TagInterface
         return $this->unique;
     }
 
-    public function setUnique(bool $unique): TagInterface
+    /**
+     * @return static
+     */
+    public function unique(): self
     {
-        $this->unique = $unique;
+        $obj = clone $this;
+        $obj->unique = true;
 
-        return $this;
+        return $obj;
+    }
+
+    /**
+     * @return static
+     */
+    public function notUnique(): self
+    {
+        $obj = clone $this;
+        $obj->unique = false;
+
+        return $obj;
+    }
+
+    /**
+     * @return static
+     */
+    public function withUnique(bool $unique): self
+    {
+        $obj = clone $this;
+        $obj->unique = $unique;
+
+        return $obj;
     }
 
     public function getFingerprint(): ?string
     {
-        return null;
+        return $this->fingerprint;
+    }
+
+    /**
+     * @return static
+     */
+    public function withFingerprint(string $fingerprint): self
+    {
+        $obj = clone $this;
+        $obj->fingerprint = $fingerprint;
+
+        return $obj;
     }
 }

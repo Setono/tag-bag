@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\TagBag\Tag;
 
-interface ScriptTagInterface extends TagInterface, ContentAwareInterface
+interface ScriptTagInterface extends TagInterface, ContentAwareTagInterface
 {
     /**
      * Returns the type attribute for the <script type="..."> tag
