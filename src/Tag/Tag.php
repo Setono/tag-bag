@@ -79,10 +79,7 @@ abstract class Tag implements TagInterface
      */
     public function unique(): self
     {
-        $obj = clone $this;
-        $obj->unique = true;
-
-        return $obj;
+        return $this->withUnique(true);
     }
 
     /**
@@ -90,10 +87,7 @@ abstract class Tag implements TagInterface
      */
     public function notUnique(): self
     {
-        $obj = clone $this;
-        $obj->unique = false;
-
-        return $obj;
+        return $this->withUnique(false);
     }
 
     /**
