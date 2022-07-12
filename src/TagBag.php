@@ -52,7 +52,7 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
 
         try {
             $renderedValue = $this->renderer->render($tag);
-            $fingerprint = $this->getFingerprint($tag, $renderedValue);
+            $fingerprint = $tag->getFingerprint() ?? $this->fingerprintGenerator->generate($tag, $renderedValue);
             $existingTag = $this->findTagByFingerprint($fingerprint);
             if (null !== $existingTag && ($existingTag->isUnique() || $tag->isUnique())) {
                 return;
@@ -178,11 +178,6 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
     public function setEventDispatcher(EventDispatcherInterface $eventDispatcher): void
     {
         $this->eventDispatcher = $eventDispatcher;
-    }
-
-    private function getFingerprint(TagInterface $tag, string $renderedValue): string
-    {
-        return $tag->getFingerprint() ?? $this->fingerprintGenerator->generate($tag, $renderedValue);
     }
 
     private function findTagByFingerprint(string $fingerprint): ?RenderedTag
