@@ -185,6 +185,36 @@ final class TagBagTest extends TestCase
         self::assertSame('some content', $tagBag->renderAll());
     }
 
+    /**
+     * @test
+     */
+    public function it_ignores_fingerprint_when_both_tags_are_not_unique(): void
+    {
+        $tag1 = $this->getTag()->notUnique();
+        $tag2 = $this->getTag()->notUnique();
+
+        $tagBag = $this->getTagBag();
+        $tagBag->add($tag1);
+        $tagBag->add($tag2);
+
+        self::assertSame('contentcontent', $tagBag->renderAll());
+    }
+
+    /**
+     * @test
+     */
+    public function it_does_not_ignore_fingerprint_when_one_of_the_tags_is_unique(): void
+    {
+        $tag1 = $this->getTag()->unique();
+        $tag2 = $this->getTag()->notUnique();
+
+        $tagBag = $this->getTagBag();
+        $tagBag->add($tag1);
+        $tagBag->add($tag2);
+
+        self::assertSame('content', $tagBag->renderAll());
+    }
+
     private function getTag(
         string $content = 'content',
         string $name = null,
