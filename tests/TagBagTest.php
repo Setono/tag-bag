@@ -7,6 +7,8 @@ namespace Setono\TagBag;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\AbstractLogger;
+use Setono\TagBag\Event\PreTagAddedEvent;
+use Setono\TagBag\Event\TagAddedEvent;
 use Setono\TagBag\Exception\UnsupportedTagException;
 use Setono\TagBag\Renderer\RendererInterface;
 use Setono\TagBag\Storage\InMemoryStorage;
@@ -130,6 +132,59 @@ final class TagBagTest extends TestCase
         $tagBag->add($this->getTag());
     }
 
+    /**
+     * @test
+     */
+    public function it_sorts_tags(): void
+    {
+        $tagBag = $this->getTagBag();
+        $tagBag->add($this->getTag('content1')->withPriority(0));
+        $tagBag->add($this->getTag('content2')->withPriority(10));
+
+        self::assertSame('content2content1', $tagBag->renderAll());
+    }
+
+    /**
+     * @test
+     */
+    public function it_dispatches_events(): void
+    {
+        $eventDispatcher = new class() implements EventDispatcherInterface {
+            public array $dispatchedEvents = [];
+
+            public function dispatch(object $event): void
+            {
+                $this->dispatchedEvents[] = $event;
+            }
+        };
+        $tag = $this->getTag();
+        $tagBag = $this->getTagBag();
+        $tagBag->setEventDispatcher($eventDispatcher);
+        $tagBag->add($tag);
+
+        self::assertCount(2, $eventDispatcher->dispatchedEvents);
+
+        [$firstEvent, $secondEvent] = $eventDispatcher->dispatchedEvents;
+
+        self::assertInstanceOf(PreTagAddedEvent::class, $firstEvent);
+        self::assertInstanceOf(TagAddedEvent::class, $secondEvent);
+    }
+
+    /**
+     * @test
+     */
+    public function it_uses_set_fingerprint_for_uniqueness(): void
+    {
+        $tag1 = $this->getTag('some content')->withFingerprint('fingerprint');
+        $tag2 = $this->getTag('other content')->withFingerprint('fingerprint');
+
+        $tagBag = $this->getTagBag();
+        $tagBag->add($tag1);
+        $tagBag->add($tag2);
+
+        self::assertSame('some content', $tagBag->renderAll());
+    }
+
     private function getTag(
         string $content = 'content',
         string $name = null,
@@ -149,7 +204,7 @@ final class TagBagTest extends TestCase
         return $tag->withUnique($unique);
     }
 
-    private function getTagBag(StorageInterface $storage = null, RendererInterface $renderer = null): TagBagInterface
+    private function getTagBag(StorageInterface $storage = null, RendererInterface $renderer = null): TagBag
     {
         if (null === $renderer) {
             $renderer = new class() implements RendererInterface {

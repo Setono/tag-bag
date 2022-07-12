@@ -56,6 +56,6 @@ class TemplateTag extends Tag implements TemplateTagInterface
 
     public function getTemplateType(): string
     {
-        return mb_strtolower(pathinfo($this->template, PATHINFO_EXTENSION));
+        return strtolower(pathinfo($this->template, PATHINFO_EXTENSION));
     }
 }
