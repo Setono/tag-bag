@@ -13,7 +13,7 @@ A very common use case for the tag bag is tracking events on your pages.
 ## Installation
 
 ```bash
-$ composer require setono/tag-bag
+composer require setono/tag-bag
 ```
 
 ## Basic usage
