@@ -18,6 +18,7 @@ use Setono\TagBag\Renderer\RendererInterface;
 use Setono\TagBag\Storage\StorageInterface;
 use Setono\TagBag\Tag\Rendered\RenderedTag;
 use Setono\TagBag\Tag\TagInterface;
+use Throwable;
 
 final class TagBag implements TagBagInterface, LoggerAwareInterface
 {
@@ -49,17 +50,21 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
             throw new UnsupportedTagException($tag);
         }
 
-        $renderedValue = $this->renderer->render($tag);
-        $fingerprint = $this->getFingerprint($tag, $renderedValue);
-        $existingTag = $this->findTagByFingerprint($fingerprint);
-        if (null !== $existingTag && ($existingTag->isUnique() || $tag->isUnique())) {
-            return;
+        try {
+            $renderedValue = $this->renderer->render($tag);
+            $fingerprint = $this->getFingerprint($tag, $renderedValue);
+            $existingTag = $this->findTagByFingerprint($fingerprint);
+            if (null !== $existingTag && ($existingTag->isUnique() || $tag->isUnique())) {
+                return;
+            }
+
+            $renderedTag = RenderedTag::createFromTag($tag, $renderedValue, $fingerprint);
+            $this->tags[$renderedTag->getSection()][] = $renderedTag;
+
+            $this->dispatch(new TagAddedEvent($renderedTag, $this));
+        } catch (Throwable $e) {
+            $this->logger->error($e->getMessage());
         }
-
-        $renderedTag = RenderedTag::createFromTag($tag, $renderedValue, $fingerprint);
-        $this->tags[$renderedTag->getSection()][] = $renderedTag;
-
-        $this->dispatch(new TagAddedEvent($renderedTag, $this));
     }
 
     public function renderAll(): string
