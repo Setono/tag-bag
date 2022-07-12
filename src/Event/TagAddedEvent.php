@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\TagBag\Event;
 
-use Setono\TagBag\Tag\Rendered\RenderedTag;
+use Setono\TagBag\Tag\RenderedTag;
 use Setono\TagBag\TagBagInterface;
 
 /**

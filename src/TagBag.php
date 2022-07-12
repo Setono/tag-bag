@@ -16,7 +16,7 @@ use Setono\TagBag\Generator\FingerprintGeneratorInterface;
 use Setono\TagBag\Generator\ValueBasedFingerprintGenerator;
 use Setono\TagBag\Renderer\RendererInterface;
 use Setono\TagBag\Storage\StorageInterface;
-use Setono\TagBag\Tag\Rendered\RenderedTag;
+use Setono\TagBag\Tag\RenderedTag;
 use Setono\TagBag\Tag\TagInterface;
 use Throwable;
 

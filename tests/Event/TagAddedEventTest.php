@@ -7,7 +7,7 @@ namespace Setono\TagBag\Event;
 use PHPUnit\Framework\TestCase;
 use Setono\TagBag\Renderer\ContentRenderer;
 use Setono\TagBag\Tag\ContentAwareTag;
-use Setono\TagBag\Tag\Rendered\RenderedTag;
+use Setono\TagBag\Tag\RenderedTag;
 use Setono\TagBag\TagBag;
 
 /**

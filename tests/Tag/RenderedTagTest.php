@@ -2,14 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Setono\TagBag\Tag\Rendered;
+namespace Setono\TagBag\Tag;
 
 use PHPUnit\Framework\TestCase;
-use Setono\TagBag\Tag\ContentAwareTag;
-use Setono\TagBag\Tag\TagInterface;
 
 /**
- * @covers \Setono\TagBag\Tag\Rendered\RenderedTag
+ * @covers \Setono\TagBag\Tag\RenderedTag
  */
 final class RenderedTagTest extends TestCase
 {
