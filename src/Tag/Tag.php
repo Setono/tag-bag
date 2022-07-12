@@ -31,10 +31,7 @@ abstract class Tag implements TagInterface
      */
     public function withName(string $name): self
     {
-        $obj = clone $this;
-        $obj->name = $name;
-
-        return $obj;
+        return $this->with('name', $name);
     }
 
     public function getSection(): string
@@ -47,10 +44,7 @@ abstract class Tag implements TagInterface
      */
     public function withSection(string $section): self
     {
-        $obj = clone $this;
-        $obj->section = $section;
-
-        return $obj;
+        return $this->with('section', $section);
     }
 
     public function getPriority(): int
@@ -63,10 +57,7 @@ abstract class Tag implements TagInterface
      */
     public function withPriority(int $priority): self
     {
-        $obj = clone $this;
-        $obj->priority = $priority;
-
-        return $obj;
+        return $this->with('priority', $priority);
     }
 
     public function isUnique(): bool
@@ -95,10 +86,7 @@ abstract class Tag implements TagInterface
      */
     public function withUnique(bool $unique): self
     {
-        $obj = clone $this;
-        $obj->unique = $unique;
-
-        return $obj;
+        return $this->with('unique', $unique);
     }
 
     public function getFingerprint(): ?string
@@ -111,8 +99,18 @@ abstract class Tag implements TagInterface
      */
     public function withFingerprint(string $fingerprint): self
     {
+        return $this->with('fingerprint', $fingerprint);
+    }
+
+    /**
+     * @param mixed $val
+     *
+     * @return static
+     */
+    protected function with(string $property, $val): self
+    {
         $obj = clone $this;
-        $obj->fingerprint = $fingerprint;
+        $obj->{$property} = $val;
 
         return $obj;
     }

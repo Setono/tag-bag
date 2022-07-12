@@ -33,9 +33,6 @@ class ContentAwareTag extends Tag implements ContentAwareTagInterface
      */
     public function withContent(string $content): self
     {
-        $obj = clone $this;
-        $obj->content = $content;
-
-        return $obj;
+        return $this->with('content', $content);
     }
 }

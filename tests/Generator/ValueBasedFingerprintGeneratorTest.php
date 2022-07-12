@@ -17,8 +17,9 @@ final class ValueBasedFingerprintGeneratorTest extends TestCase
      */
     public function it_generates(): void
     {
-        $generator = new ValueBasedFingerprintGenerator();
-        $fingerprint = $generator->generate(ContentAwareTag::create('rendered_value'), 'rendered_value');
+        $fingerprint = (new ValueBasedFingerprintGenerator())
+            ->generate(ContentAwareTag::create('rendered_value'), 'rendered_value')
+        ;
 
         self::assertSame('5041ecdd6ce733b93561c1c79613f8e1', $fingerprint);
     }

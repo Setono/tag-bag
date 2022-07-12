@@ -155,9 +155,7 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
 
         $this->tags = [];
         if (null !== $data) {
-            $this->tags = unserialize($data, ['allowed_classes' => [
-                RenderedTag::class,
-            ]]);
+            $this->tags = $this->unserialize($data);
         }
     }
 
@@ -196,5 +194,18 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
         }
 
         return null;
+    }
+
+    /**
+     * @psalm-suppress MixedInferredReturnType
+     *
+     * @return array<string, list<RenderedTag>>
+     */
+    private function unserialize(string $data): array
+    {
+        /** @psalm-suppress MixedReturnStatement */
+        return unserialize($data, ['allowed_classes' => [
+            RenderedTag::class,
+        ]]);
     }
 }

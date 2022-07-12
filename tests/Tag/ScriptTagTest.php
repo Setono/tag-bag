@@ -30,6 +30,7 @@ final class ScriptTagTest extends TestCase
 
         self::assertSame('setono/script-tag', $tag->getName());
         self::assertNull($tag->getType());
+        self::assertSame([], $tag->getAttributes());
     }
 
     /**

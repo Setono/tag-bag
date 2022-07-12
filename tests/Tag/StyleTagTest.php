@@ -26,6 +26,6 @@ final class StyleTagTest extends TestCase
      */
     public function it_has_default_values(): void
     {
-        self::assertSame('setono/style-tag', $tag = StyleTag::create('content')->getName());
+        self::assertSame('setono/style-tag', StyleTag::create('content')->getName());
     }
 }

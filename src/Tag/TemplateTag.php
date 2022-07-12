@@ -33,6 +33,14 @@ class TemplateTag extends Tag implements TemplateTagInterface
         return $this->template;
     }
 
+    /**
+     * @return static
+     */
+    public function withTemplate(string $template): self
+    {
+        return $this->with('template', $template);
+    }
+
     public function getData(): array
     {
         return $this->data;
@@ -43,10 +51,7 @@ class TemplateTag extends Tag implements TemplateTagInterface
      */
     public function withData(array $data): self
     {
-        $obj = clone $this;
-        $obj->data = $data;
-
-        return $obj;
+        return $this->with('data', $data);
     }
 
     public function getTemplateType(): string
