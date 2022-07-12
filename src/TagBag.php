@@ -155,7 +155,9 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
 
         $this->tags = [];
         if (null !== $data) {
-            $this->tags = unserialize($data, ['allowed_classes' => true]);
+            $this->tags = unserialize($data, ['allowed_classes' => [
+                RenderedTag::class,
+            ]]);
         }
     }
 
