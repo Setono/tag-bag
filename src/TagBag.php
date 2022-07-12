@@ -10,6 +10,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Setono\TagBag\Event\PreTagAddedEvent;
 use Setono\TagBag\Event\TagAddedEvent;
+use Setono\TagBag\Exception\StorageException;
 use Setono\TagBag\Exception\UnsupportedTagException;
 use Setono\TagBag\Generator\FingerprintGeneratorInterface;
 use Setono\TagBag\Generator\ValueBasedFingerprintGenerator;
@@ -120,10 +121,14 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
             return;
         }
 
-        if (count($this->tags) === 0) {
-            $this->storage->remove();
-        } else {
-            $this->storage->store(serialize($this->tags));
+        try {
+            if (count($this->tags) === 0) {
+                $this->storage->remove();
+            } else {
+                $this->storage->store(serialize($this->tags));
+            }
+        } catch (StorageException $e) {
+            $this->logger->error($e->getMessage());
         }
     }
 
@@ -135,7 +140,13 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
             return;
         }
 
-        $data = $this->storage->restore();
+        try {
+            $data = $this->storage->restore();
+        } catch (StorageException $e) {
+            $this->logger->error($e->getMessage());
+
+            return;
+        }
 
         $this->tags = [];
         if (null !== $data) {
