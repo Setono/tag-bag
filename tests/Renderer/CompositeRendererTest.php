@@ -62,8 +62,8 @@ final class CompositeRendererTest extends TestCase
     private static function getCompositeRenderer(): CompositeRenderer
     {
         $renderer = new CompositeRenderer();
-        $renderer->addRenderer(new StyleRenderer());
-        $renderer->addRenderer(new ScriptRenderer());
+        $renderer->add(new StyleRenderer());
+        $renderer->add(new ScriptRenderer());
 
         return $renderer;
     }
