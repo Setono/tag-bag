@@ -161,15 +161,6 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
         }
     }
 
-    public function dispatch(object $event): void
-    {
-        if (null === $this->eventDispatcher) {
-            return;
-        }
-
-        $this->eventDispatcher->dispatch($event);
-    }
-
     public function setStorage(StorageInterface $storage): void
     {
         $this->storage = $storage;
@@ -178,6 +169,20 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
     public function setEventDispatcher(EventDispatcherInterface $eventDispatcher): void
     {
         $this->eventDispatcher = $eventDispatcher;
+    }
+
+    public function setLogger(LoggerInterface $logger): void
+    {
+        $this->logger = $logger;
+    }
+
+    private function dispatch(object $event): void
+    {
+        if (null === $this->eventDispatcher) {
+            return;
+        }
+
+        $this->eventDispatcher->dispatch($event);
     }
 
     private function findTagByFingerprint(string $fingerprint): ?RenderedTag
@@ -191,10 +196,5 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
         }
 
         return null;
-    }
-
-    public function setLogger(LoggerInterface $logger): void
-    {
-        $this->logger = $logger;
     }
 }
