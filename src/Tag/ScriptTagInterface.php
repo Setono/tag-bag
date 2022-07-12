@@ -8,8 +8,11 @@ interface ScriptTagInterface extends TagInterface, ContentAwareTagInterface
 {
     /**
      * Returns the type attribute for the <script type="..."> tag
-     *
-     * If this method returns null, the resulting script tag should be rendered as <script>
      */
     public function getType(): ?string;
+
+    /**
+     * @return array<string, string|null>
+     */
+    public function getAttributes(): array;
 }

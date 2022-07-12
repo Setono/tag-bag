@@ -25,9 +25,18 @@ final class ScriptRenderer extends ContentRenderer
     {
         Assert::true($this->supports($tag));
 
-        $type = $tag->getType();
-        $type = null === $type ? '' : sprintf(' type="%s"', $type);
+        $attributes = '';
 
-        return sprintf('<script%s>%s</script>', $type, parent::render($tag));
+        if ([] !== $tag->getAttributes()) {
+            foreach ($tag->getAttributes() as $attribute => $value) {
+                if (null === $value) {
+                    $attributes .= ' ' . $attribute;
+                } else {
+                    $attributes .= sprintf(' %s="%s"', $attribute, $value);
+                }
+            }
+        }
+
+        return sprintf('<script%s>%s</script>', $attributes, parent::render($tag));
     }
 }

@@ -50,6 +50,21 @@ final class ScriptRendererTest extends TestCase
         $renderer = new ScriptRenderer();
         self::assertSame('<script type="application/ld+json">content</script>', $renderer->render($tag));
     }
+
+    /**
+     * @test
+     */
+    public function it_renders_with_multiple_attributes(): void
+    {
+        $tag = ScriptTag::create('content')
+            ->withType('application/ld+json')
+            ->withAttribute('data-attribute1')
+            ->withAttribute('data-attribute2', 'attribute2-value')
+        ;
+
+        $renderer = new ScriptRenderer();
+        self::assertSame('<script type="application/ld+json" data-attribute1 data-attribute2="attribute2-value">content</script>', $renderer->render($tag));
+    }
 }
 
 final class NotAScriptTag extends Tag
