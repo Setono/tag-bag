@@ -35,10 +35,10 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
 
     private RendererInterface $renderer;
 
-    public function __construct(RendererInterface $renderer)
+    public function __construct(RendererInterface $renderer, FingerprintGeneratorInterface $fingerprintGenerator = null)
     {
         $this->logger = new NullLogger();
-        $this->fingerprintGenerator = new ValueBasedFingerprintGenerator();
+        $this->fingerprintGenerator = $fingerprintGenerator ?? new ValueBasedFingerprintGenerator();
         $this->renderer = $renderer;
     }
 
@@ -166,11 +166,6 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
         }
 
         $this->eventDispatcher->dispatch($event);
-    }
-
-    public function setFingerprintGenerator(FingerprintGeneratorInterface $fingerprintGenerator): void
-    {
-        $this->fingerprintGenerator = $fingerprintGenerator;
     }
 
     public function setStorage(StorageInterface $storage): void
