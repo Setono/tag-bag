@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\TagBag\Renderer;
 
-use Setono\TagBag\Tag\StyleTagInterface;
+use Setono\TagBag\Tag\StyleTag;
 use Setono\TagBag\Tag\TagInterface;
 use Webmozart\Assert\Assert;
 
@@ -13,15 +13,15 @@ final class StyleRenderer implements RendererInterface
     use AttributesAwareRendererTrait;
 
     /**
-     * @psalm-assert-if-true StyleTagInterface $tag
+     * @psalm-assert-if-true StyleTag $tag
      */
     public function supports(TagInterface $tag): bool
     {
-        return $tag instanceof StyleTagInterface;
+        return $tag instanceof StyleTag;
     }
 
     /**
-     * @param TagInterface|StyleTagInterface $tag
+     * @param TagInterface|StyleTag $tag
      */
     public function render(TagInterface $tag): string
     {

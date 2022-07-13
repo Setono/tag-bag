@@ -6,13 +6,13 @@ namespace Setono\TagBag\Tag;
 
 use const PATHINFO_EXTENSION;
 
-class TemplateTag extends Tag implements TemplateTagInterface
+final class TemplateTag extends Tag
 {
     protected string $template;
 
     protected array $data;
 
-    final private function __construct(string $template, array $data = [], string $name = null)
+    private function __construct(string $template, array $data = [], string $name = null)
     {
         parent::__construct($name ?? 'setono/template-tag');
 
@@ -25,9 +25,12 @@ class TemplateTag extends Tag implements TemplateTagInterface
      */
     public static function create(string $template, array $data = [], string $name = null): self
     {
-        return new static($template, $data, $name);
+        return new self($template, $data, $name);
     }
 
+    /**
+     * Returns the template to render
+     */
     public function getTemplate(): string
     {
         return $this->template;
@@ -41,6 +44,9 @@ class TemplateTag extends Tag implements TemplateTagInterface
         return $this->with('template', $template);
     }
 
+    /**
+     * Returns the data to inject into the template
+     */
     public function getData(): array
     {
         return $this->data;
@@ -54,6 +60,11 @@ class TemplateTag extends Tag implements TemplateTagInterface
         return $this->with('data', $data);
     }
 
+    /**
+     * Returns the template type. For example a twig template would return 'twig'
+     * This is helpful when creating renderers that should support generic tags. At runtime these tags
+     * can return the correct template type and subsequently be rendered by the correct renderer
+     */
     public function getTemplateType(): string
     {
         return strtolower(pathinfo($this->template, PATHINFO_EXTENSION));

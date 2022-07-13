@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Setono\TagBag\Renderer;
 
-use Setono\TagBag\Tag\ScriptTagInterface;
+use Setono\TagBag\Tag\ScriptTag;
 use Setono\TagBag\Tag\TagInterface;
 use Webmozart\Assert\Assert;
 
@@ -13,15 +13,15 @@ final class ScriptRenderer implements RendererInterface
     use AttributesAwareRendererTrait;
 
     /**
-     * @psalm-assert-if-true ScriptTagInterface $tag
+     * @psalm-assert-if-true ScriptTag $tag
      */
     public function supports(TagInterface $tag): bool
     {
-        return $tag instanceof ScriptTagInterface;
+        return $tag instanceof ScriptTag;
     }
 
     /**
-     * @param TagInterface|ScriptTagInterface $tag
+     * @param TagInterface|ScriptTag $tag
      */
     public function render(TagInterface $tag): string
     {
