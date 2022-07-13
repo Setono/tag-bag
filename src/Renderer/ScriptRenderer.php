@@ -10,6 +10,8 @@ use Webmozart\Assert\Assert;
 
 final class ScriptRenderer implements RendererInterface
 {
+    use AttributesAwareRendererTrait;
+
     /**
      * @psalm-assert-if-true ScriptTagInterface $tag
      */
@@ -25,18 +27,6 @@ final class ScriptRenderer implements RendererInterface
     {
         Assert::true($this->supports($tag));
 
-        $attributes = '';
-
-        if ([] !== $tag->getAttributes()) {
-            foreach ($tag->getAttributes() as $attribute => $value) {
-                if (null === $value) {
-                    $attributes .= ' ' . $attribute;
-                } else {
-                    $attributes .= sprintf(' %s="%s"', $attribute, $value);
-                }
-            }
-        }
-
-        return sprintf('<script%s>%s</script>', $attributes, $tag->getContent());
+        return sprintf('<script%s>%s</script>', $this->renderAttributes($tag), $tag->getContent());
     }
 }

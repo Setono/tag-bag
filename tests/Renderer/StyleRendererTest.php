@@ -39,6 +39,46 @@ final class StyleRendererTest extends TestCase
         $renderer = new StyleRenderer();
         self::assertSame('<style>content</style>', $renderer->render(StyleTag::create('content')));
     }
+
+    /**
+     * @test
+     */
+    public function it_renders_with_single_attribute(): void
+    {
+        $tag = StyleTag::create('content')
+            ->withAttribute('data-attribute')
+        ;
+
+        $renderer = new StyleRenderer();
+        self::assertSame('<style data-attribute>content</style>', $renderer->render($tag));
+    }
+
+    /**
+     * @test
+     */
+    public function it_renders_with_single_attribute_and_value(): void
+    {
+        $tag = StyleTag::create('content')
+            ->withAttribute('data-attribute', 'attribute-value')
+        ;
+
+        $renderer = new StyleRenderer();
+        self::assertSame('<style data-attribute="attribute-value">content</style>', $renderer->render($tag));
+    }
+
+    /**
+     * @test
+     */
+    public function it_renders_with_multiple_attributes(): void
+    {
+        $tag = StyleTag::create('content')
+            ->withAttribute('data-attribute1')
+            ->withAttribute('data-attribute2', 'attribute2-value')
+        ;
+
+        $renderer = new StyleRenderer();
+        self::assertSame('<style data-attribute1 data-attribute2="attribute2-value">content</style>', $renderer->render($tag));
+    }
 }
 
 final class NotAStyleTag extends Tag

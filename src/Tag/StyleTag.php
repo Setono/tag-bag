@@ -6,6 +6,8 @@ namespace Setono\TagBag\Tag;
 
 final class StyleTag extends ContentAwareTag implements StyleTagInterface
 {
+    use AttributesAwareTrait;
+
     /**
      * @return static
      */

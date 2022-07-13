@@ -6,8 +6,7 @@ namespace Setono\TagBag\Tag;
 
 final class ScriptTag extends ContentAwareTag implements ScriptTagInterface
 {
-    /** @var array<string, string|null> */
-    private array $attributes = [];
+    use AttributesAwareTrait;
 
     /**
      * @return static
@@ -28,26 +27,5 @@ final class ScriptTag extends ContentAwareTag implements ScriptTagInterface
     public function withType(string $type): self
     {
         return $this->withAttribute('type', $type);
-    }
-
-    /**
-     * @return array<string, string|null>
-     */
-    public function getAttributes(): array
-    {
-        return $this->attributes;
-    }
-
-    /**
-     * @param string|int|float|null $val
-     *
-     * @return static
-     */
-    public function withAttribute(string $attribute, $val = null): self
-    {
-        $obj = clone $this;
-        $obj->attributes[$attribute] = null === $val ? null : (string) $val;
-
-        return $obj;
     }
 }

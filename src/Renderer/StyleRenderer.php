@@ -10,6 +10,8 @@ use Webmozart\Assert\Assert;
 
 final class StyleRenderer implements RendererInterface
 {
+    use AttributesAwareRendererTrait;
+
     /**
      * @psalm-assert-if-true StyleTagInterface $tag
      */
@@ -25,6 +27,6 @@ final class StyleRenderer implements RendererInterface
     {
         Assert::true($this->supports($tag));
 
-        return '<style>' . $tag->getContent() . '</style>';
+        return sprintf('<style%s>%s</style>', $this->renderAttributes($tag), $tag->getContent());
     }
 }

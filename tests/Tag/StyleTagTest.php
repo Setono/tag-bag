@@ -18,6 +18,8 @@ final class StyleTagTest extends TestCase
     {
         $tag = StyleTag::create('content');
         self::assertInstanceOf(TagInterface::class, $tag);
+        self::assertInstanceOf(ContentAwareInterface::class, $tag);
+        self::assertInstanceOf(AttributesAwareInterface::class, $tag);
         self::assertInstanceOf(StyleTagInterface::class, $tag);
     }
 

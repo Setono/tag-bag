@@ -54,6 +54,32 @@ final class ScriptRendererTest extends TestCase
     /**
      * @test
      */
+    public function it_renders_with_single_attribute(): void
+    {
+        $tag = ScriptTag::create('content')
+            ->withAttribute('data-attribute')
+        ;
+
+        $renderer = new ScriptRenderer();
+        self::assertSame('<script data-attribute>content</script>', $renderer->render($tag));
+    }
+
+    /**
+     * @test
+     */
+    public function it_renders_with_single_attribute_and_value(): void
+    {
+        $tag = ScriptTag::create('content')
+            ->withAttribute('data-attribute', 'attribute-value')
+        ;
+
+        $renderer = new ScriptRenderer();
+        self::assertSame('<script data-attribute="attribute-value">content</script>', $renderer->render($tag));
+    }
+
+    /**
+     * @test
+     */
     public function it_renders_with_multiple_attributes(): void
     {
         $tag = ScriptTag::create('content')

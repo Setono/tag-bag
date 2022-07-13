@@ -9,16 +9,16 @@ use Setono\TagBag\Tag\ContentAwareTag;
 use Setono\TagBag\Tag\Tag;
 
 /**
- * @covers \Setono\TagBag\Renderer\ContentRenderer
+ * @covers \Setono\TagBag\Renderer\ContentAwareRenderer
  */
-final class ContentRendererTest extends TestCase
+final class ContentAwareRendererTest extends TestCase
 {
     /**
      * @test
      */
     public function it_supports_content_tag(): void
     {
-        $renderer = new ContentRenderer();
+        $renderer = new ContentAwareRenderer();
         self::assertTrue($renderer->supports(ContentAwareTag::create('content')));
     }
 
@@ -27,7 +27,7 @@ final class ContentRendererTest extends TestCase
      */
     public function it_does_not_support_other_tags(): void
     {
-        $renderer = new ContentRenderer();
+        $renderer = new ContentAwareRenderer();
         self::assertFalse($renderer->supports(new NotAContentAwareTag()));
     }
 
@@ -36,7 +36,7 @@ final class ContentRendererTest extends TestCase
      */
     public function it_renders(): void
     {
-        $renderer = new ContentRenderer();
+        $renderer = new ContentAwareRenderer();
         self::assertSame('content', $renderer->render(ContentAwareTag::create('content')));
     }
 }

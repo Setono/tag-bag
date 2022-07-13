@@ -18,6 +18,8 @@ final class ScriptTagTest extends TestCase
     {
         $tag = ScriptTag::create('content');
         self::assertInstanceOf(TagInterface::class, $tag);
+        self::assertInstanceOf(ContentAwareInterface::class, $tag);
+        self::assertInstanceOf(AttributesAwareInterface::class, $tag);
         self::assertInstanceOf(ScriptTagInterface::class, $tag);
     }
 
