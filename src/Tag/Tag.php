@@ -83,6 +83,8 @@ abstract class Tag implements TagInterface
     }
 
     /**
+     * This is a helper method for immutable withers
+     *
      * @param mixed $val
      *
      * @return static
