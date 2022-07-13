@@ -7,16 +7,16 @@ namespace Setono\TagBag\Tag;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Setono\TagBag\Tag\ScriptTag
+ * @covers \Setono\TagBag\Tag\InlineScriptTag
  */
-final class ScriptTagTest extends TestCase
+final class InlineScriptTagTest extends TestCase
 {
     /**
      * @test
      */
     public function it_creates(): void
     {
-        $tag = ScriptTag::create('content');
+        $tag = InlineScriptTag::create('content');
         self::assertInstanceOf(TagInterface::class, $tag);
         self::assertInstanceOf(ContentAwareInterface::class, $tag);
         self::assertInstanceOf(AttributesAwareInterface::class, $tag);
@@ -27,9 +27,9 @@ final class ScriptTagTest extends TestCase
      */
     public function it_has_default_values(): void
     {
-        $tag = ScriptTag::create('content');
+        $tag = InlineScriptTag::create('content');
 
-        self::assertSame('setono/script-tag', $tag->getName());
+        self::assertSame('setono/inline-script-tag', $tag->getName());
         self::assertNull($tag->getType());
         self::assertSame([], $tag->getAttributes());
     }
@@ -39,7 +39,7 @@ final class ScriptTagTest extends TestCase
      */
     public function it_mutates(): void
     {
-        $tag = ScriptTag::create('content')->withType('type');
+        $tag = InlineScriptTag::create('content')->withType('type');
 
         self::assertSame('type', $tag->getType());
     }

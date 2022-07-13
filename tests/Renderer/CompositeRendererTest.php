@@ -6,8 +6,7 @@ namespace Setono\TagBag\Renderer;
 
 use PHPUnit\Framework\TestCase;
 use Setono\TagBag\Exception\UnsupportedTagException;
-use Setono\TagBag\Tag\ContentAwareTag;
-use Setono\TagBag\Tag\ScriptTag;
+use Setono\TagBag\Tag\InlineScriptTag;
 use Setono\TagBag\Tag\StyleTag;
 use Setono\TagBag\Tag\Tag;
 
@@ -45,7 +44,7 @@ final class CompositeRendererTest extends TestCase
         $renderer = self::getCompositeRenderer();
 
         self::assertSame('<style>content</style>', $renderer->render(StyleTag::create('content')));
-        self::assertSame('<script>content</script>', $renderer->render(ScriptTag::create('content')));
+        self::assertSame('<script>content</script>', $renderer->render(InlineScriptTag::create('content')));
     }
 
     /**
@@ -55,15 +54,22 @@ final class CompositeRendererTest extends TestCase
     {
         $this->expectException(UnsupportedTagException::class);
 
+        $tag = new class() extends Tag {
+            public function __construct()
+            {
+                parent::__construct('setono/test-tag');
+            }
+        };
+
         $renderer = self::getCompositeRenderer();
-        $renderer->render(ContentAwareTag::create('content'));
+        $renderer->render($tag);
     }
 
     private static function getCompositeRenderer(): CompositeRenderer
     {
         $renderer = new CompositeRenderer();
-        $renderer->add(new StyleRenderer());
-        $renderer->add(new ScriptRenderer());
+        $renderer->add(new ElementRenderer());
+        $renderer->add(new ContentAwareRenderer());
 
         return $renderer;
     }

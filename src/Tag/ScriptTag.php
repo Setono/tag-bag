@@ -4,16 +4,35 @@ declare(strict_types=1);
 
 namespace Setono\TagBag\Tag;
 
-final class ScriptTag extends ContentAwareTag implements AttributesAwareInterface
+/**
+ * The inline script tag represents script tags in the form of <script>function foobar() {}</script>
+ */
+final class ScriptTag extends ElementTag
 {
-    use AttributesAwareTrait;
+    /**
+     * @return static
+     */
+    public static function create(string $src, string $name = null): self
+    {
+        return parent::createWithoutContent('script', true, $name ?? 'setono/script-tag')
+            ->withSrc($src)
+        ;
+    }
+
+    /**
+     * Returns the src attribute value for the <script src="..."> tag
+     */
+    public function getSrc(): ?string
+    {
+        return $this->attributes['src'] ?? null;
+    }
 
     /**
      * @return static
      */
-    public static function create(string $content, string $name = null): self
+    public function withSrc(string $src): self
     {
-        return parent::create($content, $name ?? 'setono/script-tag');
+        return $this->withAttribute('src', $src);
     }
 
     /**
@@ -30,5 +49,31 @@ final class ScriptTag extends ContentAwareTag implements AttributesAwareInterfac
     public function withType(string $type): self
     {
         return $this->withAttribute('type', $type);
+    }
+
+    public function isDeferred(): bool
+    {
+        return array_key_exists('defer', $this->attributes);
+    }
+
+    /**
+     * @return static
+     */
+    public function defer(): self
+    {
+        return $this->withAttribute('defer');
+    }
+
+    public function isAsync(): bool
+    {
+        return array_key_exists('async', $this->attributes);
+    }
+
+    /**
+     * @return static
+     */
+    public function async(): self
+    {
+        return $this->withAttribute('async');
     }
 }

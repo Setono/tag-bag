@@ -20,13 +20,13 @@ composer require setono/tag-bag
 
 ```php
 <?php
-use Setono\TagBag\Tag\ScriptTag;
+use Setono\TagBag\Tag\InlineScriptTag;
 use Setono\TagBag\TagBagInterface;
 
 /** @var TagBagInterface $tagBag */
 
 // in a controller or service
-$tagBag->add(new ScriptTag('trackSomething();'));
+$tagBag->add(new InlineScriptTag('trackSomething();'));
 
 // in your template
 $tagBag->renderAll();
@@ -66,9 +66,9 @@ Renders as:
 
 ```php
 <?php
-use Setono\TagBag\Tag\ScriptTag;
+use Setono\TagBag\Tag\InlineScriptTag;
 
-$tag = ScriptTag::create('alert("Hey!");');
+$tag = InlineScriptTag::create('alert("Hey!");');
 ```
 
 Renders as:
@@ -83,9 +83,9 @@ The script tag also has an optional property named `type`:
 
 ```php
 <?php
-use Setono\TagBag\Tag\ScriptTag;
+use Setono\TagBag\Tag\InlineScriptTag;
 
-$tag = ScriptTag::create('{"@context": "https://schema.org/"}')->withType('application/ld+json');
+$tag = InlineScriptTag::create('{"@context": "https://schema.org/"}')->withType('application/ld+json');
 ```
 
 The above renders as:
@@ -151,13 +151,13 @@ The `TagBagInterface` has `store` and `restore` methods for these events respect
 
 ```php
 <?php
-use Setono\TagBag\Tag\ScriptTag;
+use Setono\TagBag\Tag\InlineScriptTag;
 use Setono\TagBag\TagBagInterface;
 
 /** @var TagBagInterface $tagBag */
 
 // in a controller or service
-$tagBag->add(new ScriptTag('trackSomething();'));
+$tagBag->add(new InlineScriptTag('trackSomething();'));
 
 // this stores the contents of the tag bag
 $tagBag->store();
