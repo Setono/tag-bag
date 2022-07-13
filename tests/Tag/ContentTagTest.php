@@ -18,6 +18,7 @@ final class ContentTagTest extends TestCase
     public function it_creates(): void
     {
         self::assertInstanceOf(TagInterface::class, ContentAwareTag::create('content'));
+        self::assertInstanceOf(ContentAwareTagInterface::class, ContentAwareTag::create('content'));
     }
 
     /**
