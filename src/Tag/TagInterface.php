@@ -56,7 +56,7 @@ interface TagInterface
     public function getPriority(): int;
 
     /**
-     * If a tag is set to unique, it means that no other tags with the same name can be added.
+     * If a tag is set to unique, it means that no other tags with the same fingerprint can be added.
      * Returns true by default
      */
     public function isUnique(): bool;
