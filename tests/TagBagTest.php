@@ -55,8 +55,8 @@ final class TagBagTest extends TestCase
     public function it_renders_a_section_and_removes_rendered_section(): void
     {
         $tagBag = $this->getTagBag();
-        $tagBag->add($this->getTag('content1', '', 'section1'));
-        $tagBag->add($this->getTag('content2', '', 'section2'));
+        $tagBag->add($this->getTag('content1', 'section1'));
+        $tagBag->add($this->getTag('content2', 'section2'));
 
         self::assertSame('content1', $tagBag->renderSection('section1'));
 
@@ -73,8 +73,8 @@ final class TagBagTest extends TestCase
     public function it_renders_all_tags_and_resets_the_tag_bag(): void
     {
         $tagBag = $this->getTagBag();
-        $tagBag->add($this->getTag('content1', '', 'section1'));
-        $tagBag->add($this->getTag('content2', '', 'section2'));
+        $tagBag->add($this->getTag('content1', 'section1'));
+        $tagBag->add($this->getTag('content2', 'section2'));
 
         self::assertSame('content1content2', $tagBag->renderAll());
 
@@ -217,15 +217,10 @@ final class TagBagTest extends TestCase
 
     private function getTag(
         string $content = 'content',
-        string $name = null,
         string $section = null,
         bool $unique = true
     ): ContentAwareTag {
         $tag = ContentAwareTag::create($content);
-
-        if (null !== $name) {
-            $tag = $tag->withName($name);
-        }
 
         if (null !== $section) {
             $tag = $tag->withSection($section);

@@ -29,7 +29,6 @@ final class InlineScriptTagTest extends TestCase
     {
         $tag = InlineScriptTag::create('content');
 
-        self::assertSame('setono/inline-script-tag', $tag->getName());
         self::assertNull($tag->getType());
         self::assertSame([], $tag->getAttributes());
     }

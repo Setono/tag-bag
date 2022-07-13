@@ -95,8 +95,4 @@ final class ElementRendererTest extends TestCase
 
 final class NotAScriptTag extends Tag
 {
-    public function __construct()
-    {
-        parent::__construct('setono/not-a-script-tag');
-    }
 }

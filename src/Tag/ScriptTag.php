@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace Setono\TagBag\Tag;
 
 /**
- * The inline script tag represents script tags in the form of <script>function foobar() {}</script>
+ * The script tag represents script tags in the form of <script src="..."></script>
  */
 final class ScriptTag extends ElementTag
 {
     /**
      * @return static
      */
-    public static function create(string $src, string $name = null): self
+    public static function create(string $src): self
     {
-        return parent::createWithoutContent('script', true, $name ?? 'setono/script-tag')
+        return parent::createWithoutContent('script')
             ->withSrc($src)
         ;
     }

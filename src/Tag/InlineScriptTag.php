@@ -13,9 +13,9 @@ final class InlineScriptTag extends ElementTag
     /**
      * @return static
      */
-    public static function create(string $content, string $name = null): self
+    public static function create(string $content): self
     {
-        return parent::createWithContent('script', $content, $name ?? 'setono/inline-script-tag');
+        return parent::createWithContent('script', $content);
     }
 
     /**

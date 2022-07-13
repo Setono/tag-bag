@@ -26,12 +26,6 @@ interface TagInterface
     public const SECTION_BODY_END = 'body_end';
 
     /**
-     * Returns the name for this tag. The name is used in dependency checking. It is good practice using a namespace
-     * when naming your tag, i.e. 'setono/style-tag' could be a name for the StyleTag instead of just 'style-tag'
-     */
-    public function getName(): string;
-
-    /**
      * The section where this tag belongs. See SECTION_ constants above
      */
     public function getSection(): string;

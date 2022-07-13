@@ -12,10 +12,8 @@ final class TemplateTag extends Tag
 
     protected array $data;
 
-    private function __construct(string $template, array $data = [], string $name = null)
+    private function __construct(string $template, array $data = [])
     {
-        parent::__construct($name ?? 'setono/template-tag');
-
         $this->template = $template;
         $this->data = $data;
     }
@@ -23,9 +21,9 @@ final class TemplateTag extends Tag
     /**
      * @return static
      */
-    public static function create(string $template, array $data = [], string $name = null): self
+    public static function create(string $template, array $data = []): self
     {
-        return new self($template, $data, $name);
+        return new self($template, $data);
     }
 
     /**

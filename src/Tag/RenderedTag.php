@@ -14,27 +14,28 @@ namespace Setono\TagBag\Tag;
  */
 final class RenderedTag
 {
-    private string $name;
+    /** @readonly */
+    public string $value;
 
-    private string $value;
+    /** @readonly */
+    public string $section;
 
-    private string $section;
+    /** @readonly */
+    public int $priority;
 
-    private int $priority;
+    /** @readonly */
+    public bool $unique;
 
-    private bool $unique;
-
-    private string $fingerprint;
+    /** @readonly */
+    public string $fingerprint;
 
     private function __construct(
-        string $name,
         string $value,
         string $section,
         int $priority,
         bool $unique,
         string $fingerprint
     ) {
-        $this->name = $name;
         $this->value = $value;
         $this->section = $section;
         $this->priority = $priority;
@@ -45,7 +46,6 @@ final class RenderedTag
     public static function createFromTag(TagInterface $tag, string $value, string $fingerprint): self
     {
         return new self(
-            $tag->getName(),
             $value,
             $tag->getSection(),
             $tag->getPriority(),
@@ -56,36 +56,6 @@ final class RenderedTag
 
     public function __toString(): string
     {
-        return $this->getValue();
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function getValue(): string
-    {
         return $this->value;
-    }
-
-    public function getSection(): string
-    {
-        return $this->section;
-    }
-
-    public function getPriority(): int
-    {
-        return $this->priority;
-    }
-
-    public function isUnique(): bool
-    {
-        return $this->unique;
-    }
-
-    public function getFingerprint(): string
-    {
-        return $this->fingerprint;
     }
 }

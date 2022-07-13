@@ -9,8 +9,8 @@ final class StyleTag extends ElementTag
     /**
      * @return static
      */
-    public static function create(string $content, string $name = null): self
+    public static function create(string $content): self
     {
-        return parent::createWithContent('style', $content, $name ?? 'setono/style-tag');
+        return parent::createWithContent('style', $content);
     }
 }

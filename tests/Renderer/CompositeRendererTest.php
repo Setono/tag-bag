@@ -55,10 +55,6 @@ final class CompositeRendererTest extends TestCase
         $this->expectException(UnsupportedTagException::class);
 
         $tag = new class() extends Tag {
-            public function __construct()
-            {
-                parent::__construct('setono/test-tag');
-            }
         };
 
         $renderer = self::getCompositeRenderer();
@@ -77,8 +73,4 @@ final class CompositeRendererTest extends TestCase
 
 final class BaseTag extends Tag
 {
-    public function __construct()
-    {
-        parent::__construct('setono/base-tag');
-    }
 }

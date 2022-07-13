@@ -43,8 +43,4 @@ final class ContentAwareRendererTest extends TestCase
 
 final class NotAContentAwareTag extends Tag
 {
-    public function __construct()
-    {
-        parent::__construct('setono/not-a-content-aware-tag');
-    }
 }

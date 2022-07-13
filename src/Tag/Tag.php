@@ -6,8 +6,6 @@ namespace Setono\TagBag\Tag;
 
 abstract class Tag implements TagInterface
 {
-    private string $name;
-
     protected string $section = self::SECTION_BODY_END;
 
     protected int $priority = 0;
@@ -15,24 +13,6 @@ abstract class Tag implements TagInterface
     protected bool $unique = true;
 
     protected ?string $fingerprint = null;
-
-    public function __construct(string $name)
-    {
-        $this->name = $name;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @return static
-     */
-    public function withName(string $name): self
-    {
-        return $this->with('name', $name);
-    }
 
     public function getSection(): string
     {

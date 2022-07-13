@@ -17,10 +17,8 @@ class ElementTag extends Tag implements AttributesAwareInterface, ContentAwareIn
 
     protected bool $hasClosingElement;
 
-    final private function __construct(string $element, string $content, bool $hasClosingElement, ?string $name)
+    final private function __construct(string $element, string $content, bool $hasClosingElement)
     {
-        parent::__construct($name ?? 'setono/element-tag');
-
         $this->content = $content;
         $this->element = $element;
         $this->hasClosingElement = $hasClosingElement;
@@ -29,17 +27,17 @@ class ElementTag extends Tag implements AttributesAwareInterface, ContentAwareIn
     /**
      * @return static
      */
-    public static function createWithContent(string $element, string $content, string $name = null): self
+    public static function createWithContent(string $element, string $content): self
     {
-        return new static($element, $content, true, $name);
+        return new static($element, $content, true);
     }
 
     /**
      * @return static
      */
-    public static function createWithoutContent(string $element, bool $hasClosingElement = true, string $name = null): self
+    public static function createWithoutContent(string $element, bool $hasClosingElement = true): self
     {
-        return new static($element, '', $hasClosingElement, $name);
+        return new static($element, '', $hasClosingElement);
     }
 
     public function getElement(): string

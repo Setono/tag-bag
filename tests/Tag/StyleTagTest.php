@@ -21,12 +21,4 @@ final class StyleTagTest extends TestCase
         self::assertInstanceOf(ContentAwareInterface::class, $tag);
         self::assertInstanceOf(AttributesAwareInterface::class, $tag);
     }
-
-    /**
-     * @test
-     */
-    public function it_has_default_values(): void
-    {
-        self::assertSame('setono/style-tag', StyleTag::create('content')->getName());
-    }
 }

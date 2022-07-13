@@ -17,9 +17,9 @@ final class UnsupportedTagExceptionTest extends TestCase
      */
     public function it_instantiates(): void
     {
-        $tag = ContentAwareTag::create('content')->withName('name');
+        $tag = ContentAwareTag::create('content');
         $exception = new UnsupportedTagException($tag);
 
-        self::assertMatchesRegularExpression('/The tag [^(]+ \(name\) is not supported/', $exception->getMessage());
+        self::assertSame(sprintf('The tag %s is not supported', ContentAwareTag::class), $exception->getMessage());
     }
 }

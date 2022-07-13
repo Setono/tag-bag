@@ -26,7 +26,6 @@ final class TemplateTagTest extends TestCase
     {
         $tag = TemplateTag::create('template.html.twig');
 
-        self::assertSame('setono/template-tag', $tag->getName());
         self::assertSame('template.html.twig', $tag->getTemplate());
         self::assertSame('twig', $tag->getTemplateType());
         self::assertSame([], $tag->getData());

@@ -11,18 +11,16 @@ class ContentAwareTag extends Tag implements ContentAwareInterface
 {
     use ContentAwareTrait;
 
-    final private function __construct(string $content, string $name = null)
+    final private function __construct(string $content)
     {
-        parent::__construct($name ?? 'setono/content-aware-tag');
-
         $this->content = $content;
     }
 
     /**
      * @return static
      */
-    public static function create(string $content, string $name = null): self
+    public static function create(string $content): self
     {
-        return new static($content, $name);
+        return new static($content);
     }
 }

@@ -54,12 +54,12 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
             $renderedValue = $this->renderer->render($tag);
             $fingerprint = $tag->getFingerprint() ?? $this->fingerprintGenerator->generate($tag, $renderedValue);
             $existingTag = $this->findTagByFingerprint($fingerprint);
-            if (null !== $existingTag && ($existingTag->isUnique() || $tag->isUnique())) {
+            if (null !== $existingTag && ($existingTag->unique || $tag->isUnique())) {
                 return;
             }
 
             $renderedTag = RenderedTag::createFromTag($tag, $renderedValue, $fingerprint);
-            $this->tags[$renderedTag->getSection()][] = $renderedTag;
+            $this->tags[$renderedTag->section][] = $renderedTag;
 
             $this->dispatch(new TagAddedEvent($renderedTag, $this));
         } catch (Throwable $e) {
@@ -102,7 +102,7 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
 
         $str = '';
         foreach ($tags as $tag) {
-            $str .= $tag->getValue();
+            $str .= $tag->value;
         }
 
         return $str;
@@ -114,7 +114,7 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
     private static function sort(array &$tags): void
     {
         usort($tags, static function (RenderedTag $tag1, RenderedTag $tag2): int {
-            return $tag2->getPriority() <=> $tag1->getPriority();
+            return $tag2->priority <=> $tag1->priority;
         });
     }
 
@@ -187,7 +187,7 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
     {
         foreach ($this->tags as $section) {
             foreach ($section as $tag) {
-                if ($tag->getFingerprint() === $fingerprint) {
+                if ($tag->fingerprint === $fingerprint) {
                     return $tag;
                 }
             }

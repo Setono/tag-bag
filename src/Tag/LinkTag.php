@@ -9,9 +9,9 @@ final class LinkTag extends ElementTag
     /**
      * @return static
      */
-    public static function create(string $rel = null, string $href = null, string $name = null): self
+    public static function create(string $rel = null, string $href = null): self
     {
-        $tag = parent::createWithoutContent('link', false, $name ?? 'setono/link-tag');
+        $tag = parent::createWithoutContent('link', false);
 
         if (null !== $rel) {
             $tag = $tag->withRel($rel);

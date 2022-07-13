@@ -28,7 +28,6 @@ final class ContentAwareTagTest extends TestCase
     {
         $tag = ContentAwareTag::create('content');
 
-        self::assertSame('setono/content-aware-tag', $tag->getName());
         self::assertSame('content', $tag->getContent());
         self::assertSame(TagInterface::SECTION_BODY_END, $tag->getSection());
         self::assertSame(0, $tag->getPriority());
@@ -43,7 +42,6 @@ final class ContentAwareTagTest extends TestCase
         $originalTag = ContentAwareTag::create('content');
 
         self::assertNotSame($originalTag, $originalTag->withContent('new content'));
-        self::assertNotSame($originalTag, $originalTag->withName('new_name'));
         self::assertNotSame($originalTag, $originalTag->withSection('new_section'));
         self::assertNotSame($originalTag, $originalTag->withPriority(10));
         self::assertNotSame($originalTag, $originalTag->unique());
