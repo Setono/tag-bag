@@ -13,8 +13,8 @@ use Setono\TagBag\Exception\UnsupportedTagException;
 use Setono\TagBag\Renderer\RendererInterface;
 use Setono\TagBag\Storage\InMemoryStorage;
 use Setono\TagBag\Storage\StorageInterface;
+use Setono\TagBag\Tag\ContentAwareInterface;
 use Setono\TagBag\Tag\ContentAwareTag;
-use Setono\TagBag\Tag\ContentAwareTagInterface;
 use Setono\TagBag\Tag\TagInterface;
 
 /**
@@ -245,7 +245,7 @@ final class TagBagTest extends TestCase
 
                 public function render(TagInterface $tag): string
                 {
-                    if ($tag instanceof ContentAwareTagInterface) {
+                    if ($tag instanceof ContentAwareInterface) {
                         return $tag->getContent();
                     }
 

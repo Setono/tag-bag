@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Setono\TagBag\Tag;
 
-class ContentAwareTag extends Tag implements ContentAwareTagInterface
+class ContentAwareTag extends Tag implements ContentAwareInterface
 {
-    protected string $content;
+    use ContentAwareTrait;
 
     final private function __construct(string $content, string $name = null)
     {
@@ -21,18 +21,5 @@ class ContentAwareTag extends Tag implements ContentAwareTagInterface
     public static function create(string $content, string $name = null): self
     {
         return new static($content, $name);
-    }
-
-    public function getContent(): string
-    {
-        return $this->content;
-    }
-
-    /**
-     * @return static
-     */
-    public function withContent(string $content): self
-    {
-        return $this->with('content', $content);
     }
 }

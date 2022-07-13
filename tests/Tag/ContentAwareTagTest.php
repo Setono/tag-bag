@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Setono\TagBag\Tag\Tag
  * @covers \Setono\TagBag\Tag\ContentAwareTag
  */
-final class ContentTagTest extends TestCase
+final class ContentAwareTagTest extends TestCase
 {
     /**
      * @test
@@ -18,7 +18,7 @@ final class ContentTagTest extends TestCase
     public function it_creates(): void
     {
         self::assertInstanceOf(TagInterface::class, ContentAwareTag::create('content'));
-        self::assertInstanceOf(ContentAwareTagInterface::class, ContentAwareTag::create('content'));
+        self::assertInstanceOf(ContentAwareInterface::class, ContentAwareTag::create('content'));
     }
 
     /**
