@@ -8,14 +8,14 @@ use Setono\TagBag\Tag\ScriptTagInterface;
 use Setono\TagBag\Tag\TagInterface;
 use Webmozart\Assert\Assert;
 
-final class ScriptRenderer extends ContentRenderer
+final class ScriptRenderer implements RendererInterface
 {
     /**
      * @psalm-assert-if-true ScriptTagInterface $tag
      */
     public function supports(TagInterface $tag): bool
     {
-        return parent::supports($tag) && $tag instanceof ScriptTagInterface;
+        return $tag instanceof ScriptTagInterface;
     }
 
     /**
@@ -37,6 +37,6 @@ final class ScriptRenderer extends ContentRenderer
             }
         }
 
-        return sprintf('<script%s>%s</script>', $attributes, parent::render($tag));
+        return sprintf('<script%s>%s</script>', $attributes, $tag->getContent());
     }
 }

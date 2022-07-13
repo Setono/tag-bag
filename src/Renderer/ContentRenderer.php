@@ -8,7 +8,7 @@ use Setono\TagBag\Tag\ContentAwareTagInterface;
 use Setono\TagBag\Tag\TagInterface;
 use Webmozart\Assert\Assert;
 
-class ContentRenderer implements RendererInterface
+final class ContentRenderer implements RendererInterface
 {
     /**
      * @psalm-assert-if-true ContentAwareTagInterface $tag
