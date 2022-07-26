@@ -33,10 +33,13 @@ final class InlineScriptTagTest extends TestCase
     /**
      * @test
      */
-    public function it_mutates(): void
+    public function it_has_immutable_setters(): void
     {
         $tag = InlineScriptTag::create('content')->withType('type');
+        $newTag = $tag->withType('new_type');
 
+        self::assertNotSame($tag, $newTag);
         self::assertSame('type', $tag->getType());
+        self::assertSame('new_type', $newTag->getType());
     }
 }
