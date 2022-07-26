@@ -173,10 +173,10 @@ $tagBag->restore();
 [ico-version]: https://poser.pugx.org/setono/tag-bag/v/stable
 [ico-license]: https://poser.pugx.org/setono/tag-bag/license
 [ico-github-actions]: https://github.com/Setono/tag-bag/workflows/build/badge.svg
-[ico-code-coverage]: https://codecov.io/gh/Setono/tag-bag/branch/1.x/graph/badge.svg
-[ico-infection]: https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FSetono%2Ftag-bag%2F1.x
+[ico-code-coverage]: https://codecov.io/gh/Setono/tag-bag/branch/2.x/graph/badge.svg
+[ico-infection]: https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FSetono%2Ftag-bag%2F2.x
 
 [link-packagist]: https://packagist.org/packages/setono/tag-bag
 [link-github-actions]: https://github.com/Setono/tag-bag/actions
 [link-code-coverage]: https://codecov.io/gh/Setono/tag-bag
-[link-infection]: https://dashboard.stryker-mutator.io/reports/github.com/Setono/tag-bag/1.x
+[link-infection]: https://dashboard.stryker-mutator.io/reports/github.com/Setono/tag-bag/2.x
