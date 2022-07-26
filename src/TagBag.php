@@ -27,19 +27,19 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
 
     private LoggerInterface $logger;
 
-    private FingerprintGeneratorInterface $fingerprintGenerator;
-
     private ?StorageInterface $storage = null;
 
     private ?EventDispatcherInterface $eventDispatcher = null;
 
     private RendererInterface $renderer;
 
+    private FingerprintGeneratorInterface $fingerprintGenerator;
+
     public function __construct(RendererInterface $renderer, FingerprintGeneratorInterface $fingerprintGenerator = null)
     {
         $this->logger = new NullLogger();
-        $this->fingerprintGenerator = $fingerprintGenerator ?? new ValueBasedFingerprintGenerator();
         $this->renderer = $renderer;
+        $this->fingerprintGenerator = $fingerprintGenerator ?? new ValueBasedFingerprintGenerator();
     }
 
     public function add(TagInterface $tag): void
