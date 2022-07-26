@@ -53,8 +53,8 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
         try {
             $renderedValue = $this->renderer->render($tag);
             $fingerprint = $tag->getFingerprint() ?? $this->fingerprintGenerator->generate($tag, $renderedValue);
-            $existingTag = $this->findTagByFingerprint($fingerprint);
-            if (null !== $existingTag && ($existingTag->unique || $tag->isUnique())) {
+
+            if (!$this->handleExistingTag($tag, $fingerprint)) {
                 return;
             }
 
@@ -87,6 +87,46 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
         unset($this->tags[$section]);
 
         return $value;
+    }
+
+    /**
+     * Returns true if the tag should be added
+     */
+    private function handleExistingTag(TagInterface $tag, string $fingerprint): bool
+    {
+        $search = $this->findTagByFingerprint($fingerprint);
+
+        // if no existing tag exists we should add the tag
+        if (null === $search) {
+            return true;
+        }
+
+        [$section, $idx, $existingTag] = $search;
+
+        // if both tags are unique
+        if ($existingTag->unique && $tag->isUnique()) {
+            // ... we check the priority and if the priority of the new tag is higher than the existing tag
+            if ($existingTag->priority >= $tag->getPriority()) {
+                return false;
+            }
+
+            // ... we will remove the old tag and add the new tag
+            unset($this->tags[$section][$idx]);
+
+            return true;
+        }
+
+        // if the old tag is unique, but the new tag isn't, we will not add the new tag
+        if ($existingTag->unique) {
+            return false;
+        }
+
+        // if the old tag is not unique, but the new tag is, we will remove the old tag and add the new tag
+        if ($tag->isUnique()) {
+            unset($this->tags[$section][$idx]);
+        }
+
+        return true;
     }
 
     /**
@@ -183,12 +223,15 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
         $this->eventDispatcher->dispatch($event);
     }
 
-    private function findTagByFingerprint(string $fingerprint): ?RenderedTag
+    /**
+     * @return array{0: string, 1: int, 2: RenderedTag}|null
+     */
+    private function findTagByFingerprint(string $fingerprint): ?array
     {
-        foreach ($this->tags as $section) {
-            foreach ($section as $tag) {
+        foreach ($this->tags as $section => $sectionTags) {
+            foreach ($sectionTags as $idx => $tag) {
                 if ($tag->fingerprint === $fingerprint) {
-                    return $tag;
+                    return [$section, $idx, $tag];
                 }
             }
         }

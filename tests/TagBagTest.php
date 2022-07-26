@@ -215,6 +215,21 @@ final class TagBagTest extends TestCase
         self::assertSame('content', $tagBag->renderAll());
     }
 
+    /**
+     * @test
+     */
+    public function it_replaces_unique_tag_with_new_one_with_higher_priority(): void
+    {
+        $tag1 = $this->getTag('tag1')->unique()->withPriority(10)->withFingerprint('tag');
+        $tag2 = $this->getTag('tag2')->unique()->withPriority(20)->withFingerprint('tag');
+
+        $tagBag = $this->getTagBag();
+        $tagBag->add($tag1);
+        $tagBag->add($tag2);
+
+        self::assertSame('tag2', $tagBag->renderAll());
+    }
+
     private function getTag(
         string $content = 'content',
         string $section = null,
