@@ -15,13 +15,13 @@ class ElementTag extends Tag implements AttributesAwareInterface, ContentAwareIn
 
     protected string $element;
 
-    protected bool $hasClosingElement;
+    protected bool $closingElement;
 
     final private function __construct(string $element, string $content, bool $hasClosingElement)
     {
         $this->content = $content;
         $this->element = $element;
-        $this->hasClosingElement = $hasClosingElement;
+        $this->closingElement = $hasClosingElement;
     }
 
     /**
@@ -55,7 +55,15 @@ class ElementTag extends Tag implements AttributesAwareInterface, ContentAwareIn
 
     public function hasClosingElement(): bool
     {
-        return $this->hasClosingElement;
+        return $this->closingElement;
+    }
+
+    /**
+     * @return static
+     */
+    public function withClosingElement(bool $closingElement): self
+    {
+        return $this->with('closingElement', $closingElement);
     }
 
     /**
@@ -63,6 +71,6 @@ class ElementTag extends Tag implements AttributesAwareInterface, ContentAwareIn
      */
     public function noClosingElement(): self
     {
-        return $this->with('hasClosingElement', false);
+        return $this->withClosingElement(false);
     }
 }
