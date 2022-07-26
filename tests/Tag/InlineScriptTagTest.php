@@ -6,9 +6,6 @@ namespace Setono\TagBag\Tag;
 
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Setono\TagBag\Tag\InlineScriptTag
- */
 final class InlineScriptTagTest extends TestCase
 {
     /**

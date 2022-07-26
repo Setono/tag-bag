@@ -6,10 +6,6 @@ namespace Setono\TagBag\Tag;
 
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Setono\TagBag\Tag\Tag
- * @covers \Setono\TagBag\Tag\ContentAwareTag
- */
 final class ContentAwareTagTest extends TestCase
 {
     /**

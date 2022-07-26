@@ -6,9 +6,6 @@ namespace Setono\TagBag\Tag;
 
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Setono\TagBag\Tag\StyleTag
- */
 final class StyleTagTest extends TestCase
 {
     /**
