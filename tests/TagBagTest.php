@@ -325,7 +325,7 @@ final class TestLogger extends AbstractLogger
 
     public function log($level, $message, array $context = []): void
     {
-        $this->messages[] = $message;
+        $this->messages[] = (string) $message;
     }
 
     public function hasMessageMatching(string $regexp): bool
