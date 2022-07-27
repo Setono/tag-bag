@@ -325,6 +325,7 @@ final class TestLogger extends AbstractLogger
 
     public function log($level, $message, array $context = []): void
     {
+        /** @psalm-suppress RedundantCastGivenDocblockType */
         $this->messages[] = (string) $message;
     }
 
