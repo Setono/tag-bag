@@ -29,6 +29,8 @@ final class ScriptTagTest extends TestCase
 
         self::assertSame('https://example.com/script.js', $tag->getSrc());
         self::assertNull($tag->getType());
+        self::assertFalse($tag->isDeferred());
+        self::assertFalse($tag->isAsync());
     }
 
     /**
@@ -37,12 +39,20 @@ final class ScriptTagTest extends TestCase
     public function it_has_immutable_setters(): void
     {
         $tag = ScriptTag::create('https://example.com/script.js')->withType('type');
-        $newTag = $tag->withSrc('https://example.com/script2.js')->withType('new_type');
+        $newTag = $tag->withSrc('https://example.com/script2.js')->withType('new_type')->async()->defer();
 
         self::assertNotSame($tag, $newTag);
+
         self::assertSame('type', $tag->getType());
         self::assertSame('new_type', $newTag->getType());
+
         self::assertSame('https://example.com/script.js', $tag->getSrc());
         self::assertSame('https://example.com/script2.js', $newTag->getSrc());
+
+        self::assertFalse($tag->isAsync());
+        self::assertTrue($newTag->isAsync());
+
+        self::assertFalse($tag->isDeferred());
+        self::assertTrue($newTag->isDeferred());
     }
 }

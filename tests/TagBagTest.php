@@ -7,6 +7,7 @@ namespace Setono\TagBag;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\AbstractLogger;
+use RuntimeException;
 use Setono\TagBag\Event\PreTagAddedEvent;
 use Setono\TagBag\Event\TagAddedEvent;
 use Setono\TagBag\Exception\UnsupportedTagException;
@@ -22,11 +23,11 @@ use Setono\TagBag\Tag\TagInterface;
  */
 final class TagBagTest extends TestCase
 {
-    private Logger $logger;
+    private TestLogger $logger;
 
     protected function setUp(): void
     {
-        $this->logger = new Logger();
+        $this->logger = new TestLogger();
     }
 
     /**
@@ -230,6 +231,29 @@ final class TagBagTest extends TestCase
         self::assertSame('tag2', $tagBag->renderAll());
     }
 
+    /**
+     * @test
+     */
+    public function it_handles_exceptions_when_trying_to_add_a_tag(): void
+    {
+        $renderer = new class() implements RendererInterface {
+            public function supports(TagInterface $tag): bool
+            {
+                return true;
+            }
+
+            public function render(TagInterface $tag): string
+            {
+                throw new RuntimeException('Cannot render tag');
+            }
+        };
+
+        $tagBag = $this->getTagBag(null, $renderer);
+        $tagBag->add($this->getTag());
+
+        self::assertTrue($this->logger->hasMessageMatching('/^Cannot render tag$/'));
+    }
+
     private function getTag(
         string $content = 'content',
         string $section = null,
@@ -279,21 +303,24 @@ final class TagBagTest extends TestCase
     }
 }
 
-final class Logger extends AbstractLogger
+final class TestLogger extends AbstractLogger
 {
-    private array $messages = [];
+    /** @var list<string> */
+    public array $messages = [];
 
     public function log($level, $message, array $context = []): void
     {
-        $this->messages[] = [
-            'level' => $level,
-            'message' => $message,
-            'context' => $context,
-        ];
+        $this->messages[] = $message;
     }
 
-    public function getMessages(): array
+    public function hasMessageMatching(string $regexp): bool
     {
-        return $this->messages;
+        foreach ($this->messages as $message) {
+            if (preg_match($regexp, $message) === 1) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
