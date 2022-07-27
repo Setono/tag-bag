@@ -161,7 +161,7 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
     public function store(): void
     {
         if (null === $this->storage) {
-            $this->logger->error('You are trying to store the tag bag, but haven\t set any storage');
+            $this->logger->error('You are trying to store the tag bag, but haven\'t set any storage');
 
             return;
         }
@@ -180,7 +180,7 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
     public function restore(): void
     {
         if (null === $this->storage) {
-            $this->logger->error('You are trying to restore the tag bag, but haven\t set any storage');
+            $this->logger->error('You are trying to restore the tag bag, but haven\'t set any storage');
 
             return;
         }
