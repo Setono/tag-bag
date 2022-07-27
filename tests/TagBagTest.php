@@ -234,6 +234,21 @@ final class TagBagTest extends TestCase
     /**
      * @test
      */
+    public function it_replaces_non_unique_existing_tag_with_new_unique_tag(): void
+    {
+        $tag1 = $this->getTag('tag1')->notUnique()->withPriority(30)->withFingerprint('tag');
+        $tag2 = $this->getTag('tag2')->unique()->withPriority(20)->withFingerprint('tag');
+
+        $tagBag = $this->getTagBag();
+        $tagBag->add($tag1);
+        $tagBag->add($tag2);
+
+        self::assertSame('tag2', $tagBag->renderAll());
+    }
+
+    /**
+     * @test
+     */
     public function it_handles_exceptions_when_trying_to_add_a_tag(): void
     {
         $renderer = new class() implements RendererInterface {
