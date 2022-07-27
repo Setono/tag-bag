@@ -28,18 +28,34 @@ final class ContentAwareTagTest extends TestCase
         self::assertSame(TagInterface::SECTION_BODY_END, $tag->getSection());
         self::assertSame(0, $tag->getPriority());
         self::assertTrue($tag->isUnique());
+        self::assertNull($tag->getFingerprint());
     }
 
     /**
      * @test
      */
-    public function it_is_immutable(): void
+    public function it_has_immutable_setters(): void
     {
-        $originalTag = ContentAwareTag::create('content');
+        $tag = ContentAwareTag::create('content');
+        $newTag = $tag->withContent('new content')
+            ->withSection('new_section')
+            ->withPriority(10)
+            ->withFingerprint('fingerprint')
+            ->notUnique()
+        ;
 
-        self::assertNotSame($originalTag, $originalTag->withContent('new content'));
-        self::assertNotSame($originalTag, $originalTag->withSection('new_section'));
-        self::assertNotSame($originalTag, $originalTag->withPriority(10));
-        self::assertNotSame($originalTag, $originalTag->unique());
+        self::assertNotSame($tag, $newTag);
+
+        self::assertSame('content', $tag->getContent());
+        self::assertSame(TagInterface::SECTION_BODY_END, $tag->getSection());
+        self::assertSame(0, $tag->getPriority());
+        self::assertNull($tag->getFingerprint());
+        self::assertTrue($tag->isUnique());
+
+        self::assertSame('new content', $newTag->getContent());
+        self::assertSame('new_section', $newTag->getSection());
+        self::assertSame(10, $newTag->getPriority());
+        self::assertSame('fingerprint', $newTag->getFingerprint());
+        self::assertFalse($newTag->isUnique());
     }
 }
