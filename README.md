@@ -20,13 +20,16 @@ composer require setono/tag-bag
 
 ```php
 <?php
-use Setono\TagBag\Tag\InlineScriptTag;
-use Setono\TagBag\TagBagInterface;
+declare(strict_types=1);
 
-/** @var TagBagInterface $tagBag */
+use Setono\TagBag\Renderer\ElementRenderer;
+use Setono\TagBag\Tag\InlineScriptTag;
+use Setono\TagBag\TagBag;
+
+$tagBag = new TagBag(new ElementRenderer());
 
 // in a controller or service
-$tagBag->add(new InlineScriptTag('trackSomething();'));
+$tagBag->add(InlineScriptTag::create('trackSomething();'));
 
 // in your template
 $tagBag->renderAll();
@@ -41,19 +44,19 @@ The above call to `TagBagInterface::renderAll()` would output the following:
 Here we introduced two important concepts of the tag bag: The [tags](#tags) and the [rendering of the tags](#renderers).
 
 Tags are PHP classes implementing the `TagInterface` and they are designed to make it easier for you to output content
-on your pages. The ones included are pretty basic, and you may find that you'd want to use some of the other more
+on your pages. The ones included are pretty basic, and you may find that you'd want to use some other more
 advanced tags that you can read about in the [tags](#tags) section below.
 
 ## Tags
-The base library has three tags and on top of that you can use other tags by installing small sub packages of the tag bag.
+The base library includes the following tags:
 
 ### Content tag
 
 ```php
 <?php
-use Setono\TagBag\Tag\ContentAwareTag;
+use Setono\TagBag\Tag\ContentTag;
 
-$tag = ContentAwareTag::create('<div class="class-name">tag</div>');
+$tag = ContentTag::create('<div class="class-name">tag</div>');
 ```
 
 Renders as:
@@ -62,7 +65,22 @@ Renders as:
 <div class="class-name">tag</div>
 ```
 
-### Script tag
+### Element tag
+
+```php
+<?php
+use Setono\TagBag\Tag\ElementTag;
+
+$tag = ElementTag::createWithContent('div', 'content');
+```
+
+Renders as:
+
+```html
+<div>content</div>
+```
+
+### Inline script tag
 
 ```php
 <?php
@@ -79,7 +97,7 @@ alert("Hey!");
 </script>
 ```
 
-The script tag also has an optional property named `type`:
+You can also add attributes to the inline script tag:
 
 ```php
 <?php
@@ -93,6 +111,21 @@ The above renders as:
 <script type="application/ld+json">
 {"@context": "https://schema.org/"}
 </script>
+```
+
+### Link tag
+
+```php
+<?php
+use Setono\TagBag\Tag\LinkTag;
+
+$tag = LinkTag::create('stylesheet', 'https://example.com/style.css');
+```
+
+Renders as:
+
+```html
+<link rel="stylesheet" href="https://example.com/style.css">
 ```
 
 ### Style tag
