@@ -6,7 +6,7 @@ namespace Setono\TagBag\Event;
 
 use PHPUnit\Framework\TestCase;
 use Setono\TagBag\Renderer\ContentAwareRenderer;
-use Setono\TagBag\Tag\ContentAwareTag;
+use Setono\TagBag\Tag\ContentTag;
 use Setono\TagBag\Tag\RenderedTag;
 use Setono\TagBag\TagBag;
 
@@ -20,7 +20,7 @@ final class TagAddedEventTest extends TestCase
      */
     public function it_instantiates(): void
     {
-        $tag = ContentAwareTag::create('value');
+        $tag = ContentTag::create('value');
         $renderedTag = RenderedTag::createFromTag($tag, 'value', 'fingerprint');
         $tagBag = new TagBag(new ContentAwareRenderer());
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Setono\TagBag\Renderer;
 
 use PHPUnit\Framework\TestCase;
-use Setono\TagBag\Tag\ContentAwareTag;
+use Setono\TagBag\Tag\ContentTag;
 use Setono\TagBag\Tag\Tag;
 
 /**
@@ -19,7 +19,7 @@ final class ContentAwareRendererTest extends TestCase
     public function it_supports_content_tag(): void
     {
         $renderer = new ContentAwareRenderer();
-        self::assertTrue($renderer->supports(ContentAwareTag::create('content')));
+        self::assertTrue($renderer->supports(ContentTag::create('content')));
     }
 
     /**
@@ -37,7 +37,7 @@ final class ContentAwareRendererTest extends TestCase
     public function it_renders(): void
     {
         $renderer = new ContentAwareRenderer();
-        self::assertSame('content', $renderer->render(ContentAwareTag::create('content')));
+        self::assertSame('content', $renderer->render(ContentTag::create('content')));
     }
 }
 

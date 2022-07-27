@@ -6,15 +6,15 @@ namespace Setono\TagBag\Tag;
 
 use PHPUnit\Framework\TestCase;
 
-final class ContentAwareTagTest extends TestCase
+final class ContentTagTest extends TestCase
 {
     /**
      * @test
      */
     public function it_creates(): void
     {
-        self::assertInstanceOf(TagInterface::class, ContentAwareTag::create('content'));
-        self::assertInstanceOf(ContentAwareInterface::class, ContentAwareTag::create('content'));
+        self::assertInstanceOf(TagInterface::class, ContentTag::create('content'));
+        self::assertInstanceOf(ContentAwareInterface::class, ContentTag::create('content'));
     }
 
     /**
@@ -22,7 +22,7 @@ final class ContentAwareTagTest extends TestCase
      */
     public function it_has_default_values(): void
     {
-        $tag = ContentAwareTag::create('content');
+        $tag = ContentTag::create('content');
 
         self::assertSame('content', $tag->getContent());
         self::assertSame(TagInterface::SECTION_BODY_END, $tag->getSection());
@@ -36,7 +36,7 @@ final class ContentAwareTagTest extends TestCase
      */
     public function it_has_immutable_setters(): void
     {
-        $tag = ContentAwareTag::create('content');
+        $tag = ContentTag::create('content');
         $newTag = $tag->withContent('new content')
             ->withSection('new_section')
             ->withPriority(10)

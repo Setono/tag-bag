@@ -7,7 +7,7 @@ namespace Setono\TagBag\Tag;
 /**
  * This is a very simple tag that will just output the content you give it
  */
-class ContentAwareTag extends Tag implements ContentAwareInterface
+class ContentTag extends Tag implements ContentAwareInterface
 {
     use ContentAwareTrait;
 

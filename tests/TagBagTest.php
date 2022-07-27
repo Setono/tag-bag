@@ -15,7 +15,7 @@ use Setono\TagBag\Renderer\RendererInterface;
 use Setono\TagBag\Storage\InMemoryStorage;
 use Setono\TagBag\Storage\StorageInterface;
 use Setono\TagBag\Tag\ContentAwareInterface;
-use Setono\TagBag\Tag\ContentAwareTag;
+use Setono\TagBag\Tag\ContentTag;
 use Setono\TagBag\Tag\TagInterface;
 
 /**
@@ -273,8 +273,8 @@ final class TagBagTest extends TestCase
         string $content = 'content',
         string $section = null,
         bool $unique = true
-    ): ContentAwareTag {
-        $tag = ContentAwareTag::create($content);
+    ): ContentTag {
+        $tag = ContentTag::create($content);
 
         if (null !== $section) {
             $tag = $tag->withSection($section);

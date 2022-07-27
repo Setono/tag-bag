@@ -13,7 +13,7 @@ final class RenderedTagTest extends TestCase
      */
     public function it_instantiates(): void
     {
-        $tag = ContentAwareTag::create('value')
+        $tag = ContentTag::create('value')
             ->unique()
         ;
 
