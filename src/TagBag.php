@@ -19,6 +19,7 @@ use Setono\TagBag\Storage\StorageInterface;
 use Setono\TagBag\Tag\RenderedTag;
 use Setono\TagBag\Tag\TagInterface;
 use Throwable;
+use TypeError;
 
 final class TagBag implements TagBagInterface, LoggerAwareInterface
 {
@@ -195,7 +196,11 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
 
         $this->tags = [];
         if (null !== $data) {
-            $this->tags = $this->unserialize($data);
+            try {
+                $this->tags = $this->unserialize($data);
+            } catch (TypeError $e) {
+                $this->logger->error(sprintf('Exception thrown when trying to unserialize data. Error was: %s. Data was: %s', $e->getMessage(), $data));
+            }
         }
     }
 
@@ -241,6 +246,8 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
 
     /**
      * @psalm-suppress MixedInferredReturnType
+     *
+     * @throws TypeError if the unserialized data doesn't unserialize to instances of RenderedTag
      *
      * @return array<string, list<RenderedTag>>
      */
