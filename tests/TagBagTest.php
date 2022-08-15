@@ -269,6 +269,33 @@ final class TagBagTest extends TestCase
         self::assertTrue($this->logger->hasMessageMatching('/^Cannot render tag$/'));
     }
 
+    /**
+     * @test
+     */
+    public function it_catches_unserialize_error(): void
+    {
+        $storage = new class() implements StorageInterface {
+            public function store(string $data): void
+            {
+            }
+
+            public function restore(): ?string
+            {
+                return serialize([
+                    new NotARenderedTag(),
+                ]);
+            }
+
+            public function remove(): void
+            {
+            }
+        };
+        $tagBag = $this->getTagBag($storage);
+        $tagBag->restore();
+
+        self::assertTrue($this->logger->hasMessageMatching('/^Exception thrown when trying to unserialize data/'));
+    }
+
     private function getTag(
         string $content = 'content',
         string $section = null,
@@ -339,4 +366,8 @@ final class TestLogger extends AbstractLogger
 
         return false;
     }
+}
+
+final class NotARenderedTag
+{
 }
