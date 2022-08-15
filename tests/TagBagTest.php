@@ -340,7 +340,3 @@ final class TestLogger extends AbstractLogger
         return false;
     }
 }
-
-final class NotARenderedTag
-{
-}
