@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Setono\TagBag;
 
+use InvalidArgumentException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Setono\TagBag\Event\PreTagAddedEvent;
 use Setono\TagBag\Event\TagAddedEvent;
+use Setono\TagBag\Exception\SerializationException;
 use Setono\TagBag\Exception\StorageException;
 use Setono\TagBag\Exception\UnsupportedTagException;
 use Setono\TagBag\Generator\FingerprintGeneratorInterface;
@@ -19,7 +21,7 @@ use Setono\TagBag\Storage\StorageInterface;
 use Setono\TagBag\Tag\RenderedTag;
 use Setono\TagBag\Tag\TagInterface;
 use Throwable;
-use TypeError;
+use Webmozart\Assert\Assert;
 
 final class TagBag implements TagBagInterface, LoggerAwareInterface
 {
@@ -198,7 +200,7 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
         if (null !== $data) {
             try {
                 $this->tags = $this->unserialize($data);
-            } catch (TypeError $e) {
+            } catch (SerializationException $e) {
                 $this->logger->error(sprintf('Exception thrown when trying to unserialize data. Error was: %s. Data was: %s', $e->getMessage(), $data));
             }
         }
@@ -245,15 +247,62 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
     }
 
     /**
-     * @psalm-suppress MixedInferredReturnType
+     * @throws SerializationException if the data cannot be unserialized
      *
      * @return array<string, list<RenderedTag>>
+     *
+     * Most of this method is taken from here: https://github.com/symfony/symfony/blob/6.2/src/Symfony/Component/Messenger/Transport/Serialization/PhpSerializer.php
      */
     private function unserialize(string $data): array
     {
-        /** @psalm-suppress MixedReturnStatement */
-        return unserialize($data, [
-            'allowed_classes' => true,
-        ]);
+        if ('' === $data) {
+            throw SerializationException::emptyData();
+        }
+
+        $serializationException = new SerializationException(sprintf('Could not unserialize data: %s.', $data));
+        $prevUnserializeHandler = ini_set('unserialize_callback_func', self::class . '::handleUnserializeCallback');
+        /** @psalm-suppress MixedArgumentTypeCoercion */
+        $prevErrorHandler = set_error_handler(static function ($type, $msg, $file, $line, $context = []) use (&$prevErrorHandler, $serializationException) {
+            if (__FILE__ === $file) {
+                throw $serializationException;
+            }
+
+            /** @psalm-suppress MixedFunctionCall */
+            return $prevErrorHandler ? $prevErrorHandler($type, $msg, $file, $line, $context) : false;
+        });
+
+        try {
+            /** @var array<string, list<RenderedTag>> $result */
+            $result = unserialize($data, [
+                'allowed_classes' => [RenderedTag::class],
+            ]);
+            /** @psalm-suppress RedundantConditionGivenDocblockType */
+            Assert::isArray($result);
+            foreach ($result as $section => $tags) {
+                /** @psalm-suppress RedundantConditionGivenDocblockType */
+                Assert::string($section);
+
+                /** @psalm-suppress RedundantConditionGivenDocblockType */
+                Assert::isArray($tags);
+
+                /** @psalm-suppress DocblockTypeContradiction */
+                Assert::allIsInstanceOf($tags, RenderedTag::class);
+            }
+        } catch (InvalidArgumentException $e) {
+            throw new SerializationException(sprintf('The unserialized data was incorrect. Here is the original data: %s', $data));
+        } finally {
+            restore_error_handler();
+            ini_set('unserialize_callback_func', $prevUnserializeHandler);
+        }
+
+        return $result;
+    }
+
+    /**
+     * @internal
+     */
+    public static function handleUnserializeCallback(string $class): void
+    {
+        throw new SerializationException(sprintf('Message class "%s" not found during decoding.', $class));
     }
 }
