@@ -247,15 +247,13 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
     /**
      * @psalm-suppress MixedInferredReturnType
      *
-     * @throws TypeError if the unserialized data doesn't unserialize to instances of RenderedTag
-     *
      * @return array<string, list<RenderedTag>>
      */
     private function unserialize(string $data): array
     {
         /** @psalm-suppress MixedReturnStatement */
-        return unserialize($data, ['allowed_classes' => [
-            RenderedTag::class,
-        ]]);
+        return unserialize($data, [
+            'allowed_classes' => true,
+        ]);
     }
 }
