@@ -19,7 +19,7 @@
     "require-dev": {
         "infection/infection": "^0.26",
         "phpunit/phpunit": "^9.5",
-        "psalm/plugin-phpunit": "^0.17",
+        "psalm/plugin-phpunit": "^0.18",
         "setono/code-quality-pack": "^2.2"
     },
     "prefer-stable": true,
