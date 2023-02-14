@@ -18,9 +18,9 @@
     },
     "require-dev": {
         "infection/infection": "^0.26",
-        "phpunit/phpunit": "^9.5",
-        "psalm/plugin-phpunit": "^0.17",
-        "setono/code-quality-pack": "^2.2"
+        "phpunit/phpunit": "^9.6",
+        "psalm/plugin-phpunit": "^0.18",
+        "setono/code-quality-pack": "^2.4"
     },
     "prefer-stable": true,
     "autoload": {
