@@ -34,14 +34,11 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
 
     private ?EventDispatcherInterface $eventDispatcher = null;
 
-    private RendererInterface $renderer;
+    private readonly FingerprintGeneratorInterface $fingerprintGenerator;
 
-    private FingerprintGeneratorInterface $fingerprintGenerator;
-
-    public function __construct(RendererInterface $renderer, FingerprintGeneratorInterface $fingerprintGenerator = null)
+    public function __construct(private readonly RendererInterface $renderer, FingerprintGeneratorInterface $fingerprintGenerator = null)
     {
         $this->logger = new NullLogger();
-        $this->renderer = $renderer;
         $this->fingerprintGenerator = $fingerprintGenerator ?? new ValueBasedFingerprintGenerator();
     }
 
@@ -156,9 +153,7 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
      */
     private static function sort(array &$tags): void
     {
-        usort($tags, static function (RenderedTag $tag1, RenderedTag $tag2): int {
-            return $tag2->priority <=> $tag1->priority;
-        });
+        usort($tags, static fn (RenderedTag $tag1, RenderedTag $tag2): int => $tag2->priority <=> $tag1->priority);
     }
 
     public function store(): void
@@ -261,7 +256,7 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
 
         $serializationException = new SerializationException(sprintf('Could not unserialize data: %s.', $data));
         $prevUnserializeHandler = ini_set('unserialize_callback_func', self::class . '::handleUnserializeCallback');
-        /** @psalm-suppress MixedArgumentTypeCoercion */
+        /** @psalm-suppress MixedArgumentTypeCoercion,UndefinedVariable */
         $prevErrorHandler = set_error_handler(static function ($type, $msg, $file, $line, $context = []) use (&$prevErrorHandler, $serializationException) {
             if (__FILE__ === $file) {
                 throw $serializationException;
@@ -285,10 +280,9 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
                 /** @psalm-suppress RedundantConditionGivenDocblockType */
                 Assert::isArray($tags);
 
-                /** @psalm-suppress DocblockTypeContradiction */
                 Assert::allIsInstanceOf($tags, RenderedTag::class);
             }
-        } catch (InvalidArgumentException $e) {
+        } catch (InvalidArgumentException) {
             throw new SerializationException(sprintf('The unserialized data was incorrect. Here is the original data: %s', $data));
         } finally {
             restore_error_handler();
@@ -301,7 +295,7 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
     /**
      * @internal
      */
-    public static function handleUnserializeCallback(string $class): void
+    public static function handleUnserializeCallback(string $class): never
     {
         throw new SerializationException(sprintf('Message class "%s" not found during decoding.', $class));
     }

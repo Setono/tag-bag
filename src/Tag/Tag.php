@@ -19,10 +19,7 @@ abstract class Tag implements TagInterface
         return $this->section;
     }
 
-    /**
-     * @return static
-     */
-    public function withSection(string $section): self
+    public function withSection(string $section): static
     {
         return $this->with('section', $section);
     }
@@ -32,10 +29,7 @@ abstract class Tag implements TagInterface
         return $this->priority;
     }
 
-    /**
-     * @return static
-     */
-    public function withPriority(int $priority): self
+    public function withPriority(int $priority): static
     {
         return $this->with('priority', $priority);
     }
@@ -45,26 +39,17 @@ abstract class Tag implements TagInterface
         return $this->unique;
     }
 
-    /**
-     * @return static
-     */
-    public function unique(): self
+    public function unique(): static
     {
         return $this->withUnique(true);
     }
 
-    /**
-     * @return static
-     */
-    public function notUnique(): self
+    public function notUnique(): static
     {
         return $this->withUnique(false);
     }
 
-    /**
-     * @return static
-     */
-    public function withUnique(bool $unique): self
+    public function withUnique(bool $unique): static
     {
         return $this->with('unique', $unique);
     }
@@ -74,22 +59,15 @@ abstract class Tag implements TagInterface
         return $this->fingerprint;
     }
 
-    /**
-     * @return static
-     */
-    public function withFingerprint(string $fingerprint): self
+    public function withFingerprint(string $fingerprint): static
     {
         return $this->with('fingerprint', $fingerprint);
     }
 
     /**
      * This is a helper method for immutable withers
-     *
-     * @param mixed $val
-     *
-     * @return static
      */
-    protected function with(string $property, $val): self
+    protected function with(string $property, mixed $val): static
     {
         $obj = clone $this;
         $obj->{$property} = $val;

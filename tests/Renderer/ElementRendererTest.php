@@ -46,7 +46,7 @@ final class ElementRendererTest extends TestCase
     {
         self::assertRenderedContent(
             '<script type="application/ld+json">content</script>',
-            InlineScriptTag::create('content')->withType('application/ld+json')
+            InlineScriptTag::create('content')->withType('application/ld+json'),
         );
     }
 
@@ -58,7 +58,7 @@ final class ElementRendererTest extends TestCase
         self::assertRenderedContent(
             '<script data-attribute>content</script>',
             InlineScriptTag::create('content')
-                ->withAttribute('data-attribute')
+                ->withAttribute('data-attribute'),
         );
     }
 
@@ -70,7 +70,7 @@ final class ElementRendererTest extends TestCase
         self::assertRenderedContent(
             '<script data-attribute="attribute-value">content</script>',
             InlineScriptTag::create('content')
-                ->withAttribute('data-attribute', 'attribute-value')
+                ->withAttribute('data-attribute', 'attribute-value'),
         );
     }
 
@@ -84,7 +84,7 @@ final class ElementRendererTest extends TestCase
             InlineScriptTag::create('content')
                 ->withType('application/ld+json')
                 ->withAttribute('data-attribute1')
-                ->withAttribute('data-attribute2', 'attribute2-value')
+                ->withAttribute('data-attribute2', 'attribute2-value'),
         );
     }
 
@@ -95,7 +95,7 @@ final class ElementRendererTest extends TestCase
     {
         self::assertRenderedContent(
             '<link rel="stylesheet" href="https://example.com/style.css">',
-            LinkTag::create('stylesheet', 'https://example.com/style.css')
+            LinkTag::create('stylesheet', 'https://example.com/style.css'),
         );
     }
 

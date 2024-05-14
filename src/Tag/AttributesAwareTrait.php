@@ -33,12 +33,7 @@ trait AttributesAwareTrait
         return $this->attributes;
     }
 
-    /**
-     * @param string|int|float|null $val
-     *
-     * @return static
-     */
-    public function withAttribute(string $attribute, $val = null): self
+    public function withAttribute(string $attribute, \Stringable|string|int|float $val = null): static
     {
         $obj = clone $this;
         $obj->attributes[$attribute] = null === $val ? null : (string) $val;

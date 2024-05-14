@@ -10,7 +10,7 @@
         }
     ],
     "require": {
-        "php": ">=7.4",
+        "php": ">=8.1",
         "ext-hash": "*",
         "psr/event-dispatcher": "^1.0",
         "psr/log": "^1.1 || ^2.0 || ^3.0",
@@ -20,7 +20,7 @@
         "infection/infection": "^0.26",
         "phpunit/phpunit": "^9.6",
         "psalm/plugin-phpunit": "^0.18",
-        "setono/code-quality-pack": "^2.4"
+        "setono/code-quality-pack": "^2.7"
     },
     "prefer-stable": true,
     "autoload": {
@@ -35,8 +35,8 @@
     },
     "config": {
         "allow-plugins": {
-            "ergebnis/composer-normalize": true,
             "dealerdirect/phpcodesniffer-composer-installer": false,
+            "ergebnis/composer-normalize": true,
             "infection/extension-installer": true
         },
         "sort-packages": true

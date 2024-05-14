@@ -33,7 +33,7 @@ final class ElementRenderer implements RendererInterface
                 $tag->getElement(),
                 $this->renderAttributes($tag),
                 $tag->getContent(),
-                $tag->getElement()
+                $tag->getElement(),
             );
         }
 

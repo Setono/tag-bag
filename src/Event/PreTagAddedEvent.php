@@ -11,10 +11,7 @@ use Setono\TagBag\Tag\TagInterface;
  */
 final class PreTagAddedEvent
 {
-    public TagInterface $tag;
-
-    public function __construct(TagInterface $tag)
+    public function __construct(public readonly TagInterface $tag)
     {
-        $this->tag = $tag;
     }
 }

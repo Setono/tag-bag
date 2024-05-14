@@ -10,32 +10,19 @@ namespace Setono\TagBag\Tag;
 class ElementTag extends Tag implements AttributesAwareInterface, ContentAwareInterface
 {
     use AttributesAwareTrait;
-
     use ContentAwareTrait;
 
-    protected string $element;
-
-    protected bool $closingElement;
-
-    final private function __construct(string $element, string $content, bool $hasClosingElement)
+    final private function __construct(protected string $element, string $content, protected bool $closingElement)
     {
         $this->content = $content;
-        $this->element = $element;
-        $this->closingElement = $hasClosingElement;
     }
 
-    /**
-     * @return static
-     */
-    public static function createWithContent(string $element, string $content): self
+    public static function createWithContent(string $element, string $content): static
     {
         return new static($element, $content, true);
     }
 
-    /**
-     * @return static
-     */
-    public static function createWithoutContent(string $element, bool $hasClosingElement = true): self
+    public static function createWithoutContent(string $element, bool $hasClosingElement = true): static
     {
         return new static($element, '', $hasClosingElement);
     }
@@ -45,10 +32,7 @@ class ElementTag extends Tag implements AttributesAwareInterface, ContentAwareIn
         return $this->element;
     }
 
-    /**
-     * @return static
-     */
-    public function withElement(string $element): self
+    public function withElement(string $element): static
     {
         return $this->with('element', $element);
     }
@@ -58,18 +42,12 @@ class ElementTag extends Tag implements AttributesAwareInterface, ContentAwareIn
         return $this->closingElement;
     }
 
-    /**
-     * @return static
-     */
-    public function withClosingElement(bool $closingElement): self
+    public function withClosingElement(bool $closingElement): static
     {
         return $this->with('closingElement', $closingElement);
     }
 
-    /**
-     * @return static
-     */
-    public function noClosingElement(): self
+    public function noClosingElement(): static
     {
         return $this->withClosingElement(false);
     }

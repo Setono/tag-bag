@@ -9,7 +9,7 @@ use Webmozart\Assert\Assert;
 
 final class ValueBasedFingerprintGenerator implements FingerprintGeneratorInterface
 {
-    private string $hashAlgorithm;
+    private readonly string $hashAlgorithm;
 
     public function __construct(string $hashAlgorithm = 'md5')
     {

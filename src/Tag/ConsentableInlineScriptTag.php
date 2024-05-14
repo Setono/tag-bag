@@ -11,9 +11,6 @@ namespace Setono\TagBag\Tag;
  */
 final class ConsentableInlineScriptTag extends ElementTag
 {
-    /**
-     * @return static
-     */
     public static function create(string $content, string $consentType = null): self
     {
         $obj = parent::createWithContent('script', $content)
@@ -35,9 +32,6 @@ final class ConsentableInlineScriptTag extends ElementTag
         return $this->attributes['type'] ?? null;
     }
 
-    /**
-     * @return static
-     */
     public function withType(string $type): self
     {
         return $this->withAttribute('type', $type);
