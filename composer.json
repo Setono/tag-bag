@@ -17,9 +17,9 @@
         "webmozart/assert": "^1.11"
     },
     "require-dev": {
-        "infection/infection": "^0.26",
-        "phpunit/phpunit": "^9.6",
-        "psalm/plugin-phpunit": "^0.18",
+        "infection/infection": "^0.26.21",
+        "phpunit/phpunit": "^10.5.20",
+        "psalm/plugin-phpunit": "^0.19",
         "setono/code-quality-pack": "^2.7"
     },
     "prefer-stable": true,

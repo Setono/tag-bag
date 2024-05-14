@@ -1,20 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd" bootstrap="vendor/autoload.php"
-         colors="true" verbose="true">
-    <coverage>
-        <include>
-            <directory suffix=".php">src/</directory>
-        </include>
-        <report>
-            <clover outputFile="build/coverage.xml"/>
-            <html outputDirectory="build/coverage"/>
-        </report>
-    </coverage>
+         colors="true" cacheDirectory=".phpunit.cache">
     <testsuites>
         <testsuite name="TagBag Test Suite">
             <directory>tests</directory>
         </testsuite>
     </testsuites>
     <logging/>
+    <source>
+        <include>
+            <directory suffix=".php">src/</directory>
+        </include>
+    </source>
 </phpunit>
