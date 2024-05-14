@@ -12,15 +12,9 @@ use Setono\TagBag\TagBagInterface;
  */
 final class TagAddedEvent
 {
-    /** @readonly */
-    public RenderedTag $tag;
-
-    /** @readonly */
-    public TagBagInterface $tagBag;
-
-    public function __construct(RenderedTag $tag, TagBagInterface $tagBag)
-    {
-        $this->tag = $tag;
-        $this->tagBag = $tagBag;
+    public function __construct(
+        public readonly RenderedTag $tag,
+        public readonly TagBagInterface $tagBag,
+    ) {
     }
 }

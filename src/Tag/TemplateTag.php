@@ -8,19 +8,10 @@ use const PATHINFO_EXTENSION;
 
 final class TemplateTag extends Tag
 {
-    protected string $template;
-
-    protected array $data;
-
-    private function __construct(string $template, array $data = [])
+    private function __construct(protected string $template, protected array $data = [])
     {
-        $this->template = $template;
-        $this->data = $data;
     }
 
-    /**
-     * @return static
-     */
     public static function create(string $template, array $data = []): self
     {
         return new self($template, $data);
@@ -34,9 +25,6 @@ final class TemplateTag extends Tag
         return $this->template;
     }
 
-    /**
-     * @return static
-     */
     public function withTemplate(string $template): self
     {
         return $this->with('template', $template);
@@ -50,9 +38,6 @@ final class TemplateTag extends Tag
         return $this->data;
     }
 
-    /**
-     * @return static
-     */
     public function withData(array $data): self
     {
         return $this->with('data', $data);

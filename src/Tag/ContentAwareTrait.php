@@ -13,10 +13,7 @@ trait ContentAwareTrait
         return $this->content;
     }
 
-    /**
-     * @return static
-     */
-    public function withContent(string $content): self
+    public function withContent(string $content): static
     {
         $obj = clone $this;
         $obj->content = $content;

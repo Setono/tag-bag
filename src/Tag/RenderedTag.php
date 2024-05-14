@@ -12,35 +12,15 @@ namespace Setono\TagBag\Tag;
  *
  * @internal
  */
-final class RenderedTag
+final class RenderedTag implements \Stringable
 {
-    /** @readonly */
-    public string $value;
-
-    /** @readonly */
-    public string $section;
-
-    /** @readonly */
-    public int $priority;
-
-    /** @readonly */
-    public bool $unique;
-
-    /** @readonly */
-    public string $fingerprint;
-
     private function __construct(
-        string $value,
-        string $section,
-        int $priority,
-        bool $unique,
-        string $fingerprint
+        public readonly string $value,
+        public readonly string $section,
+        public readonly int $priority,
+        public readonly bool $unique,
+        public readonly string $fingerprint,
     ) {
-        $this->value = $value;
-        $this->section = $section;
-        $this->priority = $priority;
-        $this->unique = $unique;
-        $this->fingerprint = $fingerprint;
     }
 
     public static function createFromTag(TagInterface $tag, string $value, string $fingerprint): self
@@ -50,7 +30,7 @@ final class RenderedTag
             $tag->getSection(),
             $tag->getPriority(),
             $tag->isUnique(),
-            $fingerprint
+            $fingerprint,
         );
     }
 

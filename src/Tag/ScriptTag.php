@@ -9,9 +9,6 @@ namespace Setono\TagBag\Tag;
  */
 final class ScriptTag extends ElementTag
 {
-    /**
-     * @return static
-     */
     public static function create(string $src): self
     {
         return parent::createWithoutContent('script')
@@ -27,9 +24,6 @@ final class ScriptTag extends ElementTag
         return $this->attributes['src'] ?? null;
     }
 
-    /**
-     * @return static
-     */
     public function withSrc(string $src): self
     {
         return $this->withAttribute('src', $src);
@@ -43,9 +37,6 @@ final class ScriptTag extends ElementTag
         return $this->attributes['type'] ?? null;
     }
 
-    /**
-     * @return static
-     */
     public function withType(string $type): self
     {
         return $this->withAttribute('type', $type);
@@ -56,9 +47,6 @@ final class ScriptTag extends ElementTag
         return array_key_exists('defer', $this->attributes);
     }
 
-    /**
-     * @return static
-     */
     public function defer(): self
     {
         return $this->withAttribute('defer');
@@ -69,9 +57,6 @@ final class ScriptTag extends ElementTag
         return array_key_exists('async', $this->attributes);
     }
 
-    /**
-     * @return static
-     */
     public function async(): self
     {
         return $this->withAttribute('async');

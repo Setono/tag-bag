@@ -16,10 +16,7 @@ class ContentTag extends Tag implements ContentAwareInterface
         $this->content = $content;
     }
 
-    /**
-     * @return static
-     */
-    public static function create(string $content): self
+    public static function create(string $content): static
     {
         return new static($content);
     }

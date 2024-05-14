@@ -299,7 +299,7 @@ final class TagBagTest extends TestCase
     private function getTag(
         string $content = 'content',
         string $section = null,
-        bool $unique = true
+        bool $unique = true,
     ): ContentTag {
         $tag = ContentTag::create($content);
 
@@ -356,6 +356,9 @@ final class TestLogger extends AbstractLogger
         $this->messages[] = (string) $message;
     }
 
+    /**
+     * @param non-empty-string $regexp
+     */
     public function hasMessageMatching(string $regexp): bool
     {
         foreach ($this->messages as $message) {

@@ -10,9 +10,6 @@ namespace Setono\TagBag\Tag;
  */
 final class InlineScriptTag extends ElementTag
 {
-    /**
-     * @return static
-     */
     public static function create(string $content): self
     {
         return parent::createWithContent('script', $content);
@@ -26,9 +23,6 @@ final class InlineScriptTag extends ElementTag
         return $this->attributes['type'] ?? null;
     }
 
-    /**
-     * @return static
-     */
     public function withType(string $type): self
     {
         return $this->withAttribute('type', $type);
