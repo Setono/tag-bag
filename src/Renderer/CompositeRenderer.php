@@ -12,6 +12,13 @@ final class CompositeRenderer implements RendererInterface
     /** @var list<RendererInterface> */
     private array $renderers = [];
 
+    public function __construct(RendererInterface ...$renderers)
+    {
+        foreach ($renderers as $renderer) {
+            $this->add($renderer);
+        }
+    }
+
     public function add(RendererInterface $renderer): void
     {
         $this->renderers[] = $renderer;
