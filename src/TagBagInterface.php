@@ -11,7 +11,7 @@ interface TagBagInterface
     public function add(TagInterface $tag): void;
 
     /**
-     * If the tag is empty, it renders an empty string, i.e. ''
+     * If the tag bag is empty, it renders an empty string, i.e. ''
      *
      * NOTICE: All tags are removed from the tag bag when this method is called
      */
