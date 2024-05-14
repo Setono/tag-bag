@@ -16,6 +16,9 @@ use Setono\TagBag\Exception\StorageException;
 use Setono\TagBag\Exception\UnsupportedTagException;
 use Setono\TagBag\Generator\FingerprintGeneratorInterface;
 use Setono\TagBag\Generator\ValueBasedFingerprintGenerator;
+use Setono\TagBag\Renderer\CompositeRenderer;
+use Setono\TagBag\Renderer\ContentAwareRenderer;
+use Setono\TagBag\Renderer\ElementRenderer;
 use Setono\TagBag\Renderer\RendererInterface;
 use Setono\TagBag\Storage\StorageInterface;
 use Setono\TagBag\Tag\RenderedTag;
@@ -34,11 +37,16 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
 
     private ?EventDispatcherInterface $eventDispatcher = null;
 
+    private readonly RendererInterface $renderer;
+
     private readonly FingerprintGeneratorInterface $fingerprintGenerator;
 
-    public function __construct(private readonly RendererInterface $renderer, FingerprintGeneratorInterface $fingerprintGenerator = null)
-    {
+    public function __construct(
+        RendererInterface $renderer = null,
+        FingerprintGeneratorInterface $fingerprintGenerator = null,
+    ) {
         $this->logger = new NullLogger();
+        $this->renderer = $renderer ?? new CompositeRenderer(new ElementRenderer(), new ContentAwareRenderer());
         $this->fingerprintGenerator = $fingerprintGenerator ?? new ValueBasedFingerprintGenerator();
     }
 
