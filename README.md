@@ -26,7 +26,7 @@ use Setono\TagBag\Renderer\ElementRenderer;
 use Setono\TagBag\Tag\InlineScriptTag;
 use Setono\TagBag\TagBag;
 
-$tagBag = new TagBag(new ElementRenderer());
+$tagBag = new TagBag();
 
 // in a controller or service
 $tagBag->add(InlineScriptTag::create('trackSomething();'));
@@ -160,8 +160,7 @@ If you're using Google's services, some of them allow you to track events using 
 To make it easier to create these tags, you can use the [gtag extension for the tag bag](https://github.com/Setono/tag-bag-gtag).
 
 ## Renderers
-The base library contains three renderers that corresponds to the base tags.
-A renderer implements the `RendererInterface`.
+The base library contains two renderers. A renderer implements the `RendererInterface`.
 
 Just as with the tags there are also renderers in the sub packages.
 
@@ -169,13 +168,9 @@ Just as with the tags there are also renderers in the sub packages.
 
 The `ContentRenderer` renders the content you've input in the tag.
 
-**Script renderer**
+**Element renderer**
 
-The `ScriptRenderer` wraps the content in a `<script>` tag.
-
-**Style renderer**
-
-The `StyleRenderer` wraps the content in a `<style>` tag.
+The `ElementRenderer` renders 'element tag', e.g. `<script>`, `<style>`, `<meta>`, `<link>`, all tags based on HTML elements basically.
 
 ## Storage
 
