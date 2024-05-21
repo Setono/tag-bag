@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Setono\TagBag;
 
-use InvalidArgumentException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
@@ -20,11 +19,14 @@ use Setono\TagBag\Renderer\CompositeRenderer;
 use Setono\TagBag\Renderer\ContentAwareRenderer;
 use Setono\TagBag\Renderer\ElementRenderer;
 use Setono\TagBag\Renderer\RendererInterface;
+use Setono\TagBag\Serializer\CompositeSerializer;
+use Setono\TagBag\Serializer\JsonSerializer;
+use Setono\TagBag\Serializer\PhpSerializer;
+use Setono\TagBag\Serializer\SerializerInterface;
 use Setono\TagBag\Storage\StorageInterface;
 use Setono\TagBag\Tag\RenderedTag;
 use Setono\TagBag\Tag\TagInterface;
 use Throwable;
-use Webmozart\Assert\Assert;
 
 final class TagBag implements TagBagInterface, LoggerAwareInterface
 {
@@ -41,13 +43,19 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
 
     private readonly FingerprintGeneratorInterface $fingerprintGenerator;
 
+    private readonly SerializerInterface $serializer;
+
     public function __construct(
         RendererInterface $renderer = null,
         FingerprintGeneratorInterface $fingerprintGenerator = null,
+        SerializerInterface $serializer = null,
     ) {
         $this->logger = new NullLogger();
         $this->renderer = $renderer ?? new CompositeRenderer(new ElementRenderer(), new ContentAwareRenderer());
         $this->fingerprintGenerator = $fingerprintGenerator ?? new ValueBasedFingerprintGenerator();
+
+        /** @psalm-suppress DeprecatedClass */
+        $this->serializer = $serializer ?? new CompositeSerializer(new JsonSerializer(), new PhpSerializer());
     }
 
     public function add(TagInterface $tag): void
@@ -176,7 +184,7 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
             if (count($this->tags) === 0) {
                 $this->storage->remove();
             } else {
-                $this->storage->store(serialize($this->tags));
+                $this->storage->store($this->serializer->serialize($this->tags));
             }
         } catch (StorageException $e) {
             $this->logger->error($e->getMessage());
@@ -202,7 +210,7 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
         $this->tags = [];
         if (null !== $data) {
             try {
-                $this->tags = $this->unserialize($data);
+                $this->tags = $this->serializer->deserialize($data);
             } catch (SerializationException $e) {
                 $this->logger->error(sprintf('Exception thrown when trying to unserialize data. Error was: %s. Data was: %s', $e->getMessage(), $data));
             }
@@ -247,64 +255,5 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
         }
 
         return null;
-    }
-
-    /**
-     * @throws SerializationException if the data cannot be unserialized
-     *
-     * @return array<string, list<RenderedTag>>
-     *
-     * Most of this method is taken from here: https://github.com/symfony/symfony/blob/6.2/src/Symfony/Component/Messenger/Transport/Serialization/PhpSerializer.php
-     */
-    private function unserialize(string $data): array
-    {
-        if ('' === $data) {
-            throw SerializationException::emptyData();
-        }
-
-        $serializationException = new SerializationException(sprintf('Could not unserialize data: %s.', $data));
-        $prevUnserializeHandler = ini_set('unserialize_callback_func', self::class . '::handleUnserializeCallback');
-        /** @psalm-suppress MixedArgumentTypeCoercion,UndefinedVariable */
-        $prevErrorHandler = set_error_handler(static function ($type, $msg, $file, $line, $context = []) use (&$prevErrorHandler, $serializationException) {
-            if (__FILE__ === $file) {
-                throw $serializationException;
-            }
-
-            /** @psalm-suppress MixedFunctionCall */
-            return $prevErrorHandler ? $prevErrorHandler($type, $msg, $file, $line, $context) : false;
-        });
-
-        try {
-            /** @var array<string, list<RenderedTag>> $result */
-            $result = unserialize($data, [
-                'allowed_classes' => [RenderedTag::class],
-            ]);
-            /** @psalm-suppress RedundantConditionGivenDocblockType */
-            Assert::isArray($result);
-            foreach ($result as $section => $tags) {
-                /** @psalm-suppress RedundantConditionGivenDocblockType */
-                Assert::string($section);
-
-                /** @psalm-suppress RedundantConditionGivenDocblockType */
-                Assert::isArray($tags);
-
-                Assert::allIsInstanceOf($tags, RenderedTag::class);
-            }
-        } catch (InvalidArgumentException) {
-            throw new SerializationException(sprintf('The unserialized data was incorrect. Here is the original data: %s', $data));
-        } finally {
-            restore_error_handler();
-            ini_set('unserialize_callback_func', $prevUnserializeHandler);
-        }
-
-        return $result;
-    }
-
-    /**
-     * @internal
-     */
-    public static function handleUnserializeCallback(string $class): never
-    {
-        throw new SerializationException(sprintf('Message class "%s" not found during decoding.', $class));
     }
 }
