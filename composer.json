@@ -16,7 +16,7 @@
         "ext-session": "*",
         "laminas/laminas-stdlib": "^3.2",
         "psr/event-dispatcher": "^1.0",
-        "psr/log": "^1.1",
+        "psr/log": "^1.1 || ^2.0 || ^3.0",
         "webmozart/assert": "^1.11"
     },
     "require-dev": {
