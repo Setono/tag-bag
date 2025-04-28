@@ -350,9 +350,12 @@ final class TestLogger extends AbstractLogger
     /** @var list<string> */
     public array $messages = [];
 
+    /**
+     * @param mixed $level
+     * @param string|\Stringable $message
+     */
     public function log($level, $message, array $context = []): void
     {
-        /** @psalm-suppress RedundantCastGivenDocblockType */
         $this->messages[] = (string) $message;
     }
 
