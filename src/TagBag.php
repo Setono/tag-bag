@@ -60,7 +60,9 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
 
     public function add(TagInterface $tag): void
     {
-        $this->dispatch(new PreTagAddedEvent($tag));
+        $event = new PreTagAddedEvent($tag);
+        $this->dispatch($event);
+        $tag = $event->tag;
 
         if (!$this->renderer->supports($tag)) {
             throw new UnsupportedTagException($tag);
