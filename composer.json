@@ -20,7 +20,7 @@
         "infection/infection": "^0.26.21",
         "phpunit/phpunit": "^10.5.20",
         "psalm/plugin-phpunit": "^0.19",
-        "setono/code-quality-pack": "^2.7"
+        "setono/code-quality-pack": "^2.9"
     },
     "prefer-stable": true,
     "autoload": {
