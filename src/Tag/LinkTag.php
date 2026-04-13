@@ -6,7 +6,7 @@ namespace Setono\TagBag\Tag;
 
 final class LinkTag extends ElementTag
 {
-    public static function create(string $rel = null, string $href = null): self
+    public static function create(?string $rel = null, ?string $href = null): self
     {
         $tag = parent::createWithoutContent('link', false);
 

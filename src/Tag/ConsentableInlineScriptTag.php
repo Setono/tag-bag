@@ -11,7 +11,7 @@ namespace Setono\TagBag\Tag;
  */
 final class ConsentableInlineScriptTag extends ElementTag
 {
-    public static function create(string $content, string $consentType = null): self
+    public static function create(string $content, ?string $consentType = null): self
     {
         $obj = parent::createWithContent('script', $content)
             ->withType('text/plain')
