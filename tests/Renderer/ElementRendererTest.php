@@ -20,7 +20,7 @@ final class ElementRendererTest extends TestCase
      */
     public function it_supports_element_tag(): void
     {
-        self::assertTrue((new ElementRenderer())->supports(InlineScriptTag::create('content')));
+        self::assertTrue((new ElementRenderer())->supports(InlineScriptTag::create('content'))); // @phpstan-ignore method.alreadyNarrowedType
     }
 
     /**
@@ -28,7 +28,7 @@ final class ElementRendererTest extends TestCase
      */
     public function it_does_not_support_other_tags(): void
     {
-        self::assertFalse((new ElementRenderer())->supports(new NotAnElementTag()));
+        self::assertFalse((new ElementRenderer())->supports(new NotAnElementTag())); // @phpstan-ignore method.impossibleType
     }
 
     /**

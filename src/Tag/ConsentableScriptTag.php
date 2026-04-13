@@ -9,7 +9,7 @@ namespace Setono\TagBag\Tag;
  */
 final class ConsentableScriptTag extends ElementTag
 {
-    public static function create(string $src, string $consentType = null): self
+    public static function create(string $src, ?string $consentType = null): self
     {
         $obj = parent::createWithoutContent('script')
             ->withSrc($src)

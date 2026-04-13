@@ -151,11 +151,14 @@ final class TagBagTest extends TestCase
     public function it_dispatches_events(): void
     {
         $eventDispatcher = new class() implements EventDispatcherInterface {
+            /** @var list<object> */
             public array $dispatchedEvents = [];
 
-            public function dispatch(object $event): void
+            public function dispatch(object $event): object
             {
                 $this->dispatchedEvents[] = $event;
+
+                return $event;
             }
         };
         $tag = $this->getTag();
@@ -279,7 +282,7 @@ final class TagBagTest extends TestCase
             {
             }
 
-            public function restore(): ?string
+            public function restore(): string
             {
                 return serialize([
                     new NotARenderedTag(),
@@ -298,7 +301,7 @@ final class TagBagTest extends TestCase
 
     private function getTag(
         string $content = 'content',
-        string $section = null,
+        ?string $section = null,
         bool $unique = true,
     ): ContentTag {
         $tag = ContentTag::create($content);
@@ -310,7 +313,7 @@ final class TagBagTest extends TestCase
         return $tag->withUnique($unique);
     }
 
-    private function getTagBag(StorageInterface $storage = null, RendererInterface $renderer = null): TagBag
+    private function getTagBag(?StorageInterface $storage = null, ?RendererInterface $renderer = null): TagBag
     {
         if (null === $renderer) {
             $renderer = new class() implements RendererInterface {
@@ -331,8 +334,9 @@ final class TagBagTest extends TestCase
         }
 
         $eventDispatcher = new class() implements EventDispatcherInterface {
-            public function dispatch(object $event): void
+            public function dispatch(object $event): object
             {
+                return $event;
             }
         };
 

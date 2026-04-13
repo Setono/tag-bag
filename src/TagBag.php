@@ -46,15 +46,14 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
     private readonly SerializerInterface $serializer;
 
     public function __construct(
-        RendererInterface $renderer = null,
-        FingerprintGeneratorInterface $fingerprintGenerator = null,
-        SerializerInterface $serializer = null,
+        ?RendererInterface $renderer = null,
+        ?FingerprintGeneratorInterface $fingerprintGenerator = null,
+        ?SerializerInterface $serializer = null,
     ) {
         $this->logger = new NullLogger();
         $this->renderer = $renderer ?? new CompositeRenderer(new ElementRenderer(), new ContentAwareRenderer());
         $this->fingerprintGenerator = $fingerprintGenerator ?? new ValueBasedFingerprintGenerator();
 
-        /** @psalm-suppress DeprecatedClass */
         $this->serializer = $serializer ?? new CompositeSerializer(new JsonSerializer(), new PhpSerializer());
     }
 
@@ -129,7 +128,7 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
             }
 
             // ... we will remove the old tag and add the new tag
-            unset($this->tags[$section][$idx]);
+            $this->removeTag($section, $idx);
 
             return true;
         }
@@ -141,7 +140,7 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
 
         // if the old tag is not unique, but the new tag is, we will remove the old tag and add the new tag
         if ($tag->isUnique()) {
-            unset($this->tags[$section][$idx]);
+            $this->removeTag($section, $idx);
         }
 
         return true;
@@ -241,6 +240,11 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
         }
 
         $this->eventDispatcher->dispatch($event);
+    }
+
+    private function removeTag(string $section, int $idx): void
+    {
+        array_splice($this->tags[$section], $idx, 1);
     }
 
     /**

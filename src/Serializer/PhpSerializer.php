@@ -29,31 +29,37 @@ final class PhpSerializer implements SerializerInterface
 
         $serializationException = new SerializationException(sprintf('Could not unserialize data: %s.', $data));
         $prevUnserializeHandler = ini_set('unserialize_callback_func', self::class . '::handleUnserializeCallback');
-        /** @psalm-suppress MixedArgumentTypeCoercion,UndefinedVariable */
-        $prevErrorHandler = set_error_handler(static function ($type, $msg, $file, $line, $context = []) use (&$prevErrorHandler, $serializationException) {
+        $prevErrorHandler = set_error_handler(static function (int $type, string $msg, string $file, int $line) use (&$prevErrorHandler, $serializationException): bool {
             if (__FILE__ === $file) {
                 throw $serializationException;
             }
 
-            /** @psalm-suppress MixedFunctionCall */
-            return $prevErrorHandler ? $prevErrorHandler($type, $msg, $file, $line, $context) : false;
+            if (null !== $prevErrorHandler) {
+                return (bool) $prevErrorHandler($type, $msg, $file, $line);
+            }
+
+            return false;
         });
 
         try {
-            /** @var array<string, list<RenderedTag>> $result */
             $result = unserialize($data, [
                 'allowed_classes' => [RenderedTag::class],
             ]);
-            /** @psalm-suppress RedundantConditionGivenDocblockType */
-            Assert::isArray($result);
+
+            if (!is_array($result)) {
+                throw new \InvalidArgumentException('Expected array');
+            }
+
+            /** @var array<string, list<RenderedTag>> $validated */
+            $validated = [];
             foreach ($result as $section => $tags) {
-                /** @psalm-suppress RedundantConditionGivenDocblockType */
                 Assert::string($section);
-
-                /** @psalm-suppress RedundantConditionGivenDocblockType */
                 Assert::isArray($tags);
-
                 Assert::allIsInstanceOf($tags, RenderedTag::class);
+
+                /** @var list<RenderedTag> $sectionTags */
+                $sectionTags = $tags;
+                $validated[$section] = $sectionTags;
             }
         } catch (\InvalidArgumentException) {
             throw new SerializationException(sprintf('The unserialized data was incorrect. Here is the original data: %s', $data));
@@ -62,7 +68,7 @@ final class PhpSerializer implements SerializerInterface
             ini_set('unserialize_callback_func', $prevUnserializeHandler);
         }
 
-        return $result;
+        return $validated;
     }
 
     /**
