@@ -38,6 +38,7 @@ final class RenderedTag implements Stringable, JsonSerializable
         );
     }
 
+    /** @param array<string, mixed> $data */
     public static function createFromArray(array $data): self
     {
         if (!isset($data['value'], $data['section'], $data['priority'], $data['unique'], $data['fingerprint'])) {
@@ -62,6 +63,7 @@ final class RenderedTag implements Stringable, JsonSerializable
         return $this->value;
     }
 
+    /** @return array{value: string, section: string, priority: int, unique: bool, fingerprint: string} */
     public function jsonSerialize(): array
     {
         return [

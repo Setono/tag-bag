@@ -38,7 +38,9 @@ final class JsonSerializer implements SerializerInterface
                 foreach ($sectionTags as $tag) {
                     Assert::isArray($tag);
 
-                    $tags[$section][] = RenderedTag::createFromArray($tag);
+                    /** @var array<string, mixed> $tagData */
+                    $tagData = $tag;
+                    $tags[$section][] = RenderedTag::createFromArray($tagData);
                 }
             }
 

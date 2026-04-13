@@ -34,7 +34,8 @@ The library has four core subsystems coordinated by `TagBag`:
 
 ## Conventions
 
-- PHP 8.1+ with `declare(strict_types=1)` in every file
+- Use `jq` for JSON parsing (not python)
+- PHP 8.2+ with `declare(strict_types=1)` in every file
 - PSR-4 autoloading under `Setono\TagBag\` namespace
 - Psalm level 1 (strictest) — all code must pass without errors
 - Coding standard: Sylius Labs (`vendor/sylius-labs/coding-standard/ecs.php`)

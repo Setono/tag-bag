@@ -8,10 +8,12 @@ use const PATHINFO_EXTENSION;
 
 final class TemplateTag extends Tag
 {
+    /** @param array<string, mixed> $data */
     private function __construct(protected string $template, protected array $data = [])
     {
     }
 
+    /** @param array<string, mixed> $data */
     public static function create(string $template, array $data = []): self
     {
         return new self($template, $data);
@@ -32,12 +34,15 @@ final class TemplateTag extends Tag
 
     /**
      * Returns the data to inject into the template
+     *
+     * @return array<string, mixed>
      */
     public function getData(): array
     {
         return $this->data;
     }
 
+    /** @param array<string, mixed> $data */
     public function withData(array $data): self
     {
         return $this->with('data', $data);

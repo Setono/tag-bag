@@ -19,7 +19,7 @@ final class ContentAwareRendererTest extends TestCase
     public function it_supports_content_tag(): void
     {
         $renderer = new ContentAwareRenderer();
-        self::assertTrue($renderer->supports(ContentTag::create('content')));
+        self::assertTrue($renderer->supports(ContentTag::create('content'))); // @phpstan-ignore method.alreadyNarrowedType
     }
 
     /**
@@ -28,7 +28,7 @@ final class ContentAwareRendererTest extends TestCase
     public function it_does_not_support_other_tags(): void
     {
         $renderer = new ContentAwareRenderer();
-        self::assertFalse($renderer->supports(new NotAContentAwareTag()));
+        self::assertFalse($renderer->supports(new NotAContentAwareTag())); // @phpstan-ignore method.impossibleType
     }
 
     /**
