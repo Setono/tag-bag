@@ -54,7 +54,6 @@ final class TagBag implements TagBagInterface, LoggerAwareInterface
         $this->renderer = $renderer ?? new CompositeRenderer(new ElementRenderer(), new ContentAwareRenderer());
         $this->fingerprintGenerator = $fingerprintGenerator ?? new ValueBasedFingerprintGenerator();
 
-        /** @psalm-suppress DeprecatedClass */
         $this->serializer = $serializer ?? new CompositeSerializer(new JsonSerializer(), new PhpSerializer());
     }
 

@@ -29,7 +29,6 @@ final class PhpSerializer implements SerializerInterface
 
         $serializationException = new SerializationException(sprintf('Could not unserialize data: %s.', $data));
         $prevUnserializeHandler = ini_set('unserialize_callback_func', self::class . '::handleUnserializeCallback');
-        /** @psalm-suppress MixedArgumentTypeCoercion,UndefinedVariable */
         $prevErrorHandler = set_error_handler(static function (int $type, string $msg, string $file, int $line) use (&$prevErrorHandler, $serializationException): bool {
             if (__FILE__ === $file) {
                 throw $serializationException;

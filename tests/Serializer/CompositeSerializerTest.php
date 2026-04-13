@@ -46,7 +46,6 @@ final class CompositeSerializerTest extends TestCase
     {
         $serializer = new CompositeSerializer(new JsonSerializer());
 
-        /** @psalm-suppress DeprecatedClass */
         $serializer->add(new PhpSerializer());
 
         return $serializer;

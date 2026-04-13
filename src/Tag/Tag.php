@@ -70,7 +70,7 @@ abstract class Tag implements TagInterface
     protected function with(string $property, mixed $val): static
     {
         $obj = clone $this;
-        $obj->{$property} = $val; // @phpstan-ignore property.dynamicName
+        $obj->{$property} = $val;
 
         return $obj;
     }

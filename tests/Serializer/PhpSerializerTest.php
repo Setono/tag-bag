@@ -8,7 +8,6 @@ final class PhpSerializerTest extends AbstractSerializerTestCase
 {
     protected static function getSerializer(): SerializerInterface
     {
-        /** @psalm-suppress DeprecatedClass */
         return new PhpSerializer();
     }
 
